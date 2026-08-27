@@ -10,11 +10,27 @@ RUN apt install -y ninja-build
 RUN apt install -y pkg-config
 RUN apt install -y python3
 RUN apt install -y python3-pip
+RUN apt install -y libtinfo5
 
 # UPMEM SDK
 WORKDIR /root
-RUN wget sdk-releases.upmem.com/2023.2.0/ubuntu_22.04/upmem-2023.2.0-Linux-x86_64.tar.gz
-RUN tar -zxvf upmem-2023.2.0-Linux-x86_64.tar.gz
-RUN echo "source /root/upmem-2023.2.0-Linux-x86_64/upmem_env.sh" > /root/.bashrc
+
+RUN git clone --depth 1 \
+    https://github.com/LangInteger/LoCaLUT.git \
+    /root/LoCaLUT
+
+RUN ln -s /root/LoCaLUT/upmem-2023.2.0-Linux-x86_64 \
+    /root/upmem-2023.2.0-Linux-x86_64
+
+RUN chmod a+x /root/upmem-2023.2.0-Linux-x86_64/upmem_env.sh && \
+    chmod -R a+x /root/upmem-2023.2.0-Linux-x86_64/bin
+
+ENV UPMEM_HOME=/root/upmem-2023.2.0-Linux-x86_64
+ENV PATH="${UPMEM_HOME}/bin:${PATH}"
+ENV LD_LIBRARY_PATH="${UPMEM_HOME}/lib"
+ENV PYTHONPATH="${UPMEM_HOME}/lib/python3/dist-packages"
+ENV UPMEM_NO_OS_WARNING=1
+
+RUN dpu-upmem-dpurte-clang --version
 
 WORKDIR /root/uPIMulator

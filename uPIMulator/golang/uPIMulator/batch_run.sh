@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if (( BASH_VERSINFO[0] < 4 )); then
+  echo "ERROR: Bash 4+ is required. Current version: $BASH_VERSION" >&2
+  exit 1
+fi
+
 set -u
 set -o pipefail
 

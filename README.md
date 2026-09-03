@@ -3,9 +3,7 @@
 ```text
 project/
 ├── dra_figs/
-│   ├── main.cpp
-│   ├── analyzer.cpp
-│   └── analyzer.h
+├── sdk/                             # the UPMEM SDK
 ├── static_analyzer/                 # data movement cost analyzer
 │   ├── run_benchmarks.sh            # generate symoblic expression result
 │   └── build_and_run_benchmarks.sh  # build the static analyzer and generate symbolic expression result

@@ -1,0 +1,230 @@
+[
+  {
+    "function": "app.c::compute_ts_statistics",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(((((((((((((((1 + (1 + (2 * timeSeriesLength))) + 1) + 1) + (1 + (3 * timeSeriesLength))) + 1) + 1) + (2 + (3 * timeSeriesLength - queryLength))) + 1) + 1) + (2 + (3 * timeSeriesLength - queryLength))) + 1) + (1 + ProfileLength)) + 1) + (1 + (3 * ProfileLength))) + 1)",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::create_test_file",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "((1 + ts_elements) + (1 + query_elements))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::main",
+    "features": {
+      "launches": "p.n_warmup + p.n_reps",
+      "waits": "0",
+      "h2d_bytes": "((((query_length * sizeof(int32_t) + (slice_per_dpu + query_length) * sizeof(int32_t)) + (slice_per_dpu + query_length) * sizeof(int32_t)) + (slice_per_dpu + query_length) * sizeof(int32_t)) * p.n_warmup + p.n_reps)",
+      "d2h_bytes": "(16 * sizeof(dpu_result_t) * p.n_warmup + p.n_reps)",
+      "arith_ops": "(((((((((((((12 + ((1 + ts_elements) + (1 + query_elements))) + ((((((((((((((((1 + (1 + (2 * timeSeriesLength))) + 1) + 1) + (1 + (3 * timeSeriesLength))) + 1) + 1) + (2 + (3 * timeSeriesLength - queryLength))) + 1) + 1) + (2 + (3 * timeSeriesLength - queryLength))) + 1) + (1 + ProfileLength)) + 1) + (1 + (3 * ProfileLength))) + 1) + 1)) + (1 + query_length)) + 1) + (1 + (4 * query_length))) + 1) + 1) + (2 + (((83 + ((1 + (((1 + (3 * queryLength)) + 7) * ProfileLength)) + 2)) + 5) * p.n_warmup + p.n_reps))) + 2) + 2) + 2) + 2) + 2)",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::streamp",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(1 + (((1 + (3 * queryLength)) + 7) * ProfileLength))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::input_params",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "2",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::usage",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::dot_product",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(3 + ((3 + (10 * (1 << 10) / sizeof(int32_t))) * (1 << 10) / sizeof(int32_t)))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main_kernel1",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(23 + (3 + (((((((6 + (4 + ((9 + (3 + ((3 + (10 * (1 << 10) / sizeof(int32_t))) * (1 << 10) / sizeof(int32_t)))) * (query_length) / ((1 << 10) / sizeof(int32_t))))) + 1) + 1) + 2) + 2) + (3 + (8 * ((1 << 10) / sizeof(int32_t))))) * (myEndElem / (((1 << 10) / sizeof(int32_t)))))))",
+      "mram_read": "(((((((1 << 10) + (1 << 10)) + (1 << 10)) * (query_length) / ((1 << 10) / sizeof(int32_t))) + (1 << 10)) + (1 << 10)) * (myEndElem / (((1 << 10) / sizeof(int32_t)))))",
+      "mram_read_tx": "((((3 * (query_length) / ((1 << 10) / sizeof(int32_t))) + 1) + 1) * (myEndElem / (((1 << 10) / sizeof(int32_t)))))",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "1",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::print",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "2",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::start",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::stop",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "5",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  }
+]

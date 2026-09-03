@@ -1,0 +1,344 @@
+[
+  {
+    "function": "app.c::main",
+    "features": {
+      "launches": "((2 * UNKNOWN_WHILE_BOUND) * p.n_warmup + p.n_reps)",
+      "waits": "0",
+      "h2d_bytes": "(((sizeof (input_arguments) + sizeof (input_arguments2)) * UNKNOWN_WHILE_BOUND) * p.n_warmup + p.n_reps)",
+      "d2h_bytes": "0",
+      "arith_ops": "(((((((23 + (2 + ((((6 + ((((3 + (1 + ((2 + (10 * A * B)) * b))) + 3) + 1) + 1)) + 5) + (35 * UNKNOWN_WHILE_BOUND)) * p.n_warmup + p.n_reps))) + 2) + 2) + 2) + 2) + 2) + 4)",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::read_input",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "1",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::trns_host",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "((3 + (1 + ((2 + (10 * A * B)) * b))) + 3)",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::input_params",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::usage",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::get_and_set_done",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "7",
+      "mram_read": "sizeof(int64_t)",
+      "mram_read_tx": "1",
+      "mram_write": "sizeof(int64_t)",
+      "mram_write_tx": "1",
+      "barriers": "0",
+      "mutexes": "1",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::get_done",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "3",
+      "mram_read": "sizeof(int64_t)",
+      "mram_read_tx": "1",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "1",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::get_tile",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "1",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "1",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main_kernel1",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(4 + (1 + (((((1 + (13 * UNKNOWN_WHILE_BOUND)) + 2) + (2 + (6 * m * n))) + ((1 + (13 * UNKNOWN_WHILE_BOUND)) + 2)) * (M_ / (16)))))",
+      "mram_read": "((sizeof(int64_t) * transfer * UNKNOWN_WHILE_BOUND) * (M_ / (16)))",
+      "mram_read_tx": "(UNKNOWN_WHILE_BOUND * (M_ / (16)))",
+      "mram_write": "((sizeof(int64_t) * transfer * UNKNOWN_WHILE_BOUND) * (M_ / (16)))",
+      "mram_write_tx": "(UNKNOWN_WHILE_BOUND * (M_ / (16)))",
+      "barriers": "1",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main_kernel2",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(9 + (((12 + (4 + (16 * N))) + 1) * UNKNOWN_WHILE_BOUND))",
+      "mram_read": "(((sizeof(int64_t) * m + sizeof(int64_t)) + ((sizeof(int64_t) * m + sizeof(int64_t)) * N)) * UNKNOWN_WHILE_BOUND)",
+      "mram_read_tx": "((2 + (2 * N)) * UNKNOWN_WHILE_BOUND)",
+      "mram_write": "(((sizeof(int64_t) + sizeof(int64_t) * m) * N) * UNKNOWN_WHILE_BOUND)",
+      "mram_write_tx": "((2 * N) * UNKNOWN_WHILE_BOUND)",
+      "barriers": "1",
+      "mutexes": "(1 + (((2 + N) + 1) * UNKNOWN_WHILE_BOUND))",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::read_tile_step2",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(1 + (13 * UNKNOWN_WHILE_BOUND))",
+      "mram_read": "(sizeof(int64_t) * transfer * UNKNOWN_WHILE_BOUND)",
+      "mram_read_tx": "UNKNOWN_WHILE_BOUND",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::read_tile_step3",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "3",
+      "mram_read": "sizeof(int64_t) * m",
+      "mram_read_tx": "1",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::write_tile_step2",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(1 + (13 * UNKNOWN_WHILE_BOUND))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "(sizeof(int64_t) * transfer * UNKNOWN_WHILE_BOUND)",
+      "mram_write_tx": "UNKNOWN_WHILE_BOUND",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::write_tile_step3",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "3",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "sizeof(int64_t) * m",
+      "mram_write_tx": "1",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::print",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "2",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::start",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::stop",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "5",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  }
+]

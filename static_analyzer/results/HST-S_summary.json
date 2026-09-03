@@ -1,0 +1,211 @@
+[
+  {
+    "function": "app.c::histogram_host",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "max((1 + ((1 + (5 * nr_elements)) * nr_of_dpus)), (1 + (3 * nr_elements)))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::main",
+    "features": {
+      "launches": "p.n_warmup + p.n_reps",
+      "waits": "0",
+      "h2d_bytes": "((sizeof (input_arguments[0]) + input_size_dpu_8bytes * sizeof(uint32_t)) * p.n_warmup + p.n_reps)",
+      "d2h_bytes": "(p.bins * sizeof(unsigned int) * p.n_warmup + p.n_reps)",
+      "arith_ops": "((((((((20 + (1 + (2 * p.input_size))) + max((1 + (3 * nr_of_dpus)), (1 + (3 * dpu_s)))) + (2 + ((((((((((((((((((((4 + max((1 + ((1 + (5 * nr_elements)) * nr_of_dpus)), (1 + (3 * nr_elements)))) + 5) + 1) + (2 + (2 * nr_of_dpus - 1))) + 5) + 2) + 1) + 1) + 1) + 3) + 1) + 5) + 1) + 5) + 1) + 3) + 2) + (1 + ((1 + (3 * p.bins)) * nr_of_dpus))) + 5) * p.n_warmup + p.n_reps))) + 2) + 2) + 2) + 2) + max(1, max((1 + p.bins), (1 + p.bins))))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "app.c::read_input",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(1 + (2 * p.input_size))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::input_params",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "1",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "params.h::usage",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::histogram",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(1 + (3 * l_size))",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "task.c::main_kernel1",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "(((5 + (3 + ((5 + ((1 + (3 * l_size)) + 1)) * (input_size_dpu_bytes / ((1 << 10) * 16))))) + (1 + (33 * (bins / (16))))) + (1 + max(1, (3 + (4 * ((bins * sizeof(uint32_t)) >> 11))))))",
+      "mram_read": "(l_size_bytes * (input_size_dpu_bytes / ((1 << 10) * 16)))",
+      "mram_read_tx": "(input_size_dpu_bytes / ((1 << 10) * 16))",
+      "mram_write": "max(bins * sizeof(uint32_t), (2048 * ((bins * sizeof(uint32_t)) >> 11)))",
+      "mram_write_tx": "max(1, ((bins * sizeof(uint32_t)) >> 11))",
+      "barriers": "3",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::print",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "2",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::start",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "0",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  },
+  {
+    "function": "timer.h::stop",
+    "features": {
+      "launches": "0",
+      "waits": "0",
+      "h2d_bytes": "0",
+      "d2h_bytes": "0",
+      "arith_ops": "5",
+      "mram_read": "0",
+      "mram_read_tx": "0",
+      "mram_write": "0",
+      "mram_write_tx": "0",
+      "barriers": "0",
+      "mutexes": "0",
+      "semaphores": "0",
+      "atomics": "0",
+      "assumptions": ""
+    }
+  }
+]

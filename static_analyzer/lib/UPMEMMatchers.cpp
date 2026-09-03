@@ -67,6 +67,73 @@ private:
     return false;
   }
 
+  bool isVariableReference(const Expr *E, const VarDecl *Variable) const {
+    if (!E || !Variable)
+      return false;
+    E = E->IgnoreParenImpCasts();
+    const auto *Reference = dyn_cast<DeclRefExpr>(E);
+    if (!Reference)
+      return false;
+    const auto *ReferencedVariable = dyn_cast<VarDecl>(Reference->getDecl());
+    return ReferencedVariable && ReferencedVariable->getCanonicalDecl() ==
+                                     Variable->getCanonicalDecl();
+  }
+
+  const VarDecl *getNegatedLoopFlag(const WhileStmt *WS) const {
+    if (!WS || !WS->getCond())
+      return nullptr;
+    const Expr *Condition = WS->getCond()->IgnoreParenImpCasts();
+    const auto *Negation = dyn_cast<UnaryOperator>(Condition);
+    if (!Negation || Negation->getOpcode() != UO_LNot)
+      return nullptr;
+    const Expr *Flag = Negation->getSubExpr()->IgnoreParenImpCasts();
+    const auto *Reference = dyn_cast<DeclRefExpr>(Flag);
+    return Reference ? dyn_cast<VarDecl>(Reference->getDecl()) : nullptr;
+  }
+
+  bool isTrueConstant(const Expr *E) const {
+    if (!E)
+      return false;
+    E = E->IgnoreParenImpCasts();
+    if (const auto *Literal = dyn_cast<IntegerLiteral>(E))
+      return !Literal->getValue().isZero();
+    if (const auto *Literal = dyn_cast<CXXBoolLiteralExpr>(E))
+      return Literal->getValue();
+    return false;
+  }
+
+  bool assignsTrueToFlag(const Stmt *S, const VarDecl *Flag) const {
+    if (!S)
+      return false;
+    if (const auto *Assignment = dyn_cast<BinaryOperator>(S)) {
+      if (Assignment->getOpcode() == BO_Assign &&
+          isVariableReference(Assignment->getLHS(), Flag) &&
+          isTrueConstant(Assignment->getRHS()))
+        return true;
+    }
+    for (const Stmt *Child : S->children()) {
+      if (assignsTrueToFlag(Child, Flag))
+        return true;
+    }
+    return false;
+  }
+
+  bool containsLoopBreak(const Stmt *S) const {
+    if (!S)
+      return false;
+    if (isa<BreakStmt>(S))
+      return true;
+    // Breaks in nested loops or switches do not terminate the current loop.
+    if (isa<ForStmt>(S) || isa<WhileStmt>(S) || isa<DoStmt>(S) ||
+        isa<SwitchStmt>(S))
+      return false;
+    for (const Stmt *Child : S->children()) {
+      if (containsLoopBreak(Child))
+        return true;
+    }
+    return false;
+  }
+
   std::string getUnknownWhileBound(const WhileStmt *WS) const {
     const SourceManager &SM = Context->getSourceManager();
     SourceLocation location = SM.getExpansionLoc(WS->getWhileLoc());
@@ -86,6 +153,29 @@ private:
     }
 
     return "UNKNOWN_WHILE_BOUND_" + filename + "_L" +
+           std::to_string(presumed.getLine()) + "_C" +
+           std::to_string(presumed.getColumn());
+  }
+
+  std::string getUnknownForBound(const ForStmt *FS) const {
+    const SourceManager &SM = Context->getSourceManager();
+    SourceLocation location = SM.getExpansionLoc(FS->getForLoc());
+    PresumedLoc presumed = SM.getPresumedLoc(location);
+    if (presumed.isInvalid())
+      return "UNKNOWN_FOR_BOUND_UNKNOWN_LOCATION";
+
+    std::string filename =
+        llvm::sys::path::filename(presumed.getFilename()).str();
+    for (char &character : filename) {
+      bool isAlphaNumeric =
+          (character >= 'a' && character <= 'z') ||
+          (character >= 'A' && character <= 'Z') ||
+          (character >= '0' && character <= '9');
+      if (!isAlphaNumeric)
+        character = '_';
+    }
+
+    return "UNKNOWN_FOR_BOUND_" + filename + "_L" +
            std::to_string(presumed.getLine()) + "_C" +
            std::to_string(presumed.getColumn());
   }
@@ -169,6 +259,74 @@ private:
     return result;
   }
 
+  // Model loops such as `while (!end)`: ordinary work repeats W times, while
+  // DMA in branches that set end=true occurs only on the final iteration.
+  // A break branch is another terminal alternative and may have zero extra
+  // memory cost.  Non-memory features retain the existing conservative model.
+  bool analyzeFlagTerminatedLoop(const WhileStmt *WS, const VarDecl *Flag,
+                                 const std::string &Bound,
+                                 FeatureDomain &Result) {
+    const auto *Body = dyn_cast<CompoundStmt>(WS->getBody());
+    if (!Body || !Flag)
+      return false;
+
+    FeatureDomain Repeated;
+    FeatureDomain FinalExtras;
+    bool HasTerminalBranch = false;
+
+    for (const Stmt *Child : Body->children()) {
+      const auto *Branch = dyn_cast<IfStmt>(Child);
+      if (!Branch) {
+        Repeated += analyzeStmt(Child);
+        continue;
+      }
+
+      const Stmt *Then = Branch->getThen();
+      const Stmt *Else = Branch->getElse();
+      bool ThenTerminates = containsLoopBreak(Then) ||
+                            assignsTrueToFlag(Then, Flag);
+      bool ElseTerminates = containsLoopBreak(Else) ||
+                            assignsTrueToFlag(Else, Flag);
+      if (!ThenTerminates && !ElseTerminates) {
+        Repeated += analyzeStmt(Child);
+        continue;
+      }
+
+      HasTerminalBranch = true;
+      Repeated += analyzeStmt(Branch->getCond());
+
+      FeatureDomain ThenFeatures = analyzeStmt(Then);
+      FeatureDomain ElseFeatures = analyzeStmt(Else);
+      if (!ThenTerminates)
+        Repeated += ThenFeatures;
+      if (!ElseTerminates)
+        Repeated += ElseFeatures;
+
+      FeatureDomain NoExtra;
+      if (ThenTerminates)
+        FinalExtras +=
+            FeatureDomain::memoryPathChoice(NoExtra, ThenFeatures);
+      if (ElseTerminates)
+        FinalExtras +=
+            FeatureDomain::memoryPathChoice(NoExtra, ElseFeatures);
+    }
+
+    if (!HasTerminalBranch)
+      return false;
+
+    FeatureDomain Condition = analyzeStmt(WS->getCond());
+    Result = Condition + analyzeStmt(WS->getBody()).multiply(Bound);
+    FeatureDomain Memory = Condition + Repeated.multiply(Bound) + FinalExtras;
+    Result.mram_read = Memory.mram_read;
+    Result.mram_read_tx = Memory.mram_read_tx;
+    Result.mram_write = Memory.mram_write;
+    Result.mram_write_tx = Memory.mram_write_tx;
+    if (!Result.assumptions.empty())
+      Result.assumptions += "; ";
+    Result.assumptions += Bound + " >= 1";
+    return true;
+  }
+
   void analyzeFunction(FunctionDecl *D, FunctionSummary &S) {
     Stmt *Body = D->getBody();
     if (!Body)
@@ -187,39 +345,235 @@ private:
     return stream.str();
   }
 
+  bool isLoopVariable(const Expr *E, const VarDecl *LoopVariable) const {
+    return isVariableReference(E, LoopVariable);
+  }
+
+  bool extractForInduction(const ForStmt *FS, const VarDecl *&LoopVariable,
+                           std::string &InitialValue) {
+    LoopVariable = nullptr;
+    const Stmt *Init = FS->getInit();
+    if (const auto *Declaration = dyn_cast_or_null<DeclStmt>(Init)) {
+      if (!Declaration->isSingleDecl())
+        return false;
+      const auto *Variable = dyn_cast<VarDecl>(Declaration->getSingleDecl());
+      if (!Variable || !Variable->hasInit())
+        return false;
+      LoopVariable = Variable;
+      InitialValue = extractExprString(Variable->getInit());
+      return true;
+    }
+
+    const auto *Assignment = dyn_cast_or_null<BinaryOperator>(Init);
+    if (!Assignment || Assignment->getOpcode() != BO_Assign)
+      return false;
+    const auto *Reference =
+        dyn_cast<DeclRefExpr>(Assignment->getLHS()->IgnoreParenImpCasts());
+    if (!Reference)
+      return false;
+    LoopVariable = dyn_cast<VarDecl>(Reference->getDecl());
+    if (!LoopVariable)
+      return false;
+    InitialValue = extractExprString(Assignment->getRHS());
+    return true;
+  }
+
+  bool extractPositiveForStep(const ForStmt *FS, const VarDecl *LoopVariable,
+                              std::string &Step) {
+    const Expr *Increment = FS->getInc();
+    if (!Increment)
+      return false;
+    Increment = Increment->IgnoreParenImpCasts();
+
+    if (const auto *Unary = dyn_cast<UnaryOperator>(Increment)) {
+      if (Unary->isIncrementOp() &&
+          isLoopVariable(Unary->getSubExpr(), LoopVariable)) {
+        Step = "1";
+        return true;
+      }
+      return false;
+    }
+
+    const auto *Binary = dyn_cast<BinaryOperator>(Increment);
+    if (!Binary || Binary->getOpcode() != BO_AddAssign ||
+        !isLoopVariable(Binary->getLHS(), LoopVariable))
+      return false;
+    Step = extractExprString(Binary->getRHS());
+    return true;
+  }
+
+  static std::string subtractExpression(const std::string &Left,
+                                        const std::string &Right) {
+    if (Right == "0")
+      return Left;
+    if (Left == Right)
+      return "0";
+    return "((" + Left + ") - (" + Right + "))";
+  }
+
+  // Return the number of unit increments permitted by a loop condition.  For
+  // conjunctions, each recognized clause is an upper bound, so their minimum
+  // is the bound for the complete condition.
+  bool extractConditionDistance(const Expr *Condition,
+                                const VarDecl *LoopVariable,
+                                const std::string &InitialValue,
+                                std::string &Distance) {
+    if (!Condition)
+      return false;
+    Condition = Condition->IgnoreParenImpCasts();
+    const auto *Binary = dyn_cast<BinaryOperator>(Condition);
+    if (!Binary)
+      return false;
+
+    if (Binary->getOpcode() == BO_LAnd) {
+      std::string LeftDistance;
+      std::string RightDistance;
+      bool HasLeft = extractConditionDistance(
+          Binary->getLHS(), LoopVariable, InitialValue, LeftDistance);
+      bool HasRight = extractConditionDistance(
+          Binary->getRHS(), LoopVariable, InitialValue, RightDistance);
+      if (HasLeft && HasRight) {
+        Distance = LeftDistance == RightDistance
+                       ? LeftDistance
+                       : "min(" + LeftDistance + ", " + RightDistance + ")";
+        return true;
+      }
+      // A recognized conjunct still provides a sound upper bound even if the
+      // other conjunct cannot be expressed symbolically.
+      if (HasLeft || HasRight) {
+        Distance = HasLeft ? LeftDistance : RightDistance;
+        return true;
+      }
+      return false;
+    }
+
+    if (Binary->getOpcode() != BO_LT && Binary->getOpcode() != BO_LE)
+      return false;
+
+    const Expr *Left = Binary->getLHS()->IgnoreParenImpCasts();
+    std::string ExclusiveUpper;
+    if (isLoopVariable(Left, LoopVariable)) {
+      ExclusiveUpper = extractExprString(Binary->getRHS());
+    } else if (const auto *LeftBinary = dyn_cast<BinaryOperator>(Left)) {
+      if (LeftBinary->getOpcode() == BO_Add &&
+          isLoopVariable(LeftBinary->getLHS(), LoopVariable)) {
+        ExclusiveUpper = subtractExpression(
+            extractExprString(Binary->getRHS()),
+            extractExprString(LeftBinary->getRHS()));
+      } else if (LeftBinary->getOpcode() == BO_Add &&
+                 isLoopVariable(LeftBinary->getRHS(), LoopVariable)) {
+        ExclusiveUpper = subtractExpression(
+            extractExprString(Binary->getRHS()),
+            extractExprString(LeftBinary->getLHS()));
+      } else if (LeftBinary->getOpcode() == BO_Sub &&
+                 isLoopVariable(LeftBinary->getLHS(), LoopVariable)) {
+        ExclusiveUpper = "((" + extractExprString(Binary->getRHS()) +
+                         ") + (" + extractExprString(LeftBinary->getRHS()) +
+                         "))";
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+
+    Distance = subtractExpression(ExclusiveUpper, InitialValue);
+    if (Binary->getOpcode() == BO_LE)
+      Distance = "((" + Distance + ") + 1)";
+    return true;
+  }
+
+  bool extractCancelledSpan(const ForStmt *FS, const VarDecl *LoopVariable,
+                            const std::string &InitialValue,
+                            std::string &Span, bool &Inclusive) {
+    const Expr *Condition = FS->getCond();
+    if (!Condition)
+      return false;
+    Condition = Condition->IgnoreParenImpCasts();
+    const auto *Comparison = dyn_cast<BinaryOperator>(Condition);
+    if (!Comparison ||
+        (Comparison->getOpcode() != BO_LT &&
+         Comparison->getOpcode() != BO_LE) ||
+        !isLoopVariable(Comparison->getLHS(), LoopVariable))
+      return false;
+
+    const Expr *Upper = Comparison->getRHS()->IgnoreParenImpCasts();
+    const auto *Addition = dyn_cast<BinaryOperator>(Upper);
+    if (!Addition || Addition->getOpcode() != BO_Add)
+      return false;
+
+    std::string Left = extractExprString(Addition->getLHS());
+    std::string Right = extractExprString(Addition->getRHS());
+    if (Left == InitialValue)
+      Span = Right;
+    else if (Right == InitialValue)
+      Span = Left;
+    else
+      return false;
+
+    Inclusive = Comparison->getOpcode() == BO_LE;
+    return true;
+  }
+
+  std::string extractLegacyForBound(const ForStmt *FS,
+                                    const std::string &Step) {
+    const Expr *Condition = FS->getCond();
+    if (!Condition)
+      return getUnknownForBound(FS);
+    Condition = Condition->IgnoreParenImpCasts();
+    const auto *Comparison = dyn_cast<BinaryOperator>(Condition);
+    if (!Comparison ||
+        (Comparison->getOpcode() != BO_LT &&
+         Comparison->getOpcode() != BO_LE))
+      return getUnknownForBound(FS);
+
+    std::string Upper = extractExprString(Comparison->getRHS());
+    if (Step == "1")
+      return Upper;
+    return "(" + Upper + " / (" + Step + "))";
+  }
+
   std::string extractLoopBound(const Stmt *S) {
     if (const ForStmt *FS = dyn_cast<ForStmt>(S)) {
-      std::string boundStr = "N";
-      if (FS->getCond()) {
-        if (const BinaryOperator *Cond =
-                dyn_cast<BinaryOperator>(FS->getCond())) {
-          if (Cond->getOpcode() == BO_LT || Cond->getOpcode() == BO_LE) {
-            boundStr.clear();
-            llvm::raw_string_ostream stream(boundStr);
-            Cond->getRHS()->printPretty(stream, nullptr,
-                                        Context->getPrintingPolicy());
-          }
-        }
+      const VarDecl *LoopVariable = nullptr;
+      std::string InitialValue;
+      std::string Step;
+      std::string Distance;
+      if (!extractForInduction(FS, LoopVariable, InitialValue) ||
+          !extractPositiveForStep(FS, LoopVariable, Step))
+        return getUnknownForBound(FS);
+
+      const Expr *Condition = FS->getCond();
+      const auto *ConditionBinary = Condition
+                                        ? dyn_cast<BinaryOperator>(
+                                              Condition->IgnoreParenImpCasts())
+                                        : nullptr;
+      if (ConditionBinary && ConditionBinary->getOpcode() == BO_LAnd) {
+        if (!extractConditionDistance(Condition, LoopVariable, InitialValue,
+                                      Distance))
+          return getUnknownForBound(FS);
+        if (Step == "1")
+          return Distance;
+        return "ceil_div(" + Distance + ", " + Step + ")";
       }
-      std::string incStr = "1";
-      if (FS->getInc()) {
-        if (const BinaryOperator *IncOp =
-                dyn_cast<BinaryOperator>(FS->getInc())) {
-          if (IncOp->getOpcode() == BO_AddAssign) {
-            incStr.clear();
-            llvm::raw_string_ostream stream(incStr);
-            IncOp->getRHS()->printPretty(stream, nullptr,
-                                         Context->getPrintingPolicy());
-          }
-        }
+
+      std::string Span;
+      bool Inclusive = false;
+      if (extractCancelledSpan(FS, LoopVariable, InitialValue, Span,
+                               Inclusive)) {
+        if (Inclusive)
+          Span = "((" + Span + ") + 1)";
+        if (Step == "1")
+          return Span;
+        return "ceil_div(" + Span + ", " + Step + ")";
       }
-      if (boundStr != "N") {
-        if (incStr != "1")
-          return "(" + boundStr + " / (" + incStr + "))";
-        return boundStr;
-      }
+
+      // Preserve the historical expression for ordinary loops.  This keeps
+      // existing benchmark adapters stable until the analyzer can substitute
+      // tasklet-local initializers such as base_tasklet and tasklet_id.
+      return extractLegacyForBound(FS, Step);
     }
-    return "N";
+    return "UNKNOWN_FOR_BOUND_UNKNOWN_LOCATION";
   }
 
   FeatureDomain analyzeStmt(const Stmt *S) {
@@ -260,6 +614,11 @@ private:
           F_loop.assumptions += unknownBound + " >= 1";
           return F_cond + F_loop;
         }
+      }
+      if (const VarDecl *Flag = getNegatedLoopFlag(WS)) {
+        FeatureDomain FlagLoop;
+        if (analyzeFlagTerminatedLoop(WS, Flag, unknownBound, FlagLoop))
+          return FlagLoop;
       }
       FeatureDomain F_body = analyzeStmt(WS->getBody());
       return F_cond + F_body.multiply(unknownBound);

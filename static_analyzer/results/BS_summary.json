@@ -120,16 +120,16 @@
       "waits": "0",
       "h2d_bytes": "0",
       "d2h_bytes": "0",
-      "arith_ops": "(9 + (2 + ((10 + (29 * UNKNOWN_WHILE_BOUND_task_c_L96_C5)) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))))",
-      "mram_read": "((((8 + (1 << 8)) + (1 << 8)) + ((((1 << 8) + (1 << 8)) + (1 << 8)) * UNKNOWN_WHILE_BOUND_task_c_L96_C5)) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))",
-      "mram_read_tx": "((3 + (3 * UNKNOWN_WHILE_BOUND_task_c_L96_C5)) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))",
+      "arith_ops": "(9 + (2 + ((10 + (29 * UNKNOWN_WHILE_BOUND_task_c_L97_C5)) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))))",
+      "mram_read": "((((8 + (1 << 8)) + (1 << 8)) + (((1 << 8) * UNKNOWN_WHILE_BOUND_task_c_L97_C5) + (path(0, (1 << 8)) + path(0, (1 << 8))))) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))",
+      "mram_read_tx": "((3 + (UNKNOWN_WHILE_BOUND_task_c_L97_C5 + (path(0, 1) + path(0, 1)))) * (DPU_INPUT_ARGUMENTS.slice_per_dpu / 16))",
       "mram_write": "0",
       "mram_write_tx": "0",
       "barriers": "1",
       "mutexes": "0",
       "semaphores": "0",
       "atomics": "0",
-      "assumptions": ""
+      "assumptions": "UNKNOWN_WHILE_BOUND_task_c_L97_C5 >= 1"
     }
   },
   {

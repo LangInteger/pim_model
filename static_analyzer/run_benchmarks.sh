@@ -29,11 +29,26 @@ fi
 for benchmark in "${BENCHMARKS[@]}"; do
     echo "Running analyzer on benchmark: $benchmark"
     if [[ -f "../uPIMulator/golang/uPIMulator/benchmark/$benchmark/host/app.c" && -f "../uPIMulator/golang/uPIMulator/benchmark/$benchmark/dpu/task.c" ]]; then
+
+        # Match the benchmark's own build configuration.  Some benchmarks
+        # define a BL default in their Makefile, while others (for example BS,
+        # TRNS, and TS) intentionally omit -DBL and use the fallback declared
+        # in support/common.h.  Passing -DBL=10 globally changes those programs
+        # from 256-byte to 1-KiB MRAM blocks before the analyzer sees them.
+        analyzer_defines=(-DT=int -DDIV=1 -DNR_DPUS=1 -DNR_TASKLETS=16)
+        benchmark_makefile="../uPIMulator/golang/uPIMulator/benchmark/$benchmark/Makefile"
+        if [[ -f "$benchmark_makefile" ]]; then
+            bl=$(sed -nE 's/^BL[[:space:]]*\?=[[:space:]]*([0-9]+).*$/\1/p' "$benchmark_makefile" | head -n 1)
+            if [[ -n "$bl" ]]; then
+                analyzer_defines+=("-DBL=$bl")
+            fi
+        fi
+
         ./build/pim-analyzer "../uPIMulator/golang/uPIMulator/benchmark/$benchmark/host/app.c" "../uPIMulator/golang/uPIMulator/benchmark/$benchmark/dpu/task.c" -- \
             "${EXTRA_FLAGS[@]}" \
             -I"../uPIMulator/golang/uPIMulator/benchmark/$benchmark/support" \
             -Imock_dpu_includes \
-            -DT=int -DBL=10 -DDIV=1 -DNR_DPUS=1 -DNR_TASKLETS=16 > /dev/null 2>&1
+            "${analyzer_defines[@]}" > /dev/null 2>&1
         
         if [ -f "pim_summary.json" ]; then
             mv pim_summary.json "results/${benchmark}_summary.json"

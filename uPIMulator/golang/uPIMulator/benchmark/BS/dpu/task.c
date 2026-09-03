@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <defs.h>
+#include <stdbool.h>
 #include <mram.h>
 #include <alloc.h>
 #include <mram.h>

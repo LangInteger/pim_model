@@ -1,0 +1,26 @@
+OPTIONS
+verbose  -->  0
+data_prep_params  -->  524288
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/tasklet_sweep/UNI_dpu1_tasklets11_size524288
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+memory_frequency  -->  2400
+num_pipeline_stages  -->  14
+min_access_granularity  -->  8
+num_channels  -->  1
+num_ranks_per_channel  -->  1
+num_tasklets  -->  11
+num_revolver_scheduling_cycles  -->  11
+t_rcd  -->  32
+t_rp  -->  32
+t_bl  -->  8
+num_simulation_threads  -->  16
+num_dpus_per_rank  -->  1
+logic_frequency  -->  350
+t_cl  -->  32
+read_bandwidth  -->  1
+write_bandwidth  -->  3
+benchmark  -->  UNI
+wordline_size  -->  1024
+t_ras  -->  78
+

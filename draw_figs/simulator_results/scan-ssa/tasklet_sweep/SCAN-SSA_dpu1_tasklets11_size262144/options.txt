@@ -1,0 +1,26 @@
+OPTIONS
+t_cl  -->  32
+write_bandwidth  -->  3
+num_channels  -->  1
+num_dpus_per_rank  -->  1
+num_tasklets  -->  11
+data_prep_params  -->  262144
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/tasklet_sweep/SCAN-SSA_dpu1_tasklets11_size262144
+num_revolver_scheduling_cycles  -->  11
+verbose  -->  0
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+memory_frequency  -->  2400
+num_pipeline_stages  -->  14
+wordline_size  -->  1024
+min_access_granularity  -->  8
+t_ras  -->  78
+t_rp  -->  32
+logic_frequency  -->  350
+num_simulation_threads  -->  16
+benchmark  -->  SCAN-SSA
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+t_rcd  -->  32
+t_bl  -->  8
+read_bandwidth  -->  1
+num_ranks_per_channel  -->  1
+

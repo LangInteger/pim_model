@@ -1,0 +1,10 @@
+experiment=tasklet_sweep
+benchmark=SEL
+num_tasklets=4
+num_dpus=1
+data_prep_params=524288
+start_time=2026-08-27T21:54:34+00:00
+upimulator_commit=9386782e63e62f265f578a13ccdef870662836fa
+docker_image=sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7
+end_time=2026-08-27T21:55:53+00:00
+status=success

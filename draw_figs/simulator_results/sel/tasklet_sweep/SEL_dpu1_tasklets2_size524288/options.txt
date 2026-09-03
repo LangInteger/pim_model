@@ -1,0 +1,26 @@
+OPTIONS
+benchmark  -->  SEL
+num_dpus_per_rank  -->  1
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+t_ras  -->  78
+t_rp  -->  32
+t_cl  -->  32
+t_bl  -->  8
+verbose  -->  0
+num_simulation_threads  -->  16
+num_channels  -->  1
+num_tasklets  -->  2
+data_prep_params  -->  524288
+logic_frequency  -->  350
+min_access_granularity  -->  8
+read_bandwidth  -->  1
+num_ranks_per_channel  -->  1
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/tasklet_sweep/SEL_dpu1_tasklets2_size524288
+num_revolver_scheduling_cycles  -->  11
+wordline_size  -->  1024
+write_bandwidth  -->  3
+num_pipeline_stages  -->  14
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+memory_frequency  -->  2400
+t_rcd  -->  32
+

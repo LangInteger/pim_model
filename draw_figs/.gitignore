@@ -1,0 +1,23 @@
+.cache
+build-mac/
+build/
+*.pdf
+pim_summary.json
+compile_commands.json
+scripts/__pycache__/
+
+# Large reproducible simulator artifacts
+simulator_results/**/*.bin
+simulator_results/**/*.trace
+simulator_results/**/trace.txt
+
+# Verbose console output
+simulator_results/**/console.log
+
+# Interrupted runs
+simulator_results/**/*.incomplete.*/
+
+# Temporary files
+simulator_results/**/*.tmp
+simulator_results/**/.DS_Store
+.venv/

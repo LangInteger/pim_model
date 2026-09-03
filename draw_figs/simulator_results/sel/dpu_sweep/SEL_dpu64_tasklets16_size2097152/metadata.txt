@@ -1,0 +1,10 @@
+experiment=dpu_sweep
+benchmark=SEL
+num_tasklets=16
+num_dpus=64
+data_prep_params=2097152
+start_time=2026-08-28T17:07:57+00:00
+upimulator_commit=9386782e63e62f265f578a13ccdef870662836fa
+docker_image=sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7
+end_time=2026-08-28T17:09:40+00:00
+status=success

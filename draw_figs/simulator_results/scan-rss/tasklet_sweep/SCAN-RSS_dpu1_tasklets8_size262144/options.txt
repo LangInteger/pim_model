@@ -1,0 +1,26 @@
+OPTIONS
+memory_frequency  -->  2400
+num_revolver_scheduling_cycles  -->  11
+t_rcd  -->  32
+verbose  -->  0
+wordline_size  -->  1024
+t_ras  -->  78
+t_cl  -->  32
+benchmark  -->  SCAN-RSS
+num_channels  -->  1
+num_dpus_per_rank  -->  1
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+min_access_granularity  -->  8
+t_bl  -->  8
+write_bandwidth  -->  3
+num_simulation_threads  -->  16
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/tasklet_sweep/SCAN-RSS_dpu1_tasklets8_size262144
+num_pipeline_stages  -->  14
+t_rp  -->  32
+read_bandwidth  -->  1
+num_ranks_per_channel  -->  1
+num_tasklets  -->  8
+data_prep_params  -->  262144
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+logic_frequency  -->  350
+

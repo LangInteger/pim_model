@@ -1,0 +1,16 @@
+ThreadScheduler[0_0_0]_breakdown_etc: 26830744
+ThreadScheduler[0_0_0]_breakdown_run: 2683073
+ThreadScheduler[0_0_0]_breakdown_dma: 4571131
+Logic[0_0_0]_logic_cycle: 34084948
+Logic[0_0_0]_num_instructions: 2683073
+Logic[0_0_0]_active_tasklets_0: 4661258
+Logic[0_0_0]_active_tasklets_1: 29423690
+CycleRule[0_0_0]_cycle_rule: 1658896
+MemoryController[0_0_0]_memory_cycle: 204509688
+MemoryScheduler[0_0_0]_num_fcfs: 776192
+RowBuffer[0_0_0]_num_activations: 14336
+RowBuffer[0_0_0]_num_precharges: 14335
+RowBuffer[0_0_0]_num_writes: 266240
+RowBuffer[0_0_0]_write_bytes: 2129920
+RowBuffer[0_0_0]_num_reads: 524288
+RowBuffer[0_0_0]_read_bytes: 4194304

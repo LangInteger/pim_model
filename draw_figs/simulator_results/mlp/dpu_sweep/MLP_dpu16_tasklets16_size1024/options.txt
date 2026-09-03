@@ -1,0 +1,26 @@
+OPTIONS
+num_simulation_threads  -->  16
+data_prep_params  -->  1024
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/dpu_sweep/MLP_dpu16_tasklets16_size1024
+memory_frequency  -->  2400
+wordline_size  -->  1024
+min_access_granularity  -->  8
+t_cl  -->  32
+write_bandwidth  -->  3
+num_pipeline_stages  -->  14
+benchmark  -->  MLP
+num_channels  -->  1
+num_dpus_per_rank  -->  16
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+num_revolver_scheduling_cycles  -->  11
+t_rcd  -->  32
+t_ras  -->  78
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+t_rp  -->  32
+t_bl  -->  8
+read_bandwidth  -->  1
+verbose  -->  0
+num_ranks_per_channel  -->  1
+num_tasklets  -->  16
+logic_frequency  -->  350
+

@@ -1,0 +1,26 @@
+OPTIONS
+num_pipeline_stages  -->  14
+benchmark  -->  TRNS
+data_prep_params  -->  128
+logic_frequency  -->  350
+t_rcd  -->  32
+t_rp  -->  32
+t_cl  -->  32
+read_bandwidth  -->  1
+num_channels  -->  1
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+write_bandwidth  -->  3
+memory_frequency  -->  2400
+verbose  -->  0
+num_dpus_per_rank  -->  16
+num_tasklets  -->  16
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/dpu_sweep/TRNS_dpu16_tasklets16_size128
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+num_revolver_scheduling_cycles  -->  11
+wordline_size  -->  1024
+num_simulation_threads  -->  16
+num_ranks_per_channel  -->  1
+min_access_granularity  -->  8
+t_ras  -->  78
+t_bl  -->  8
+

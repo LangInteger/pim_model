@@ -1,0 +1,26 @@
+OPTIONS
+write_bandwidth  -->  3
+num_simulation_threads  -->  16
+num_channels  -->  1
+num_tasklets  -->  16
+num_revolver_scheduling_cycles  -->  11
+t_ras  -->  78
+t_cl  -->  32
+t_bl  -->  8
+num_pipeline_stages  -->  14
+verbose  -->  0
+benchmark  -->  HST-S
+num_dpus_per_rank  -->  4
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/dpu_sweep/HST-S_dpu4_tasklets16_size524288
+min_access_granularity  -->  8
+t_rp  -->  32
+num_ranks_per_channel  -->  1
+data_prep_params  -->  524288
+read_bandwidth  -->  1
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+logic_frequency  -->  350
+memory_frequency  -->  2400
+wordline_size  -->  1024
+t_rcd  -->  32
+

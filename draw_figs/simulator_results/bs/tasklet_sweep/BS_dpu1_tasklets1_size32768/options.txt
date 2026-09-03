@@ -1,0 +1,26 @@
+OPTIONS
+t_ras  -->  78
+t_rp  -->  32
+t_cl  -->  32
+num_simulation_threads  -->  16
+benchmark  -->  BS
+num_channels  -->  1
+num_ranks_per_channel  -->  1
+memory_frequency  -->  2400
+num_pipeline_stages  -->  14
+t_rcd  -->  32
+write_bandwidth  -->  3
+num_dpus_per_rank  -->  1
+num_tasklets  -->  1
+logic_frequency  -->  350
+num_revolver_scheduling_cycles  -->  11
+min_access_granularity  -->  8
+t_bl  -->  8
+read_bandwidth  -->  1
+log_dirpath  -->  /home/via/uPIMulator/golang/log
+verbose  -->  0
+data_prep_params  -->  32768
+root_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator
+bin_dirpath  -->  /home/pim/lang_evaluation/uPIMulator/golang/uPIMulator/results/tasklet_sweep/BS_dpu1_tasklets1_size32768
+wordline_size  -->  1024
+

@@ -1,0 +1,3 @@
+[submodule "sdk/LoCaLUT"]
+	path = sdk/LoCaLUT
+	url = git@github.com:LangInteger/LoCaLUT.git

@@ -35,7 +35,8 @@ STATIC_BENCHMARK_SPECS: dict[str, dict[str, Any]] = {
     },
     "va": {"element_size": 4, "block_size": 1024},
     "red": {"element_size": 8, "block_size": 1024},
-    "hst-l": {"element_size": 4, "block_size": 256, "bins": 256},
+    # Go uPIMulator's HST-L CMake configuration sets BL=10.
+    "hst-l": {"element_size": 4, "block_size": 1024, "bins": 256},
     "hst-s": {"element_size": 4, "block_size": 1024, "bins": 256},
     "gemv": {
         "element_size": 4,

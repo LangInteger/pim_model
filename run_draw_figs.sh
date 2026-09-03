@@ -10,6 +10,6 @@ fi
 
 .venv/bin/pip install -r draw_figs/requirements.txt \
 && cd "$SCRIPT_DIR" \
-&& python3 draw_figs/scripts/aggregate_simulator_results.py \
-&& python3 draw_figs/scripts/estimate_cost.py
+&& .venv/bin/python3 draw_figs/scripts/aggregate_simulator_results.py \
+&& .venv/bin/python3 draw_figs/scripts/estimate_cost.py
 

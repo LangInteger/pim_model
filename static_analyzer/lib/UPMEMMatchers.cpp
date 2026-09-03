@@ -51,7 +51,7 @@ private:
   static void mergePath(FeatureDomain &destination, bool &hasDestination,
                         const FeatureDomain &candidate) {
     destination = hasDestination
-                      ? FeatureDomain::max(destination, candidate)
+                      ? FeatureDomain::memoryPathChoice(destination, candidate)
                       : candidate;
     hasDestination = true;
   }

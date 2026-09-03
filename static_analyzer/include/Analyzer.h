@@ -25,6 +25,8 @@ struct FeatureDomain {
     FeatureDomain& operator+=(const FeatureDomain& other);
     FeatureDomain operator+(const FeatureDomain& other) const;
     static FeatureDomain max(const FeatureDomain& a, const FeatureDomain& b);
+    static FeatureDomain memoryPathChoice(const FeatureDomain& a,
+                                          const FeatureDomain& b);
     FeatureDomain multiply(const std::string& bound);
     
     void printCSV(std::ostream& os) const;

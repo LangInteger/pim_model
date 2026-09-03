@@ -16,6 +16,11 @@ static std::string maxStr(const std::string& a, const std::string& b) {
     catch(...) { return "max(" + a + ", " + b + ")"; }
 }
 
+static std::string pathChoiceStr(const std::string& a, const std::string& b) {
+    if (a == b) return a;
+    return "path(" + a + ", " + b + ")";
+}
+
 static std::string mulStr(const std::string& a, const std::string& b) {
     if (a == "0" || b == "0") return "0";
     if (a == "1") return b;
@@ -71,6 +76,16 @@ FeatureDomain FeatureDomain::max(const FeatureDomain& a, const FeatureDomain& b)
         if (!res.assumptions.empty()) res.assumptions += " | ";
         res.assumptions += b.assumptions;
     }
+    return res;
+}
+
+FeatureDomain FeatureDomain::memoryPathChoice(const FeatureDomain& a,
+                                              const FeatureDomain& b) {
+    FeatureDomain res = FeatureDomain::max(a, b);
+    res.mram_read = pathChoiceStr(a.mram_read, b.mram_read);
+    res.mram_read_tx = pathChoiceStr(a.mram_read_tx, b.mram_read_tx);
+    res.mram_write = pathChoiceStr(a.mram_write, b.mram_write);
+    res.mram_write_tx = pathChoiceStr(a.mram_write_tx, b.mram_write_tx);
     return res;
 }
 

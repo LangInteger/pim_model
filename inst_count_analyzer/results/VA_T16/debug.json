@@ -1,0 +1,5826 @@
+{
+  "benchmark": "VA",
+  "tasklets": 16,
+  "function": "main_kernel1",
+  "params": {
+    "size": 2097152,
+    "transfer_size": 2097152,
+    "kernel": 0
+  },
+  "method": "generic interprocedural CFG+SCEV flow constraints + late MIR machine basic blocks",
+  "scope_note": "Direct calls to functions defined in the same compiled DPU translation unit are recursively expanded. Scalar integer call arguments proven constant by SCEV are propagated into callee analysis. Runtime/SDK callees not present in the translation unit remain explicitly unexpanded.",
+  "dynamic_instruction_bound_direct": {
+    "lower": 45505.0,
+    "upper": 47649.0,
+    "exact": false
+  },
+  "dynamic_instruction_bound": {
+    "lower": 3719617.0,
+    "upper": 3721761.0,
+    "exact": false
+  },
+  "per_tasklet": [
+    {
+      "tid": 0,
+      "instruction_bound_direct_function": {
+        "lower": 2845.0,
+        "upper": 2979.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232477.0,
+        "upper": 232611.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 4,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "mem_reset",
+          "block": "bb2",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 1,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 2,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 3,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 4,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 5,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 6,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 7,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 8,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 9,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 10,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 11,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 12,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 13,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 14,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tid": 15,
+      "instruction_bound_direct_function": {
+        "lower": 2844.0,
+        "upper": 2978.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 232476.0,
+        "upper": 232610.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb2": {
+          "lower": 0.0,
+          "upper": -0.0,
+          "exact": true,
+          "value": 0
+        },
+        "bb4": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16.preheader": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb15": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb16": {
+          "lower": 128.0,
+          "upper": 128.0,
+          "exact": true,
+          "value": 128
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "loops": [
+          {
+            "header": "bb16",
+            "depth": 1,
+            "blocks": [
+              "bb16"
+            ],
+            "backedge_count": 127,
+            "trip_count": 128
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 3,
+          "skipped_non_integer": [],
+          "fields": [
+            "size",
+            "transfer_size",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 3,
+          "callee": "vector_addition",
+          "block": "bb16",
+          "call_bound": {
+            "lower": 128.0,
+            "upper": 128.0,
+            "exact": true,
+            "value": 128
+          },
+          "constant_integer_args": {
+            "2": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 1794.0,
+            "upper": 1794.0,
+            "exact": true,
+            "value": 1794
+          },
+          "contribution": {
+            "lower": 229632.0,
+            "upper": 229632.0,
+            "exact": true,
+            "value": 229632
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        },
+        {
+          "callee": "mem_alloc",
+          "block": "bb4",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "runtime/external callee not defined in translation unit"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_block": "bb.0.bb",
+            "ir_block": "bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.1.bb2",
+            "ir_block": "bb2",
+            "bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "machine_block": "bb.2.bb4",
+            "ir_block": "bb4",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_block": "bb.4.bb16",
+            "ir_block": "bb16",
+            "bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "machine_block": "bb.7.bb15",
+            "ir_block": "bb15",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb2",
+            "number": 1,
+            "label": "bb.1.bb2",
+            "ir_block": "bb2",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": -0.0,
+              "exact": true,
+              "value": 0
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb4",
+            "number": 2,
+            "label": "bb.2.bb4",
+            "ir_block": "bb4",
+            "successors": [
+              3,
+              7
+            ],
+            "instructions": 14,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb16.preheader",
+            "number": 3,
+            "label": "bb.3.bb16.preheader",
+            "ir_block": null,
+            "successors": [
+              4
+            ],
+            "instructions": 6,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 1.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.select.end",
+            "number": 6,
+            "label": "bb.6.select.end",
+            "ir_block": null,
+            "successors": [
+              4,
+              7
+            ],
+            "instructions": 20,
+            "calls": [
+              "vector_addition"
+            ],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb16",
+            "number": 4,
+            "label": "bb.4.bb16",
+            "ir_block": "bb16",
+            "successors": [
+              6,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "execution_bound": {
+              "lower": 128.0,
+              "upper": 128.0,
+              "exact": true,
+              "value": 128
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.select.false",
+            "number": 5,
+            "label": "bb.5.select.false",
+            "ir_block": null,
+            "successors": [
+              6
+            ],
+            "instructions": 1,
+            "calls": [],
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 128.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb15",
+            "number": 7,
+            "label": "bb.7.bb15",
+            "ir_block": "bb15",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "artifacts": {
+    "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA_T16/kernel.ll",
+    "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA_T16/kernel.named.ll",
+    "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA_T16/kernel.late.mir",
+    "emit_info": {
+      "original_compile": {
+        "argv": [
+          "dpu-upmem-dpurte-clang",
+          "-S",
+          "-w",
+          "-Isupport",
+          "-O2",
+          "-DNR_TASKLETS=16",
+          "-DBL=10",
+          "-DINT32",
+          "-o",
+          "bin/dpu_code.S",
+          "dpu/task.c"
+        ],
+        "sources": [
+          "dpu/task.c"
+        ],
+        "output": "bin/dpu_code.S"
+      },
+      "emit_llvm_argv": [
+        "dpu-upmem-dpurte-clang",
+        "-S",
+        "-w",
+        "-Isupport",
+        "-O2",
+        "-DNR_TASKLETS=16",
+        "-DBL=10",
+        "-DINT32",
+        "dpu/task.c",
+        "-S",
+        "-emit-llvm",
+        "-o",
+        "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA_T16/kernel.ll"
+      ],
+      "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA_T16/kernel.ll"
+    }
+  },
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 524288
+  }
+}

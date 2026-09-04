@@ -13,6 +13,7 @@ fi
 && ./prepare_localut_sdk.sh ../sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64 \
 && source .work/sdk_compat/upmem_env.sh \
 && ../.venv/bin/python count_instructions.py \
+  --debug \
   --root ../uPIMulator/golang/uPIMulator/benchmark \
   --benchmark VA \
   --tasklets 16 \

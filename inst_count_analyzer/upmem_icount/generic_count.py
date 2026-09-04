@@ -16,6 +16,13 @@ from .generic_cfg import (
     solve_machine_total,
 )
 from .llvm_ir import emit_llvm_ir
+from .runtime import (
+    AnalysisModule,
+    DEFAULT_RUNTIME_FUNCTIONS,
+    build_function_index,
+    prepare_runtime_modules,
+)
+from .runtime_semantics import is_collective_runtime_primitive
 from .toolchain import discover_toolchain
 
 
@@ -44,6 +51,39 @@ def _ctx_slug(function: str, args: dict[int, int]) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", f"{function}__{tail}")
 
 
+def _prepare_benchmark_module(
+    benchmark_dir: Path,
+    tasklets: int,
+    work_dir: Path,
+    opt: str,
+    llc: str,
+    extra_make: list[str] | None,
+) -> AnalysisModule:
+    llvm_ir = work_dir / "kernel.ll"
+    emit_info = emit_llvm_ir(benchmark_dir, tasklets, llvm_ir, extra_make)
+    named_ir = work_dir / "kernel.named.ll"
+    _named_ir(opt, llvm_ir, named_ir)
+    cfg = parse_ir_cfg(named_ir.read_text())
+
+    late_mir = work_dir / "kernel.late.mir"
+    run_late_mir(llc, named_ir, late_mir)
+    ir_names = {function: set(blocks) for function, blocks in cfg.items()}
+    machine = parse_mir(late_mir.read_text(), ir_names)
+
+    return AnalysisModule(
+        name="benchmark",
+        kind="benchmark",
+        source_dir=benchmark_dir,
+        source_path=None,
+        llvm_ir=llvm_ir,
+        named_ir=named_ir,
+        late_mir=late_mir,
+        cfg=cfg,
+        machine=machine,
+        emit_info=emit_info,
+    )
+
+
 def generic_dynamic_instruction_count(
     benchmark_dir: Path,
     tasklets: int,
@@ -52,16 +92,18 @@ def generic_dynamic_instruction_count(
     sdk_root: str | None = None,
     function: str = "main_kernel1",
     extra_make: list[str] | None = None,
+    runtime_functions: frozenset[str] = DEFAULT_RUNTIME_FUNCTIONS,
 ) -> dict:
     """Statically estimate/bound dynamic DPU instructions.
 
-    Direct calls to functions defined in the same DPU translation unit are
-    recursively expanded. Integer scalar call arguments that SCEV proves
-    constant are propagated into callee analysis, so callee loop counts can be
-    specialized without changing the original machine-code shape.
+    Direct calls to functions indexed from independently compiled benchmark or
+    runtime translation units are recursively expanded. Integer scalar call
+    arguments that SCEV proves constant are propagated into callee analysis,
+    so callee loop counts can be specialized without changing the original
+    machine-code shape.
 
-    Calls to runtime/SDK functions that are not present in the compiled
-    translation unit remain explicitly unexpanded.
+    Runtime collective primitives and calls without an indexed translation
+    unit remain explicitly unexpanded.
     """
     # All disposable LLVM/SCEV/MIR artifacts live under work_dir. emit_llvm_ir
     # runs clang with benchmark_dir as its working directory, so resolve both
@@ -76,27 +118,20 @@ def generic_dynamic_instruction_count(
     if not Path(llc).exists():
         raise RuntimeError(f"llc not found: {llc}")
 
-    # Emit the exact optimized target IR corresponding to the benchmark build.
-    ir = work_dir / "kernel.ll"
-    emit_info = emit_llvm_ir(benchmark_dir, tasklets, ir, extra_make)
-    named = work_dir / "kernel.named.ll"
-    _named_ir(tc.opt, ir, named)
-    named_text = named.read_text()
-    original_cfg = parse_ir_cfg(named_text)
-    if function not in original_cfg:
-        raise RuntimeError(
-            f"function {function!r} not found; available: {sorted(original_cfg)}"
+    # Keep every translation unit independent through optimization and MIR
+    # lowering. Cross-module expansion is an analyzer operation, not llvm-link.
+    benchmark_module = _prepare_benchmark_module(
+        benchmark_dir, tasklets, work_dir, tc.opt, llc, extra_make
+    )
+    modules = [benchmark_module]
+    if runtime_functions:
+        modules.extend(
+            prepare_runtime_modules(tc, llc, work_dir, runtime_functions)
         )
-
-    # Generate one unspecialized late MIR. It defines the real machine-code
-    # shape/cost; all parameter specialization below is analysis-only.
-    mir = work_dir / "kernel.late.mir"
-    run_late_mir(llc, named, mir)
-    ir_names = {fn: set(bs) for fn, bs in original_cfg.items()}
-    machine = parse_mir(mir.read_text(), ir_names)
-    if function not in machine:
+    function_index = build_function_index(modules)
+    if function not in function_index:
         raise RuntimeError(
-            f"machine function {function!r} not found; available: {sorted(machine)}"
+            f"function {function!r} not found; available: {sorted(function_index)}"
         )
 
     total_direct = Bound(0.0, 0.0)
@@ -125,7 +160,8 @@ def generic_dynamic_instruction_count(
                         {"callee": fn, "reason": "recursive call cycle"}
                     ],
                 }
-            if fn not in original_cfg or fn not in machine:
+            owner = function_index.get(fn)
+            if owner is None:
                 return {
                     "function": fn,
                     "function_args": fn_args,
@@ -133,16 +169,21 @@ def generic_dynamic_instruction_count(
                     "expanded": Bound(None, None),
                     "expanded_calls": [],
                     "unexpanded_calls": [
-                        {"callee": fn, "reason": "not defined in translation unit"}
+                        {"callee": fn, "reason": "no indexed translation unit"}
                     ],
                 }
 
             active.add(key)
-            ctx_dir = tid_dir / "contexts" / _ctx_slug(fn, fn_args)
+            ctx_dir = (
+                tid_dir
+                / "contexts"
+                / owner.name
+                / _ctx_slug(fn, fn_args)
+            )
             ana = run_opt_analysis(
                 tc.opt,
-                named,
-                benchmark_dir,
+                owner.named_ir,
+                owner.source_dir,
                 tid,
                 params,
                 ctx_dir,
@@ -159,7 +200,7 @@ def generic_dynamic_instruction_count(
 
             ir_bounds, ir_meta = solve_ir_block_bounds(cfg, loops)
             direct, machine_bounds, machine_meta = solve_machine_total(
-                machine[fn], ir_bounds
+                owner.machine[fn], ir_bounds
             )
             expanded = direct
             expanded_calls = []
@@ -169,13 +210,27 @@ def generic_dynamic_instruction_count(
                 if call.callee.startswith("llvm."):
                     continue
                 call_bound = ir_bounds.get(call.block, Bound(None, None))
-                if call.callee not in original_cfg or call.callee not in machine:
+                if is_collective_runtime_primitive(call.callee):
                     unexpanded_calls.append(
                         {
                             "callee": call.callee,
                             "block": call.block,
                             "call_bound": call_bound.to_dict(),
-                            "reason": "runtime/external callee not defined in translation unit",
+                            "reason": (
+                                "collective runtime primitive requires generation-level "
+                                "semantics; ordinary per-tasklet expansion is disabled"
+                            ),
+                        }
+                    )
+                    continue
+                callee_owner = function_index.get(call.callee)
+                if callee_owner is None:
+                    unexpanded_calls.append(
+                        {
+                            "callee": call.callee,
+                            "block": call.block,
+                            "call_bound": call_bound.to_dict(),
+                            "reason": "no indexed translation unit",
                         }
                     )
                     continue
@@ -190,6 +245,7 @@ def generic_dynamic_instruction_count(
                     {
                         "call_index": call_index,
                         "callee": call.callee,
+                        "callee_module": callee_owner.name,
                         "block": call.block,
                         "call_bound": call_bound.to_dict(),
                         "constant_integer_args": child_args,
@@ -202,6 +258,7 @@ def generic_dynamic_instruction_count(
 
             result = {
                 "function": fn,
+                "module": owner.name,
                 "function_args": fn_args,
                 "direct": direct,
                 "expanded": expanded,
@@ -256,23 +313,23 @@ def generic_dynamic_instruction_count(
         "function": function,
         "params": params,
         "method": (
-            "generic interprocedural CFG+SCEV flow constraints + late MIR "
-            "machine basic blocks"
+            "cross-translation-unit CFG+SCEV flow constraints + independent "
+            "late MIR machine basic blocks"
         ),
         "scope_note": (
-            "Direct calls to functions defined in the same compiled DPU translation unit "
-            "are recursively expanded. Scalar integer call arguments proven constant by "
-            "SCEV are propagated into callee analysis. Runtime/SDK callees not present in "
-            "the translation unit remain explicitly unexpanded."
+            "Benchmark and selected SDK runtime translation units are compiled and "
+            "lowered independently, then indexed for recursive analysis. Scalar integer "
+            "call arguments proven constant by SCEV are propagated into callees. "
+            "Collective runtime primitives remain explicitly unexpanded."
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),
         "dynamic_instruction_bound": total_expanded.to_dict(),
         "per_tasklet": per_tid,
         "artifacts": {
-            "llvm_ir": str(ir),
-            "named_ir": str(named),
-            "late_mir": str(mir),
-            "emit_info": emit_info,
+            "modules": [module.artifact_dict() for module in modules],
+            "function_index": {
+                name: owner.name for name, owner in sorted(function_index.items())
+            },
         },
     }
     return result

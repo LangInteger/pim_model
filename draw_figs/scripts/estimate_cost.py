@@ -126,6 +126,14 @@ def parse_args() -> argparse.Namespace:
         help="Override the aggregated simulator summary path",
     )
     parser.add_argument(
+        "--instruction-summary",
+        type=Path,
+        help=(
+            "Override the static instruction-count summary path "
+            "(currently used by VA)"
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         type=Path,
         help="Override the cost-model output directory",
@@ -144,6 +152,76 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     return parser.parse_args()
+
+
+def load_va_instruction_counts(path: Path) -> dict[int, dict[str, Any]]:
+    """Load VA tasklet results and their analyzed reference input sizes."""
+    with path.open(newline="", encoding="utf-8") as input_file:
+        rows = list(csv.DictReader(input_file))
+
+    counts: dict[int, dict[str, Any]] = {}
+    for row in rows:
+        if row.get("benchmark", "").upper() != "VA":
+            raise ValueError(f"non-VA row in VA instruction summary: {row}")
+        tasklets = int(row["tasklets"])
+        if tasklets in counts:
+            raise ValueError(f"duplicate VA instruction result for T={tasklets}")
+        lower = float(row["instructions_lower"])
+        upper = float(row["instructions_upper"])
+        if lower > upper:
+            raise ValueError(f"invalid VA instruction interval for T={tasklets}")
+
+        # result_path records the server's absolute path, which is deliberately
+        # not portable. Resolve the compact result relative to the summary.
+        result_path = path.parent / f"T{tasklets}" / "result.json"
+        result = json.loads(result_path.read_text(encoding="utf-8"))
+        params = result.get("params", {})
+        if "size" not in params:
+            raise ValueError(f"{result_path} does not record the analyzed VA size")
+        reference_bytes = int(params["size"])
+        if reference_bytes <= 0:
+            raise ValueError(f"invalid VA reference size in {result_path}")
+
+        counts[tasklets] = {
+            "lower": lower,
+            "upper": upper,
+            "midpoint": (lower + upper) / 2,
+            "reference_bytes": reference_bytes,
+            "unexpanded_callees": ";".join(
+                str(callee) for callee in result.get("unexpanded_callees", [])
+            ),
+        }
+    if not counts:
+        raise ValueError(f"no VA instruction results found in {path}")
+    return counts
+
+
+def va_instruction_bound_for_setting(
+    counts: dict[int, dict[str, Any]],
+    tasklets: int,
+    blocks_per_dpu: int,
+    block_size: int,
+) -> dict[str, Any]:
+    """Return the static VA count, scaling only when input size differs."""
+    if tasklets not in counts:
+        raise ValueError(f"no static VA instruction result for T={tasklets}")
+    reference = counts[tasklets]
+    reference_blocks = math.ceil(reference["reference_bytes"] / block_size)
+    scale = blocks_per_dpu / reference_blocks
+    direct_match = blocks_per_dpu == reference_blocks
+    return {
+        "lower": reference["lower"] * scale,
+        "upper": reference["upper"] * scale,
+        "midpoint": reference["midpoint"] * scale,
+        "source": (
+            "static_analyzer_midpoint"
+            if direct_match
+            else "static_analyzer_midpoint_block_scaled"
+        ),
+        "reference_bytes": reference["reference_bytes"],
+        "scale": scale,
+        "unexpanded_callees": reference["unexpanded_callees"],
+    }
 
 
 def load_kernel_features(
@@ -600,6 +678,11 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
     if spec is None:
         raise ValueError(f"no static memory adapter for benchmark: {benchmark}")
     kernels = load_kernel_features(args.static_summary, spec.get("kernel_functions"))
+    va_instruction_counts = (
+        load_va_instruction_counts(args.instruction_summary)
+        if benchmark == "va"
+        else None
+    )
     with args.simulator_summary.open(newline="", encoding="utf-8") as input_file:
         simulator_rows = list(csv.DictReader(input_file))
 
@@ -801,8 +884,43 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             + memory_read_tx * args.mram_read_latency
             + memory_write_tx * args.mram_write_latency
         )
+        # Retain the simulator count as a validation column. For VA it is not
+        # an input to the compute-cost equations below.
+        measured_instructions = float(measured["instructions_mean"])
+        if benchmark == "va":
+            instruction_bound = va_instruction_bound_for_setting(
+                va_instruction_counts,
+                tasklets,
+                blocks,
+                block_size,
+            )
+            compute_instructions = float(instruction_bound["midpoint"])
+            instruction_fields = {
+                "compute_instruction_source": str(instruction_bound["source"]),
+                "compute_instructions_per_dpu": compute_instructions,
+                "static_instructions_lower_per_dpu": float(
+                    instruction_bound["lower"]
+                ),
+                "static_instructions_upper_per_dpu": float(
+                    instruction_bound["upper"]
+                ),
+                "static_instructions_midpoint_per_dpu": compute_instructions,
+                "instruction_reference_bytes_per_dpu": int(
+                    instruction_bound["reference_bytes"]
+                ),
+                "instruction_scale_from_reference": float(
+                    instruction_bound["scale"]
+                ),
+                "instruction_unexpanded_callees": str(
+                    instruction_bound["unexpanded_callees"]
+                ),
+            }
+        else:
+            compute_instructions = measured_instructions
+            instruction_fields = {}
+
         compute_ideal = (
-            float(measured["instructions_mean"])
+            compute_instructions
             * PIPELINE_DEPTH
             * max(1 / tasklets, 1 / PIPELINE_DEPTH)
         )
@@ -848,7 +966,8 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             ),
             "memory_transactions_lower_per_dpu": memory_transactions_lower,
             "memory_transactions_upper_per_dpu": memory_transactions_upper,
-            "measured_instructions_per_dpu": float(measured["instructions_mean"]),
+            **instruction_fields,
+            "measured_instructions_per_dpu": measured_instructions,
             "actual_cycles": actual_cycles,
             "memory_model_lower_cycles": memory_cycles_lower,
             "memory_model_upper_cycles": memory_cycles_upper,
@@ -1029,6 +1148,14 @@ def run_benchmark(args: argparse.Namespace, benchmark: str) -> None:
         / benchmark_lower
         / "summary.csv"
     )
+    if benchmark_lower == "va":
+        args.instruction_summary = args.instruction_summary or (
+            draw_figs_dir.parent
+            / "inst_count_analyzer"
+            / "results"
+            / "VA_tasklet_sweep"
+            / "instruction_counts.csv"
+        )
     args.output_dir = args.output_dir or (
         draw_figs_dir
         / "results"
@@ -1074,6 +1201,7 @@ def main() -> int:
         path_overrides = {
             "--static-summary": args.static_summary,
             "--simulator-summary": args.simulator_summary,
+            "--instruction-summary": args.instruction_summary,
             "--output-dir": args.output_dir,
         }
         incompatible = [name for name, value in path_overrides.items() if value]

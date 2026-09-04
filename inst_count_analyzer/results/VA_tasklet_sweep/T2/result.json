@@ -1,0 +1,17 @@
+{
+  "benchmark": "VA",
+  "tasklets": 2,
+  "params": {
+    "size": 2097152,
+    "transfer_size": 2097152,
+    "kernel": 0
+  },
+  "dynamic_instruction_bound": {
+    "lower": 3719290,
+    "upper": 3721350,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ]
+}

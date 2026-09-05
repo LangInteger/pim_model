@@ -8,6 +8,9 @@ scripts/__pycache__/
 
 # Large reproducible simulator artifacts
 simulator_results/**/*.bin
+# Keep the small DPU runtime-argument dumps required by instruction analysis.
+!simulator_results/**/input_DPU_INPUT_ARGUMENTS_*.bin
+
 simulator_results/**/*.trace
 simulator_results/**/trace.txt
 

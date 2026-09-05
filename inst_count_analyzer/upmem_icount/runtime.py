@@ -4,7 +4,15 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from .generic_cfg import IRBlock, MachineBlock, parse_ir_cfg, parse_mir, run_late_mir
+from .generic_cfg import (
+    IRBlock,
+    MachineBlock,
+    parse_annotated_assembly,
+    parse_ir_cfg,
+    parse_mir,
+    run_annotated_assembly,
+    run_late_mir,
+)
 from .toolchain import Toolchain
 
 
@@ -19,6 +27,7 @@ class AnalysisModule:
     llvm_ir: Path
     named_ir: Path
     late_mir: Path
+    annotated_assembly: Path
     cfg: dict[str, dict[str, IRBlock]]
     machine: dict[str, list[MachineBlock]]
     emit_info: dict
@@ -31,6 +40,7 @@ class AnalysisModule:
             "llvm_ir": str(self.llvm_ir),
             "named_ir": str(self.named_ir),
             "late_mir": str(self.late_mir),
+            "annotated_assembly": str(self.annotated_assembly),
             "functions": sorted(set(self.cfg) & set(self.machine)),
             "emit_info": self.emit_info,
         }
@@ -150,7 +160,15 @@ def _prepare_runtime_module(
     late_mir = module_dir / "module.late.mir"
     run_late_mir(llc, named_ir, late_mir)
     ir_names = {function: set(blocks) for function, blocks in cfg.items()}
-    machine = parse_mir(late_mir.read_text(), ir_names)
+    annotated_assembly = module_dir / "module.annotated.s"
+    run_annotated_assembly(llc, named_ir, annotated_assembly)
+    if translation_unit.name == "syslib_mul32":
+        # __mulsi3 is handwritten cyclic-looking inline assembly contained in
+        # one LLVM MBB.  Its source-level path expansion below needs the single
+        # late-MIR INLINEASM placeholder rather than the flattened MCInst list.
+        machine = parse_mir(late_mir.read_text(), ir_names)
+    else:
+        machine = parse_annotated_assembly(annotated_assembly.read_text(), ir_names)
 
     missing = translation_unit.requested_functions - (set(cfg) & set(machine))
     if missing:
@@ -167,6 +185,7 @@ def _prepare_runtime_module(
         llvm_ir=llvm_ir,
         named_ir=named_ir,
         late_mir=late_mir,
+        annotated_assembly=annotated_assembly,
         cfg=cfg,
         machine=machine,
         emit_info=emit_info,

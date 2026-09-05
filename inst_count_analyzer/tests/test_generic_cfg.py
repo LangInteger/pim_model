@@ -12,6 +12,7 @@ from upmem_icount.generic_cfg import (  # noqa: E402
     Bound,
     LoopInfo,
     MachineBlock,
+    parse_annotated_assembly,
     parse_lowered_callsites,
     solve_machine_total,
 )
@@ -72,6 +73,71 @@ class MachineIrAnchoringTests(unittest.TestCase):
 
         self.assertEqual(total.lower, 2)
         self.assertEqual(total.upper, 3)
+
+    def test_single_exact_ir_anchor_does_not_disable_merged_taken_path(self) -> None:
+        # MBB 1 is labelled as the optional predecessor but also contains the
+        # following IR block after tail duplication.  Requiring the separately
+        # labelled MBB 2 to execute exactly once would incorrectly force MBB 1
+        # to zero executions.
+        blocks = [
+            MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 2], 1, []),
+            MachineBlock("f", "bb.1.taken", 1, "bb.1.taken", "taken", [3], 5, []),
+            MachineBlock("f", "bb.2.cont", 2, "bb.2.cont", "cont", [3], 2, []),
+            MachineBlock("f", "bb.3.exit", 3, "bb.3.exit", "exit", [], 1, []),
+        ]
+        total, block_bounds, metadata = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "taken": Bound(0, 1),
+                "cont": Bound(1, 1),
+                "exit": Bound(1, 1),
+            },
+        )
+
+        self.assertEqual(total, Bound(4, 7))
+        self.assertEqual(block_bounds["bb.1.taken"], Bound(0, 1))
+        cont = next(a for a in metadata["anchors"] if a["ir_block"] == "cont")
+        self.assertEqual(cont["anchor_kind"], "machine_flow_only")
+
+
+class FinalAssemblyParsingTests(unittest.TestCase):
+    def test_counts_expanded_mcinsts_and_machine_edges(self) -> None:
+        assembly = r"""
+        .type f,@function
+f:                                      // @f
+// %bb.0: // %entry
+        add r0, r0, r1 // <MCInst #1 ADDrrr>
+        addc r2, r2, r3 // <MCInst #2 ADDCrrr>
+        jeq r0, 0, .LBB0_2 // <MCInst #3 JEQrii>
+.LBB0_1: // %left
+        add r4, r4, 1 // <MCInst #4 ADDrri>
+        jump .LBB0_3 // <MCInst #5 JUMPi>
+.LBB0_2: // %right
+        sub r4, r4, 1 // <MCInst #6 SUBrri>
+.LBB0_3: // %exit
+        jump r23 // <MCInst #7 JUMPr>
+        .size f, .-f
+"""
+        blocks = parse_annotated_assembly(
+            assembly,
+            {"f": {"entry", "left", "right", "exit"}},
+        )["f"]
+
+        self.assertEqual([block.instructions for block in blocks], [3, 2, 1, 1])
+        self.assertEqual(blocks[0].successors, [2, 1])
+        self.assertEqual(blocks[0].edge_instruction_costs, {2: 3})
+        self.assertEqual(blocks[1].successors, [3])
+        total, _, _ = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "left": Bound(0, 1),
+                "right": Bound(0, 1),
+                "exit": Bound(1, 1),
+            },
+        )
+        self.assertEqual(total, Bound(5, 6))
 
 
 class GemvLoopSemanticsTests(unittest.TestCase):

@@ -627,6 +627,23 @@ def run_late_mir(llc: str, named_ir: Path, out_path: Path) -> None:
         raise RuntimeError(f"llc MIR failed: {' '.join(cmd)}\n{p.stdout}\n{p.stderr}")
 
 
+def run_annotated_assembly(llc: str, named_ir: Path, out_path: Path) -> None:
+    """Emit the final MCInst stream after DPU macro-instruction expansion."""
+    cmd = [
+        llc,
+        "-mtriple=dpu-upmem-dpurte",
+        "--asm-show-inst",
+        str(named_ir),
+        "-o",
+        str(out_path),
+    ]
+    p = subprocess.run(cmd, text=True, capture_output=True)
+    if p.returncode != 0:
+        raise RuntimeError(
+            f"llc annotated assembly failed: {' '.join(cmd)}\n{p.stdout}\n{p.stderr}"
+        )
+
+
 def parse_mir(text: str, ir_block_names: dict[str,set[str]] | None=None) -> dict[str,list[MachineBlock]]:
     out: dict[str,list[MachineBlock]]={}
     cur_fn=None; cur=None; blocks=[]; in_body=False
@@ -681,6 +698,139 @@ def parse_mir(text: str, ir_block_names: dict[str,set[str]] | None=None) -> dict
     return out
 
 
+def parse_annotated_assembly(
+    text: str,
+    ir_block_names: dict[str, set[str]] | None = None,
+) -> dict[str, list[MachineBlock]]:
+    """Parse the final DPU MCInst stream into a machine CFG.
+
+    Late MIR still contains target macros such as ``ADD64rr`` and ``Jcc64``.
+    UPMEM's ``DPU Resolve Macro Instructions`` pass expands those only while
+    emitting assembly.  With ``--asm-show-inst`` every real emitted
+    instruction carries an ``<MCInst`` annotation, so counting this stream
+    avoids assigning one instruction to a multi-instruction macro.
+
+    LLVM prints final machine-block numbers either as ``// %bb.N`` comments
+    (entry and newly created blocks) or in ``.LBBF_N`` labels.  The optional
+    trailing ``// %ir_name`` comment retains the original IR-block anchor.
+    """
+    out: dict[str, list[MachineBlock]] = {}
+    pending_function: str | None = None
+    function: str | None = None
+    blocks: list[MachineBlock] = []
+    instructions_by_block: dict[int, list[str]] = {}
+    current: MachineBlock | None = None
+
+    def finish_function() -> None:
+        nonlocal function, blocks, instructions_by_block, current
+        if function is None:
+            return
+        if blocks:
+            ordered = blocks
+            existing = {block.number for block in ordered}
+            for index, block in enumerate(ordered):
+                instructions = instructions_by_block.get(block.number, [])
+                successors: list[int] = []
+                edge_costs: dict[int, int] = {}
+                prevents_fallthrough = False
+                for instruction_index, instruction in enumerate(instructions, start=1):
+                    opcode = instruction.split(None, 1)[0] if instruction else ""
+                    targets = [
+                        int(value)
+                        for value in re.findall(r"\.LBB\d+_(\d+)", instruction)
+                    ]
+                    for target in targets:
+                        if target in existing and target not in successors:
+                            successors.append(target)
+                            edge_costs[target] = instruction_index
+                    if targets and (
+                        opcode == "jump"
+                        or re.search(r",\s*true\s*,", instruction)
+                    ):
+                        prevents_fallthrough = True
+                    elif opcode == "jump" and not targets:
+                        # ``jump r23`` is the ordinary function return.
+                        prevents_fallthrough = True
+                if not prevents_fallthrough and index + 1 < len(ordered):
+                    fallthrough = ordered[index + 1].number
+                    if fallthrough not in successors:
+                        successors.append(fallthrough)
+                block.successors = successors
+                block.edge_instruction_costs = edge_costs
+            out[function] = ordered
+        function = None
+        blocks = []
+        instructions_by_block = {}
+        current = None
+
+    for raw in text.splitlines():
+        type_match = re.match(r"\s*\.type\s+([^,]+),@function", raw)
+        if type_match:
+            pending_function = type_match.group(1).strip()
+            continue
+        if pending_function and re.match(
+            rf"^\s*{re.escape(pending_function)}:\s*(?://.*)?$", raw
+        ):
+            finish_function()
+            function = pending_function
+            pending_function = None
+            continue
+        if function is None:
+            continue
+        if re.match(rf"\s*\.size\s+{re.escape(function)}\s*,", raw):
+            finish_function()
+            continue
+
+        block_number: int | None = None
+        ir_block: str | None = None
+        label_match = re.search(r"\.LBB\d+_(\d+):(?:\s*//\s*%([-A-Za-z$._0-9]+))?", raw)
+        if label_match:
+            block_number = int(label_match.group(1))
+            ir_block = label_match.group(2)
+        else:
+            comment_match = re.match(
+                r"\s*//\s*%bb\.(\d+):(?:\s*//\s*%([-A-Za-z$._0-9]+))?",
+                raw,
+            )
+            if comment_match:
+                block_number = int(comment_match.group(1))
+                ir_block = comment_match.group(2)
+        if block_number is not None:
+            if current is not None and current.number == block_number:
+                if current.ir_block is None and ir_block is not None:
+                    current.ir_block = ir_block
+                continue
+            if ir_block_names and function in ir_block_names:
+                if ir_block not in ir_block_names[function]:
+                    ir_block = None
+            current = MachineBlock(
+                function,
+                f"bb.{block_number}" + (f".{ir_block}" if ir_block else ""),
+                block_number,
+                f"bb.{block_number}" + (f".{ir_block}" if ir_block else ""),
+                ir_block,
+                [],
+                0,
+                [],
+            )
+            blocks.append(current)
+            instructions_by_block.setdefault(block_number, [])
+            continue
+
+        if current is not None and "<MCInst" in raw:
+            instruction = raw.split("//", 1)[0].strip()
+            if instruction:
+                instructions_by_block[current.number].append(instruction)
+                current.instructions += 1
+                if instruction.startswith("call "):
+                    call_match = re.search(r"\bcall\s+[^,]+,\s*([-A-Za-z$._0-9]+)", instruction)
+                    if call_match:
+                        current.calls.append(call_match.group(1))
+
+    finish_function()
+    return out
+
+
 def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) -> tuple[Bound,dict[str,Bound],dict]:
     if not blocks: return Bound(None,None),{}, {'reason':'no machine blocks'}
     nums=[b.number for b in blocks]; bynum={b.number:b for b in blocks}; entry=blocks[0].number
@@ -724,6 +874,27 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
         if block.ir_block and block.ir_block in ir_bounds:
             groups.setdefault(block.ir_block, set()).add(block.number)
 
+    # Only constrain a one-to-one IR/MBB mapping when it is needed to bound a
+    # cycle or eliminate a specialized-away path.  Ordinary acyclic blocks are
+    # already governed by machine-flow conservation.  Pinning every exact-once
+    # IR block is unsound after tail duplication/block merging: an MBB labelled
+    # with the predecessor may also contain the successor's instructions, so
+    # the separately labelled successor MBB can legitimately be bypassed.
+    def reaches_itself(start: int) -> bool:
+        pending = list(bynum[start].successors)
+        seen: set[int] = set()
+        while pending:
+            current = pending.pop()
+            if current == start:
+                return True
+            if current in seen or current not in bynum:
+                continue
+            seen.add(current)
+            pending.extend(bynum[current].successors)
+        return False
+
+    cyclic_blocks = {number for number in nums if reaches_itself(number)}
+
     anchors=[]
     def reachable_within(start: int, members: set[int]) -> dict[int, int]:
         distance={start:0}
@@ -738,6 +909,21 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
 
     for ir_block, members in groups.items():
         bd=ir_bounds[ir_block]
+        needs_anchor = (
+            len(members) > 1
+            or bool(members & cyclic_blocks)
+            or (bd.upper is not None and bd.upper <= 0)
+        )
+        if not needs_anchor:
+            anchors.append({
+                'machine_blocks':[bynum[number].label for number in sorted(members)],
+                'ir_block':ir_block,
+                'anchor_kind':'machine_flow_only',
+                'entry_machine_blocks':[],
+                'representative_machine_block':None,
+                'bound':bd.to_dict(),
+            })
+            continue
         entry_targets={
             edge[1] for edge in edges
             if edge[1] in members and edge[0] not in members

@@ -7,10 +7,11 @@ from pathlib import Path
 from .generic_cfg import (
     Bound,
     add_bounds,
+    parse_annotated_assembly,
     parse_ir_cfg,
-    parse_mir,
     parse_lowered_callsites,
     resolve_callsite_integer_args,
+    run_annotated_assembly,
     run_late_mir,
     run_opt_analysis,
     solve_ir_block_bounds,
@@ -73,7 +74,9 @@ def _prepare_benchmark_module(
     late_mir = work_dir / "kernel.late.mir"
     run_late_mir(llc, named_ir, late_mir)
     ir_names = {function: set(blocks) for function, blocks in cfg.items()}
-    machine = parse_mir(late_mir.read_text(), ir_names)
+    annotated_assembly = work_dir / "kernel.annotated.s"
+    run_annotated_assembly(llc, named_ir, annotated_assembly)
+    machine = parse_annotated_assembly(annotated_assembly.read_text(), ir_names)
 
     return AnalysisModule(
         name="benchmark",
@@ -83,6 +86,7 @@ def _prepare_benchmark_module(
         llvm_ir=llvm_ir,
         named_ir=named_ir,
         late_mir=late_mir,
+        annotated_assembly=annotated_assembly,
         cfg=cfg,
         machine=machine,
         emit_info=emit_info,
@@ -399,7 +403,8 @@ def generic_dynamic_instruction_count(
         "unknown_loop_backedge_uppers": unknown_loop_backedge_uppers or {},
         "method": (
             "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive "
-            "late MIR machine blocks + target-lowered runtime helper expansion"
+            "post-macro-expansion MCInst machine blocks + target-lowered runtime "
+            "helper expansion"
         ),
         "scope_note": (
             "Benchmark and selected SDK runtime translation units are compiled and "
@@ -407,6 +412,8 @@ def generic_dynamic_instruction_count(
             "call arguments proven constant by SCEV are propagated into callees. "
             "Target-introduced libcalls and acyclic runtime inline assembly are bounded "
             "from their independently compiled SDK translation units. "
+            "Final annotated assembly is used for ordinary functions so DPU backend "
+            "macros that emit multiple instructions are charged at their emitted size. "
             "Collective runtime primitives remain explicitly unexpanded."
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),

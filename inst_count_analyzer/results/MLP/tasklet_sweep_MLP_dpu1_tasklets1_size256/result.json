@@ -28,20 +28,19 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 2583561,
-    "upper": 2583564,
+    "lower": 3766707,
+    "upper": 9873648,
     "exact": false
   },
   "unexpanded_callees": [
-    "barrier_wait",
-    "puts"
+    "barrier_wait"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 2583561.0,
-        "upper": 2583564.0,
+        "lower": 3766707.0,
+        "upper": 9873648.0,
         "exact": false
       },
       "phases": [
@@ -56,13 +55,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 1255569,
+            "upper": 3291216,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
           "result_path": "phases/a9f7a23e6cbbf9ef/result.json"
@@ -78,13 +76,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 1255569,
+            "upper": 3291216,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
           "result_path": "phases/a9f7a23e6cbbf9ef/result.json"
@@ -100,13 +97,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 1255569,
+            "upper": 3291216,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_0.bin",
           "result_path": "phases/a9f7a23e6cbbf9ef/result.json"

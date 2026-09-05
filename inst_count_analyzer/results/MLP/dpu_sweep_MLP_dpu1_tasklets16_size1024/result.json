@@ -28,20 +28,19 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 21606882,
-    "upper": 47574546,
+    "lower": 38133378,
+    "upper": 166390866,
     "exact": false
   },
   "unexpanded_callees": [
-    "barrier_wait",
-    "puts"
+    "barrier_wait"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 21606882.0,
-        "upper": 47574546.0,
+        "lower": 38133378.0,
+        "upper": 166390866.0,
         "exact": false
       },
       "phases": [
@@ -56,13 +55,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 7202294,
-            "upper": 15858182,
+            "lower": 12711126,
+            "upper": 55463622,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
           "result_path": "phases/59fc4fa2e2029dbb/result.json"
@@ -78,13 +76,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 7202294,
-            "upper": 15858182,
+            "lower": 12711126,
+            "upper": 55463622,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
           "result_path": "phases/59fc4fa2e2029dbb/result.json"
@@ -100,13 +97,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 7202294,
-            "upper": 15858182,
+            "lower": 12711126,
+            "upper": 55463622,
             "exact": false
           },
           "unexpanded_callees": [
-            "barrier_wait",
-            "puts"
+            "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_0.bin",
           "result_path": "phases/59fc4fa2e2029dbb/result.json"

@@ -8,13 +8,12 @@
     "nr_rows": 256
   },
   "dynamic_instruction_bound": {
-    "lower": 863094,
-    "upper": 863110,
+    "lower": 1257686,
+    "upper": 3294278,
     "exact": false
   },
   "unexpanded_callees": [
-    "barrier_wait",
-    "puts"
+    "barrier_wait"
   ],
   "simulator_match": {
     "experiment": "tasklet_sweep",

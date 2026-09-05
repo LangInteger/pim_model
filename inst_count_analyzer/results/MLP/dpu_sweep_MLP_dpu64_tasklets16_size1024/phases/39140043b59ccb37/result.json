@@ -8,13 +8,12 @@
     "nr_rows": 16
   },
   "dynamic_instruction_bound": {
-    "lower": 114526,
-    "upper": 249790,
+    "lower": 200878,
+    "upper": 870126,
     "exact": false
   },
   "unexpanded_callees": [
-    "barrier_wait",
-    "puts"
+    "barrier_wait"
   ],
   "simulator_match": {
     "experiment": "dpu_sweep",

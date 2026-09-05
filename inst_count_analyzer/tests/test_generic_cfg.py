@@ -12,7 +12,12 @@ from upmem_icount.generic_cfg import (  # noqa: E402
     Bound,
     LoopInfo,
     MachineBlock,
+    parse_lowered_callsites,
     solve_machine_total,
+)
+from upmem_icount.runtime_semantics import (  # noqa: E402
+    _inline_asm_path_bound,
+    runtime_function_instruction_bound,
 )
 from upmem_icount.source_loop_semantics import source_loop_backedge_bounds  # noqa: E402
 
@@ -55,6 +60,19 @@ class MachineIrAnchoringTests(unittest.TestCase):
         self.assertEqual(total.lower, 12)
         self.assertEqual(total.upper, 12)
 
+    def test_cost_stops_at_the_taken_machine_branch(self) -> None:
+        blocks = [
+            MachineBlock(
+                "f", "bb.0.a", 0, "bb.0.a", "a", [1, 2], 2, [], {1: 1, 2: 2}
+            ),
+            MachineBlock("f", "bb.1.left", 1, "bb.1.left", None, [], 1, []),
+            MachineBlock("f", "bb.2.right", 2, "bb.2.right", None, [], 1, []),
+        ]
+        total, _, _ = solve_machine_total(blocks, {"a": Bound(1, 1)})
+
+        self.assertEqual(total.lower, 2)
+        self.assertEqual(total.upper, 3)
+
 
 class GemvLoopSemanticsTests(unittest.TestCase):
     def test_gemv_64_element_remainder_and_pos_loop(self) -> None:
@@ -79,6 +97,31 @@ class GemvLoopSemanticsTests(unittest.TestCase):
         )
         self.assertEqual(bounds["chunks"], Bound(2, 2))
         self.assertEqual(bounds["remainder"], Bound(255, 255))
+
+
+class TargetLoweringTests(unittest.TestCase):
+    def test_i32_multiply_is_recorded_as_mulsi3_call(self) -> None:
+        ir = """define i32 @f(i32 %a, i32 %b) {
+bb:
+  %x = mul nsw i32 %a, %b
+  ret i32 %x
+}
+"""
+        calls = parse_lowered_callsites(ir)["f"]
+        self.assertEqual([(x.block, x.callee) for x in calls], [("bb", "__mulsi3")])
+
+    def test_mul32_inline_asm_path_bound(self) -> None:
+        source = (
+            ANALYZER_ROOT.parent
+            / "sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c"
+        )
+        bound = _inline_asm_path_bound(source, "__mulsi3")
+        self.assertEqual(bound, Bound(6, 37))
+        adjusted, provenance = runtime_function_instruction_bound(
+            "__mulsi3", source, Bound(2, 2)
+        )
+        self.assertEqual(adjusted, Bound(7, 38))
+        self.assertEqual(provenance["kind"], "inline_asm_path_expansion")
 
 
 if __name__ == "__main__":

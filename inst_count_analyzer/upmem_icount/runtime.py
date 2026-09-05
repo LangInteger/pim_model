@@ -59,10 +59,21 @@ RUNTIME_TRANSLATION_UNITS = (
         "src/syslib/handshake.c",
         frozenset({"handshake_notify", "handshake_wait_for"}),
     ),
+    RuntimeTranslationUnit(
+        "syslib_mul32",
+        "src/syslib/mul32.c",
+        frozenset({"__mulsi3"}),
+    ),
 )
 
 DEFAULT_RUNTIME_FUNCTIONS = frozenset(
-    {"mem_alloc", "mem_reset", "handshake_notify", "handshake_wait_for"}
+    {
+        "mem_alloc",
+        "mem_reset",
+        "handshake_notify",
+        "handshake_wait_for",
+        "__mulsi3",
+    }
 )
 
 

@@ -4,7 +4,7 @@ import json
 import math
 import re
 import subprocess
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Iterable
 
@@ -257,6 +257,17 @@ class IRCallSite:
     text: str
 
 
+@dataclass
+class LoweredCallSite:
+    """A target helper call introduced while lowering one LLVM IR operation."""
+
+    function: str
+    block: str
+    callee: str
+    operation: str
+    text: str
+
+
 def _split_ir_args(text: str) -> list[str]:
     parts=[]; start=0; depth=0
     opens='([{<'; closes=')]}>'
@@ -311,6 +322,42 @@ def parse_ir_callsites(text: str) -> dict[str, list[IRCallSite]]:
             val=rest.split()[-1]
             args.append((ty,val))
         out[cur_fn].append(IRCallSite(cur_fn,cur_block,callee,args,raw.strip()))
+    return out
+
+
+def parse_lowered_callsites(text: str) -> dict[str, list[LoweredCallSite]]:
+    """Recognize LLVM operations that the UPMEM backend lowers to libcalls.
+
+    These calls do not exist in LLVM IR and are introduced after the late-MIR
+    snapshot used for block costs.  The final UPMEM assembly confirms that a
+    remaining scalar ``mul i32`` is emitted as ``call __mulsi3``.  Constant
+    multiplies already folded to shifts/adds are therefore not matched here.
+    """
+    out: dict[str, list[LoweredCallSite]] = {}
+    cur_fn = None
+    cur_block = "bb"
+    for raw in text.splitlines():
+        fm = re.match(r"^define\b.*@([-A-Za-z$._0-9]+)\(.*\).*\{\s*$", raw)
+        if fm:
+            cur_fn = fm.group(1)
+            cur_block = "bb"
+            out.setdefault(cur_fn, [])
+            continue
+        if cur_fn and raw.strip() == "}":
+            cur_fn = None
+            continue
+        if not cur_fn:
+            continue
+        bm = re.match(r"^([-A-Za-z$._0-9]+):\s*(?:;.*)?$", raw)
+        if bm:
+            cur_block = bm.group(1)
+            continue
+        if re.search(r"(?:^|=)\s*mul\s+(?:nuw\s+|nsw\s+)*i32\s", raw):
+            out[cur_fn].append(
+                LoweredCallSite(
+                    cur_fn, cur_block, "__mulsi3", "mul i32", raw.strip()
+                )
+            )
     return out
 
 
@@ -570,6 +617,7 @@ class MachineBlock:
     successors: list[int]
     instructions: int
     calls: list[str]
+    edge_instruction_costs: dict[int, int] = field(default_factory=dict)
 
 
 def run_late_mir(llc: str, named_ir: Path, out_path: Path) -> None:
@@ -615,9 +663,18 @@ def parse_mir(text: str, ir_block_names: dict[str,set[str]] | None=None) -> dict
         if not raw.startswith('    '): continue
         s=raw.strip()
         if not s or s.startswith(('successors:','liveins:','DBG_VALUE','CFI_INSTRUCTION','frame-setup CFI_INSTRUCTION','#',';')): continue
-        # CFI directives do not emit DPU instructions; all remaining late MIR MIs
-        # at this pass correspond one-for-one with final instructions for tested DPU kernels.
+        # CFI/debug directives do not emit DPU instructions.  Ordinary late
+        # MIR MIs are charged here; target libcalls and inline-assembly
+        # templates are expanded separately by the interprocedural/runtime
+        # semantics layer.
         cur.instructions += 1
+        # A machine block can end in a conditional branch followed by an
+        # unconditional branch.  Taking the first edge skips the later
+        # instruction(s), so block cost is edge-dependent rather than always
+        # equal to the number of listed MIs.
+        for target in (int(x) for x in re.findall(r'%bb\.(\d+)', s)):
+            if target in cur.successors:
+                cur.edge_instruction_costs.setdefault(target, cur.instructions)
         cm=re.search(r'\bCALL\w*.*?@([-A-Za-z$._0-9]+)',s)
         if cm: cur.calls.append(cm.group(1))
     finish_fn()
@@ -735,7 +792,15 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
         lo=solve(c);hi=solve(-c)
         block_bounds[bynum[n].label]=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
     c=np.zeros(nvar)
-    for b in blocks: c[xi[b.number]]=b.instructions
+    for b in blocks:
+        outgoing = [edge for edge in edges if edge[0] == b.number]
+        if outgoing:
+            for edge in outgoing:
+                c[ei[edge]] = b.edge_instruction_costs.get(
+                    edge[1], b.instructions
+                )
+        else:
+            c[xi[b.number]] = b.instructions
     lo=solve(c);hi=solve(-c)
     total=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
     return total,block_bounds,{'anchors':anchors,'machine_blocks':[{**asdict(b),'execution_bound':block_bounds[b.label].to_dict()} for b in blocks]}

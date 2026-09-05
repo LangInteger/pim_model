@@ -9,6 +9,7 @@ from .generic_cfg import (
     add_bounds,
     parse_ir_cfg,
     parse_mir,
+    parse_lowered_callsites,
     resolve_callsite_integer_args,
     run_late_mir,
     run_opt_analysis,
@@ -22,7 +23,10 @@ from .runtime import (
     build_function_index,
     prepare_runtime_modules,
 )
-from .runtime_semantics import is_collective_runtime_primitive
+from .runtime_semantics import (
+    is_collective_runtime_primitive,
+    runtime_function_instruction_bound,
+)
 from .source_loop_semantics import source_loop_backedge_bounds
 from .toolchain import discover_toolchain
 
@@ -127,10 +131,17 @@ def generic_dynamic_instruction_count(
     )
     modules = [benchmark_module]
     benchmark_ir = benchmark_module.named_ir.read_text()
+    benchmark_lowered_calls = parse_lowered_callsites(benchmark_ir)
+    lowered_runtime_references = {
+        call.callee
+        for calls in benchmark_lowered_calls.values()
+        for call in calls
+    }
     requested_runtime_functions = frozenset(
         function
         for function in runtime_functions
         if re.search(rf"@{re.escape(function)}\s*\(", benchmark_ir)
+        or function in lowered_runtime_references
     )
     if requested_runtime_functions:
         modules.extend(
@@ -219,6 +230,9 @@ def generic_dynamic_instruction_count(
             direct, machine_bounds, machine_meta = solve_machine_total(
                 owner.machine[fn], ir_bounds
             )
+            direct, runtime_cost_semantics = runtime_function_instruction_bound(
+                fn, owner.source_path, direct
+            )
             expanded = direct
             expanded_calls = []
             unexpanded_calls = []
@@ -227,6 +241,8 @@ def generic_dynamic_instruction_count(
                 if call.callee.startswith("llvm."):
                     continue
                 call_bound = ir_bounds.get(call.block, Bound(None, None))
+                if call_bound.upper is not None and call_bound.upper <= 0:
+                    continue
                 if is_collective_runtime_primitive(call.callee):
                     unexpanded_calls.append(
                         {
@@ -273,6 +289,52 @@ def generic_dynamic_instruction_count(
                     }
                 )
 
+            # Some target helper calls are introduced only during instruction
+            # selection and therefore have no LLVM ``call`` instruction.  Use
+            # the originating IR operation's block bound, then recurse through
+            # the same cross-TU function index used by ordinary calls.
+            lowered_calls = parse_lowered_callsites(owner.named_ir.read_text()).get(
+                fn, []
+            )
+            for call_index, call in enumerate(lowered_calls):
+                call_bound = ir_bounds.get(call.block, Bound(None, None))
+                if call_bound.upper is not None and call_bound.upper <= 0:
+                    continue
+                callee_owner = function_index.get(call.callee)
+                if callee_owner is None:
+                    unexpanded_calls.append(
+                        {
+                            "callee": call.callee,
+                            "block": call.block,
+                            "call_bound": call_bound.to_dict(),
+                            "origin": "target_lowering",
+                            "operation": call.operation,
+                            "reason": "no indexed translation unit",
+                        }
+                    )
+                    continue
+                child = summarize(call.callee, {})
+                contribution = _scale_bounds(call_bound, child["expanded"])
+                expanded = add_bounds(expanded, contribution)
+                expanded_calls.append(
+                    {
+                        "call_index": call_index,
+                        "callee": call.callee,
+                        "callee_module": callee_owner.name,
+                        "block": call.block,
+                        "call_bound": call_bound.to_dict(),
+                        "origin": "target_lowering",
+                        "operation": call.operation,
+                        "constant_integer_args": {},
+                        "callee_direct_bound_per_call": child["direct"].to_dict(),
+                        "callee_expanded_bound_per_call": child[
+                            "expanded"
+                        ].to_dict(),
+                        "contribution": contribution.to_dict(),
+                        "callee_unexpanded_calls": child["unexpanded_calls"],
+                    }
+                )
+
             result = {
                 "function": fn,
                 "module": owner.name,
@@ -282,6 +344,7 @@ def generic_dynamic_instruction_count(
                 "ir_block_bounds": ir_bounds,
                 "ir_meta": ir_meta,
                 "machine_meta": machine_meta,
+                "runtime_cost_semantics": runtime_cost_semantics,
                 "analysis": ana,
                 "expanded_calls": expanded_calls,
                 "unexpanded_calls": unexpanded_calls,
@@ -324,6 +387,7 @@ def generic_dynamic_instruction_count(
                 "expanded_calls": root["expanded_calls"],
                 "unexpanded_calls": root["unexpanded_calls"],
                 "machine": root["machine_meta"],
+                "runtime_cost_semantics": root["runtime_cost_semantics"],
             }
         )
 
@@ -334,13 +398,15 @@ def generic_dynamic_instruction_count(
         "params": params,
         "unknown_loop_backedge_uppers": unknown_loop_backedge_uppers or {},
         "method": (
-            "cross-translation-unit CFG+SCEV flow constraints + independent "
-            "late MIR machine basic blocks"
+            "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive "
+            "late MIR machine blocks + target-lowered runtime helper expansion"
         ),
         "scope_note": (
             "Benchmark and selected SDK runtime translation units are compiled and "
             "lowered independently, then indexed for recursive analysis. Scalar integer "
             "call arguments proven constant by SCEV are propagated into callees. "
+            "Target-introduced libcalls and acyclic runtime inline assembly are bounded "
+            "from their independently compiled SDK translation units. "
             "Collective runtime primitives remain explicitly unexpanded."
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),

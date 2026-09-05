@@ -20,6 +20,7 @@ from upmem_icount.runtime_semantics import (  # noqa: E402
     _inline_asm_path_bound,
     runtime_function_instruction_bound,
 )
+from upmem_icount.generic_count import _descendant_unexpanded_calls  # noqa: E402
 from upmem_icount.source_loop_semantics import (  # noqa: E402
     source_loop_backedge_bounds,
     source_loop_total_backedge_bounds,
@@ -46,7 +47,8 @@ class MachineIrAnchoringTests(unittest.TestCase):
         self.assertEqual(
             b_anchor["machine_blocks"], ["bb.1.b", "bb.2.b", "bb.3.b"]
         )
-        self.assertEqual(b_anchor["representative_machine_block"], "bb.3.b")
+        self.assertEqual(b_anchor["anchor_kind"], "machine_flow_only")
+        self.assertIsNone(b_anchor["representative_machine_block"])
 
     def test_self_loop_uses_ir_execution_count_not_external_entry_count(self) -> None:
         blocks = [
@@ -236,6 +238,17 @@ bb:
         )
         self.assertEqual(adjusted, Bound(7, 38))
         self.assertEqual(provenance["kind"], "inline_asm_path_expansion")
+
+    def test_nested_unresolved_runtime_costs_are_propagated(self) -> None:
+        retry = {"callee": "__atomic_acquire_retry", "reason": "contention"}
+        summary = {
+            "unexpanded_calls": [],
+            "expanded_calls": [
+                {"callee_unexpanded_calls": [retry]},
+                {"callee_unexpanded_calls": [retry]},
+            ],
+        }
+        self.assertEqual(_descendant_unexpanded_calls(summary), [retry])
 
 
 if __name__ == "__main__":

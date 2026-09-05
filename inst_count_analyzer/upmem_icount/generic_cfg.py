@@ -912,12 +912,12 @@ def solve_machine_total(
         if block.ir_block and block.ir_block in ir_bounds:
             groups.setdefault(block.ir_block, set()).add(block.number)
 
-    # Only constrain a one-to-one IR/MBB mapping when it is needed to bound a
-    # cycle or eliminate a specialized-away path.  Ordinary acyclic blocks are
-    # already governed by machine-flow conservation.  Pinning every exact-once
-    # IR block is unsound after tail duplication/block merging: an MBB labelled
-    # with the predecessor may also contain the successor's instructions, so
-    # the separately labelled successor MBB can legitimately be bypassed.
+    # Only constrain IR/MBB mappings when needed to bound a machine cycle or
+    # eliminate a specialized-away path. Ordinary acyclic blocks, including
+    # groups created by tail duplication, are already governed by machine-flow
+    # conservation. Pinning such a group to the source IR execution count is
+    # unsound because its repeated IR annotation describes provenance, not a
+    # set of blocks that must collectively execute exactly once.
     def reaches_itself(start: int) -> bool:
         pending = list(bynum[start].successors)
         seen: set[int] = set()
@@ -948,8 +948,7 @@ def solve_machine_total(
     for ir_block, members in groups.items():
         bd=ir_bounds[ir_block]
         needs_anchor = (
-            len(members) > 1
-            or bool(members & cyclic_blocks)
+            bool(members & cyclic_blocks)
             or (bd.upper is not None and bd.upper <= 0)
         )
         if not needs_anchor:

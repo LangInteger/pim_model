@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 import subprocess
 from pathlib import Path
@@ -58,6 +59,21 @@ def _scale_bounds(a: Bound, b: Bound) -> Bound:
 def _ctx_slug(function: str, args: dict[int, int]) -> str:
     tail = "_".join(f"a{k}_{v}" for k, v in sorted(args.items())) or "generic"
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", f"{function}__{tail}")
+
+
+def _descendant_unexpanded_calls(summary: dict) -> list[dict]:
+    """Flatten unresolved costs below a recursively summarized callee."""
+    unresolved = list(summary.get("unexpanded_calls", []))
+    for call in summary.get("expanded_calls", []):
+        unresolved.extend(call.get("callee_unexpanded_calls", []))
+    deduplicated: list[dict] = []
+    seen: set[str] = set()
+    for item in unresolved:
+        signature = json.dumps(item, sort_keys=True)
+        if signature not in seen:
+            seen.add(signature)
+            deduplicated.append(item)
+    return deduplicated
 
 
 def _prepare_benchmark_module(
@@ -321,7 +337,7 @@ def generic_dynamic_instruction_count(
                         "callee_direct_bound_per_call": child["direct"].to_dict(),
                         "callee_expanded_bound_per_call": child["expanded"].to_dict(),
                         "contribution": contribution.to_dict(),
-                        "callee_unexpanded_calls": child["unexpanded_calls"],
+                        "callee_unexpanded_calls": _descendant_unexpanded_calls(child),
                     }
                 )
 
@@ -367,7 +383,7 @@ def generic_dynamic_instruction_count(
                             "expanded"
                         ].to_dict(),
                         "contribution": contribution.to_dict(),
-                        "callee_unexpanded_calls": child["unexpanded_calls"],
+                        "callee_unexpanded_calls": _descendant_unexpanded_calls(child),
                     }
                 )
 

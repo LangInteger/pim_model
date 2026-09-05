@@ -237,8 +237,15 @@ def generic_dynamic_instruction_count(
                     benchmark_dir.name, fn, loops, params, tasklets
                 ),
             )
+            synchronization_blocks = {
+                block.number
+                for block in owner.machine[fn]
+                if "__atomic_acquire_retry" in block.calls
+            }
             direct, machine_bounds, machine_meta = solve_machine_total(
-                owner.machine[fn], ir_bounds
+                owner.machine[fn],
+                ir_bounds,
+                bound_block_numbers=synchronization_blocks,
             )
             direct, runtime_cost_semantics = runtime_function_instruction_bound(
                 fn, owner.source_path, direct

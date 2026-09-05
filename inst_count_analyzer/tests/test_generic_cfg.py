@@ -141,6 +141,21 @@ f:                                      // @f
             },
         )
         self.assertEqual(total, Bound(5, 6))
+        fast_total, fast_block_bounds, metadata = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "left": Bound(0, 1),
+                "right": Bound(0, 1),
+                "exit": Bound(1, 1),
+            },
+            bound_block_numbers=set(),
+        )
+        self.assertEqual(fast_total, total)
+        self.assertEqual(fast_block_bounds, {})
+        self.assertTrue(
+            all(block["execution_bound"] is None for block in metadata["machine_blocks"])
+        )
 
     def test_exposes_atomic_acquire_retry_as_collective_cost(self) -> None:
         assembly = r"""

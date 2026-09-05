@@ -865,7 +865,11 @@ def parse_annotated_assembly(
     return out
 
 
-def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) -> tuple[Bound,dict[str,Bound],dict]:
+def solve_machine_total(
+    blocks: list[MachineBlock],
+    ir_bounds: dict[str, Bound],
+    bound_block_numbers: set[int] | None = None,
+) -> tuple[Bound,dict[str,Bound],dict]:
     if not blocks: return Bound(None,None),{}, {'reason':'no machine blocks'}
     nums=[b.number for b in blocks]; bynum={b.number:b for b in blocks}; entry=blocks[0].number
     edges=[]
@@ -1006,8 +1010,15 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
     AeqN=np.array(Aeq) if Aeq else None;beqN=np.array(beq) if beq else None
     AubN=np.array(Aub) if Aub else None;bubN=np.array(bub) if bub else None
     def solve(c): return linprog(c,A_ub=AubN,b_ub=bubN,A_eq=AeqN,b_eq=beqN,bounds=bounds,method='highs')
+    # Per-block extrema are useful for diagnostics but require two LP solves
+    # per MBB.  Production counting only requests blocks that contain an
+    # unresolved synchronization retry; unit tests/debug callers may omit the
+    # filter to retain the complete diagnostic map.
+    requested_numbers = nums if bound_block_numbers is None else [
+        number for number in nums if number in bound_block_numbers
+    ]
     block_bounds={}
-    for n in nums:
+    for n in requested_numbers:
         c=np.zeros(nvar);c[xi[n]]=1
         lo=solve(c);hi=solve(-c)
         block_bounds[bynum[n].label]=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
@@ -1023,7 +1034,20 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
             c[xi[b.number]] = b.instructions
     lo=solve(c);hi=solve(-c)
     total=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
-    return total,block_bounds,{'anchors':anchors,'machine_blocks':[{**asdict(b),'execution_bound':block_bounds[b.label].to_dict()} for b in blocks]}
+    return total,block_bounds,{
+        'anchors':anchors,
+        'machine_blocks':[
+            {
+                **asdict(b),
+                'execution_bound': (
+                    block_bounds[b.label].to_dict()
+                    if b.label in block_bounds
+                    else None
+                ),
+            }
+            for b in blocks
+        ],
+    }
 
 
 def add_bounds(a: Bound,b: Bound)->Bound:

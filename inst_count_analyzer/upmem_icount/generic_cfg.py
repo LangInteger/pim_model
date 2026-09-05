@@ -499,6 +499,7 @@ def solve_ir_block_bounds(
     entry: str = 'bb',
     unknown_loop_backedge_upper: int | None = None,
     unknown_loop_backedge_bounds: dict[str, Bound] | None = None,
+    unknown_loop_total_backedge_bounds: dict[str, Bound] | None = None,
 ) -> tuple[dict[str,Bound], dict]:
     names=list(blocks)
     if entry not in blocks:
@@ -545,8 +546,32 @@ def solve_ir_block_bounds(
         ext=[e for e in edges if e[1]==li.header and e[0] not in loopset]
         if li.backedge_count is None:
             source_bound=(unknown_loop_backedge_bounds or {}).get(li.header)
+            total_bound=(unknown_loop_total_backedge_bounds or {}).get(li.header)
             lower=source_bound.lower if source_bound is not None else None
             upper=source_bound.upper if source_bound is not None else None
+            if total_bound is not None:
+                # Absolute aggregate-work cap.  Do not also apply the ordinary
+                # per-entry relation: that would multiply a nested loop's
+                # finite global work by the enclosing loop count.
+                if total_bound.upper is None:
+                    unknown_loops.append(li.header); continue
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                Aub.append(row); bub.append(float(total_bound.upper))
+                if total_bound.lower is not None and total_bound.lower>0:
+                    row=np.zeros(nvar)
+                    for e in back: row[ei[e]]-=1
+                    Aub.append(row); bub.append(-float(total_bound.lower))
+                bounded_unknown_loops.append(
+                    {
+                        "header": li.header,
+                        "backedge_lower": total_bound.lower,
+                        "backedge_upper": total_bound.upper,
+                        "source_specific": True,
+                        "bound_kind": "absolute_amortized_total",
+                    }
+                )
+                continue
             if upper is None:
                 upper=unknown_loop_backedge_upper
             if upper is None:
@@ -575,6 +600,7 @@ def solve_ir_block_bounds(
                     "backedge_lower": lower,
                     "backedge_upper": upper,
                     "source_specific": source_bound is not None,
+                    "bound_kind": "per_entry",
                 }
             )
             continue
@@ -822,6 +848,14 @@ def parse_annotated_assembly(
             if instruction:
                 instructions_by_block[current.number].append(instruction)
                 current.instructions += 1
+                if instruction.startswith("acquire ") and re.search(
+                    r",\s*(?:nz|z)\s*,\s*\.Ltmp\d+\s*$", instruction
+                ):
+                    # Atomic acquire retries through a temporary local label,
+                    # not a MachineBasicBlock label.  Its dynamic count
+                    # depends on cross-tasklet contention, so expose it to the
+                    # interprocedural layer instead of silently charging one.
+                    current.calls.append("__atomic_acquire_retry")
                 if instruction.startswith("call "):
                     call_match = re.search(r"\bcall\s+[^,]+,\s*([-A-Za-z$._0-9]+)", instruction)
                     if call_match:

@@ -25,6 +25,40 @@ def source_loop_backedge_bounds(
     return _gemv_family_bounds(loops, params)
 
 
+def source_loop_total_backedge_bounds(
+    benchmark: str,
+    function: str,
+    loops: list[LoopInfo],
+    params: dict[str, object],
+    tasklets: int,
+) -> dict[str, Bound]:
+    """Return absolute, amortized loop-work caps for a tasklet invocation.
+
+    Unlike ``source_loop_backedge_bounds``, these limits do not multiply by
+    the number of entries into an enclosing loop.  They are intended for work
+    allocators whose finite global domain is shared by all tasklets.
+    """
+    if benchmark.upper() != "TRNS" or function != "main_kernel2":
+        return {}
+    if tasklets < 1:
+        raise ValueError("tasklets must be positive")
+
+    # get_tile() atomically distributes the non-sentinel tile identifiers
+    # [0, M*n-2].  Across the DPU, the outer loop can therefore process at
+    # most tile_max tiles.  The inner permutation walks/marks tiles from the
+    # same finite domain, so its aggregate backedge count has the same cap.
+    # Charging ceil(tile_max/T) to every tasklet is an accounting partition of
+    # global work: individual tasklet bounds are amortized, while their sum is
+    # a conservative DPU-level cap (at most T-1 excess iterations).
+    tile_max = max(0, int(params["M_"]) * int(params["n"]) - 1)
+    amortized_cap = math.ceil(tile_max / tasklets)
+    return {
+        loop.header: Bound(0, amortized_cap)
+        for loop in loops
+        if loop.backedge_count is None
+    }
+
+
 def _gemv_family_bounds(
     loops: list[LoopInfo], params: dict[str, object]
 ) -> dict[str, Bound]:

@@ -20,7 +20,10 @@ from upmem_icount.runtime_semantics import (  # noqa: E402
     _inline_asm_path_bound,
     runtime_function_instruction_bound,
 )
-from upmem_icount.source_loop_semantics import source_loop_backedge_bounds  # noqa: E402
+from upmem_icount.source_loop_semantics import (  # noqa: E402
+    source_loop_backedge_bounds,
+    source_loop_total_backedge_bounds,
+)
 
 
 class MachineIrAnchoringTests(unittest.TestCase):
@@ -139,6 +142,20 @@ f:                                      // @f
         )
         self.assertEqual(total, Bound(5, 6))
 
+    def test_exposes_atomic_acquire_retry_as_collective_cost(self) -> None:
+        assembly = r"""
+        .type lock,@function
+lock:                                   // @lock
+// %bb.0: // %entry
+.Ltmp1:
+        acquire zero, lock_bit, nz, .Ltmp1 // <MCInst #1 ACQUIRErici>
+        jump r23 // <MCInst #2 JUMPr>
+        .size lock, .-lock
+"""
+        block = parse_annotated_assembly(assembly, {"lock": {"entry"}})["lock"][0]
+        self.assertEqual(block.instructions, 2)
+        self.assertIn("__atomic_acquire_retry", block.calls)
+
 
 class GemvLoopSemanticsTests(unittest.TestCase):
     def test_gemv_64_element_remainder_and_pos_loop(self) -> None:
@@ -163,6 +180,22 @@ class GemvLoopSemanticsTests(unittest.TestCase):
         )
         self.assertEqual(bounds["chunks"], Bound(2, 2))
         self.assertEqual(bounds["remainder"], Bound(255, 255))
+
+
+class TrnsLoopSemanticsTests(unittest.TestCase):
+    def test_shared_tile_domain_is_amortized_across_tasklets(self) -> None:
+        loops = [
+            LoopInfo("main_kernel2", "outer", 1, ["outer"], [], []),
+            LoopInfo("main_kernel2", "inner", 2, ["inner"], [], []),
+        ]
+        bounds = source_loop_total_backedge_bounds(
+            "TRNS",
+            "main_kernel2",
+            loops,
+            {"M_": 1024, "n": 4},
+            16,
+        )
+        self.assertEqual(bounds, {"outer": Bound(0, 256), "inner": Bound(0, 256)})
 
 
 class TargetLoweringTests(unittest.TestCase):

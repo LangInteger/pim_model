@@ -73,10 +73,8 @@ class BenchmarkSettingTests(unittest.TestCase):
             {"search": 32, "main_kernel1": 12},
         )
         self.assertEqual(
-            loop_backedge_uppers(
-                "TRNS", {"kernel": 1, "M_": 128, "n": 8}
-            )["main_kernel2"],
-            1023,
+            loop_backedge_uppers("TRNS", {"kernel": 1, "M_": 128, "n": 8}),
+            {},
         )
 
 

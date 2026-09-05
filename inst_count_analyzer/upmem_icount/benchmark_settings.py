@@ -179,11 +179,6 @@ def loop_backedge_uppers(
             "search": block_elements,
             "main_kernel1": math.ceil(math.log2(blocks)) + 2,
         }
-    if benchmark == "TRNS" and params.get("kernel") == 1:
-        # get_tile() assigns at most M*n-1 non-sentinel tiles. A permutation
-        # cycle cannot visit more tiles than that same finite domain.
-        tile_max = max(0, params["M_"] * params["n"] - 1)
-        return {"main_kernel2": tile_max}
     return {}
 
 

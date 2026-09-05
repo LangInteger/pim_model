@@ -28,7 +28,10 @@ from .runtime_semantics import (
     is_collective_runtime_primitive,
     runtime_function_instruction_bound,
 )
-from .source_loop_semantics import source_loop_backedge_bounds
+from .source_loop_semantics import (
+    source_loop_backedge_bounds,
+    source_loop_total_backedge_bounds,
+)
 from .toolchain import discover_toolchain
 
 
@@ -230,6 +233,9 @@ def generic_dynamic_instruction_count(
                 unknown_loop_backedge_bounds=source_loop_backedge_bounds(
                     benchmark_dir.name, fn, loops, params
                 ),
+                unknown_loop_total_backedge_bounds=source_loop_total_backedge_bounds(
+                    benchmark_dir.name, fn, loops, params, tasklets
+                ),
             )
             direct, machine_bounds, machine_meta = solve_machine_total(
                 owner.machine[fn], ir_bounds
@@ -240,6 +246,25 @@ def generic_dynamic_instruction_count(
             expanded = direct
             expanded_calls = []
             unexpanded_calls = []
+
+            for block in owner.machine[fn]:
+                if "__atomic_acquire_retry" not in block.calls:
+                    continue
+                block_bound = machine_bounds.get(block.key, Bound(None, None))
+                if block_bound.upper is not None and block_bound.upper <= 0:
+                    continue
+                unexpanded_calls.append(
+                    {
+                        "callee": "__atomic_acquire_retry",
+                        "block": block.key,
+                        "call_bound": block_bound.to_dict(),
+                        "reason": (
+                            "atomic acquire retry count depends on contention and "
+                            "cross-tasklet scheduling; the successful acquire is "
+                            "counted once but failed retries are excluded"
+                        ),
+                    }
+                )
 
             for call_index, call in enumerate(ana["callsites"].get(fn, [])):
                 if call.callee.startswith("llvm."):
@@ -414,7 +439,10 @@ def generic_dynamic_instruction_count(
             "from their independently compiled SDK translation units. "
             "Final annotated assembly is used for ordinary functions so DPU backend "
             "macros that emit multiple instructions are charged at their emitted size. "
-            "Collective runtime primitives remain explicitly unexpanded."
+            "TRNS phase 2 uses an amortized per-tasklet partition of its finite, "
+            "atomically distributed tile domain to bound total DPU work without "
+            "multiplying nested data-dependent loops. Collective runtime primitives "
+            "and failed atomic-acquire retries remain explicitly unexpanded."
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),
         "dynamic_instruction_bound": total_expanded.to_dict(),

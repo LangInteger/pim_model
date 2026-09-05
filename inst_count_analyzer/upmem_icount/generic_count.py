@@ -93,6 +93,7 @@ def generic_dynamic_instruction_count(
     function: str = "main_kernel1",
     extra_make: list[str] | None = None,
     runtime_functions: frozenset[str] = DEFAULT_RUNTIME_FUNCTIONS,
+    unknown_loop_backedge_uppers: dict[str, int] | None = None,
 ) -> dict:
     """Statically estimate/bound dynamic DPU instructions.
 
@@ -124,9 +125,17 @@ def generic_dynamic_instruction_count(
         benchmark_dir, tasklets, work_dir, tc.opt, llc, extra_make
     )
     modules = [benchmark_module]
-    if runtime_functions:
+    benchmark_ir = benchmark_module.named_ir.read_text()
+    requested_runtime_functions = frozenset(
+        function
+        for function in runtime_functions
+        if re.search(rf"@{re.escape(function)}\s*\(", benchmark_ir)
+    )
+    if requested_runtime_functions:
         modules.extend(
-            prepare_runtime_modules(tc, llc, work_dir, runtime_functions)
+            prepare_runtime_modules(
+                tc, llc, work_dir, requested_runtime_functions
+            )
         )
     function_index = build_function_index(modules)
     if function not in function_index:
@@ -198,7 +207,11 @@ def generic_dynamic_instruction_count(
                     f"{fn} disappeared during analysis for tid={tid}, args={fn_args}"
                 )
 
-            ir_bounds, ir_meta = solve_ir_block_bounds(cfg, loops)
+            ir_bounds, ir_meta = solve_ir_block_bounds(
+                cfg,
+                loops,
+                unknown_loop_backedge_upper=(unknown_loop_backedge_uppers or {}).get(fn),
+            )
             direct, machine_bounds, machine_meta = solve_machine_total(
                 owner.machine[fn], ir_bounds
             )
@@ -289,6 +302,9 @@ def generic_dynamic_instruction_count(
                 },
                 "ir_analysis": {
                     "unknown_loops": root["ir_meta"]["unknown_loops"],
+                    "bounded_unknown_loops": root["ir_meta"].get(
+                        "bounded_unknown_loops", []
+                    ),
                     "loops": [
                         {
                             "header": x.header,
@@ -312,6 +328,7 @@ def generic_dynamic_instruction_count(
         "tasklets": tasklets,
         "function": function,
         "params": params,
+        "unknown_loop_backedge_uppers": unknown_loop_backedge_uppers or {},
         "method": (
             "cross-translation-unit CFG+SCEV flow constraints + independent "
             "late MIR machine basic blocks"

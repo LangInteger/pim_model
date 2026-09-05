@@ -38,6 +38,11 @@ def _float(v):
 def load_static_results(root: Path):
     seen = set()
     for p in sorted(root.rglob("*.json")):
+        # Exact-setting sweeps keep reusable per-phase results below this
+        # directory. Only the composed per-setting result is comparable with a
+        # whole simulator execution.
+        if "phases" in p.parts:
+            continue
         compact_path = p.with_name("result.json")
         if p.name in {"debug.json", "generic_count.json"} and compact_path.is_file():
             continue

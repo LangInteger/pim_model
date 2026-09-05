@@ -12,9 +12,31 @@ ANALYZER_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ANALYZER_ROOT))
 
 import run_tasklet_sweep
+from count_instructions import compact_result
 
 
 class TaskletSweepTests(unittest.TestCase):
+    def test_compact_result_keeps_exact_setting_metadata(self) -> None:
+        compact = compact_result(
+            {
+                "benchmark": "VA",
+                "tasklets": 16,
+                "params": {"size": 1024},
+                "dynamic_instruction_bound": {
+                    "lower": 10,
+                    "upper": 12,
+                    "exact": False,
+                },
+                "per_tasklet": [],
+                "simulator_match": {
+                    "experiment": "dpu_sweep",
+                    "num_dpus_configured": 4,
+                    "data_prep_params": 2097152,
+                },
+            }
+        )
+        self.assertEqual(compact["simulator_match"]["num_dpus_configured"], 4)
+
     def test_default_tasklet_set_matches_simulator_sweep(self) -> None:
         self.assertEqual(run_tasklet_sweep.DEFAULT_TASKLETS, (1, 2, 4, 8, 11, 16))
 

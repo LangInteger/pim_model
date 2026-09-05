@@ -62,7 +62,7 @@ def _compact_bound(bound: dict) -> dict:
 
 
 def compact_result(result: dict) -> dict:
-    return {
+    compact = {
         "benchmark": result["benchmark"],
         "tasklets": result["tasklets"],
         "params": result.get("params", {}),
@@ -71,6 +71,13 @@ def compact_result(result: dict) -> dict:
         ),
         "unexpanded_callees": collect_unexpanded_callees(result),
     }
+    if result.get("simulator_match"):
+        compact["simulator_match"] = result["simulator_match"]
+    if result.get("unknown_loop_backedge_uppers"):
+        compact["unknown_loop_backedge_uppers"] = result[
+            "unknown_loop_backedge_uppers"
+        ]
+    return compact
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -88,6 +95,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--params", help="JSON object containing concrete DPU_INPUT_ARGUMENTS values")
     p.add_argument("--param", action="append", default=[], help="NAME=VALUE; repeat as needed")
     p.add_argument("--make-arg", action="append", default=[], help="extra Make assignment, e.g. BL=10")
+    p.add_argument(
+        "--unknown-loop-bound",
+        action="append",
+        default=[],
+        metavar="FUNCTION=MAX_BACKEDGES",
+        help=(
+            "source-derived upper bound for each SCEV-unknown loop in FUNCTION; "
+            "repeat as needed"
+        ),
+    )
     p.add_argument(
         "--outdir",
         required=True,
@@ -132,6 +149,18 @@ def main(argv: list[str] | None = None) -> int:
         k, v = kv.split("=", 1)
         params[k] = _parse_scalar(v)
 
+    unknown_loop_bounds: dict[str, int] = {}
+    for item in a.unknown_loop_bound:
+        if "=" not in item:
+            raise SystemExit(
+                f"bad --unknown-loop-bound {item!r}; expected FUNCTION=MAX_BACKEDGES"
+            )
+        function, raw_bound = item.split("=", 1)
+        bound = int(raw_bound, 0)
+        if bound < 0:
+            raise SystemExit("unknown-loop backedge bounds must be non-negative")
+        unknown_loop_bounds[function] = bound
+
     result_dir = Path(a.outdir).resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
     work_dir = (
@@ -153,6 +182,7 @@ def main(argv: list[str] | None = None) -> int:
             a.sdk_root,
             a.function,
             a.make_arg,
+            unknown_loop_backedge_uppers=unknown_loop_bounds,
         )
     except Exception as e:
         print(f"error: {e}", file=sys.stderr)

@@ -33,6 +33,57 @@ inst_count_analyzer/
 
 Old cost models and VA-specific counters are not included.
 
+## Analyze the simulator experiment matrix
+
+`run_benchmark_sweeps.py` analyzes the exact settings present in
+`draw_figs/results/<benchmark>/summary.csv`. It reads the saved
+`DPU_INPUT_ARGUMENTS` byte dumps only to recover each DPU's runtime parameters;
+simulator instruction counts are not inputs to the analysis.
+
+On the Linux server, after sourcing the SDK environment, run all benchmarks:
+
+```bash
+python3 inst_count_analyzer/run_benchmark_sweeps.py \
+  --sdk-root sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64
+```
+
+Or run selected benchmarks while bringing up the migration in stages:
+
+```bash
+python3 inst_count_analyzer/run_benchmark_sweeps.py RED HST-S TS \
+  --sdk-root sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64
+```
+
+The runner discovers only settings that survived aggregation, so removed
+tasklet-11 points and failed simulator settings are not recreated. Sequential
+executions are composed per DPU (for example, three MLP executions and both
+SCAN/TRNS kernels), then the maximum per-DPU instruction bound is emitted for
+comparison with `cycles_max`:
+
+```text
+inst_count_analyzer/results/<BENCHMARK>/instruction_counts.csv
+inst_count_analyzer/results/<BENCHMARK>/<setting-id>/result.json
+```
+
+Loops resolved by LLVM SCEV use their exact backedge counts. Source-derived
+finite caps are supplied only for SCEV-unknown, early-exit/data-dependent loops
+in BS, GEMV/MLP, and TRNS. These caps constrain CFG path optimization while
+instruction costs still come from the original late MIR machine blocks. TRNS's
+shared work queue is intentionally conservative until a collective work-
+distribution constraint is added.
+
+After generating the instruction summaries, regenerate every cost model with:
+
+```bash
+python3 draw_figs/scripts/estimate_cost.py
+```
+
+`estimate_cost.py` requires exact static instruction settings for every
+benchmark. `instructions_mean` remains in its output CSV only as validation
+data and is never used in the compute-cost equations. The old VA tasklet-only
+summary remains a temporary backward-compatible fallback until the exact VA
+matrix above has been generated.
+
 ## Dependencies
 
 ```bash
@@ -99,8 +150,8 @@ Use `--workdir /some/ignored/path` to override the intermediate-artifact path.
 Use `--debug` when the full per-tasklet analysis is needed; it adds
 `results/VA_T16/debug.json`. Without `--debug`, `result.json` contains only the
 benchmark, tasklet count, parameters, final dynamic-instruction bound,
-and unexpanded callees. Simulator matching metadata and other detailed fields
-are kept only in `debug.json`.
+unexpanded callees, and optional simulator-setting matching metadata. Detailed
+CFG/MIR analysis fields are kept only in `debug.json`.
 
 The pre-runtime-expansion result remains in `results/VA_T16/` and is also
 preserved as the regression fixture `tests/data/VA_T16_pre_runtime.json`:
@@ -134,11 +185,10 @@ on Linux and confirm the new interval is closer to the simulator count
 ## Reproduce the simulator comparison
 
 For exact row matching when `summary.csv` contains several runs with the same
-benchmark and tasklet count, add `--debug` to the analyzer command above. The
-comparison reads matching metadata from `debug.json` without adding it to the
-compact `result.json`. The command below shows the preserved pre-runtime
-baseline; replace the directory with `results/VA_T16_runtime_alloc` for the new
-allocation-expanded result.
+benchmark and tasklet count, pass the simulator-setting arguments shown above.
+The compact `result.json` retains this matching metadata. The command below
+shows the preserved pre-runtime baseline; replace the directory with
+`results/VA_T16_runtime_alloc` for the new allocation-expanded result.
 
 With the simulator `summary.csv` used in our experiment:
 

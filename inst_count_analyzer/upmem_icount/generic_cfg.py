@@ -446,7 +446,12 @@ def _reachable_blocks(blocks: dict[str, IRBlock], entry: str) -> set[str]:
     return seen
 
 
-def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], entry: str='bb') -> tuple[dict[str,Bound], dict]:
+def solve_ir_block_bounds(
+    blocks: dict[str, IRBlock],
+    loops: list[LoopInfo],
+    entry: str = 'bb',
+    unknown_loop_backedge_upper: int | None = None,
+) -> tuple[dict[str,Bound], dict]:
     names=list(blocks)
     if entry not in blocks:
         entry=names[0]
@@ -457,7 +462,7 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
             if s in blocks: edges.append((b,s))
     nx=len(names); ne=len(edges); nvar=nx+ne
     xi={b:i for i,b in enumerate(names)}; ei={e:nx+i for i,e in enumerate(edges)}
-    Aeq=[]; beq=[]
+    Aeq=[]; beq=[]; Aub=[]; bub=[]
     def eq(row, rhs=0.0): Aeq.append(row); beq.append(rhs)
     # Block flow conservation.
     for b in names:
@@ -484,13 +489,29 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
             row=np.zeros(nvar); row[xi[b]]=1; eq(row,0)
     # Loop relation: total backedges = BTC * number of entries into header.
     unknown_loops=[]
+    bounded_unknown_loops=[]
     for li in loops:
         if li.header not in blocks or li.header not in reachable: continue
-        if li.backedge_count is None:
-            unknown_loops.append(li.header); continue
         loopset=set(li.blocks)
         back=[e for e in edges if e[1]==li.header and e[0] in loopset]
         ext=[e for e in edges if e[1]==li.header and e[0] not in loopset]
+        if li.backedge_count is None:
+            if unknown_loop_backedge_upper is None:
+                unknown_loops.append(li.header); continue
+            # backedges <= U * loop entries. A function-entry loop receives
+            # one implicit entry from the invocation itself.
+            row=np.zeros(nvar)
+            for e in back: row[ei[e]]+=1
+            for e in ext: row[ei[e]]-=unknown_loop_backedge_upper
+            Aub.append(row)
+            bub.append(
+                float(unknown_loop_backedge_upper)
+                if li.header==entry else 0.0
+            )
+            bounded_unknown_loops.append(
+                {"header": li.header, "backedge_upper": unknown_loop_backedge_upper}
+            )
+            continue
         row=np.zeros(nvar)
         for e in back: row[ei[e]]+=1
         for e in ext: row[ei[e]]-=li.backedge_count
@@ -499,17 +520,23 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
         eq(row,rhs)
     bounds=[(0,None)]*nvar
     A=np.array(Aeq) if Aeq else None; B=np.array(beq) if beq else None
+    AU=np.array(Aub) if Aub else None; BU=np.array(bub) if bub else None
     result={}
     status={}
     for b in names:
         c=np.zeros(nvar); c[xi[b]]=1
-        lo=linprog(c,A_eq=A,b_eq=B,bounds=bounds,method='highs')
-        hi=linprog(-c,A_eq=A,b_eq=B,bounds=bounds,method='highs')
+        lo=linprog(c,A_ub=AU,b_ub=BU,A_eq=A,b_eq=B,bounds=bounds,method='highs')
+        hi=linprog(-c,A_ub=AU,b_ub=BU,A_eq=A,b_eq=B,bounds=bounds,method='highs')
         lower=float(lo.fun) if lo.success else None
         upper=float(-hi.fun) if hi.success else None
         result[b]=Bound(lower,upper)
         status[b]={'min_status':lo.message,'max_status':hi.message}
-    return result, {'unknown_loops':unknown_loops,'reachable':sorted(reachable),'solver_status':status}
+    return result, {
+        'unknown_loops': unknown_loops,
+        'bounded_unknown_loops': bounded_unknown_loops,
+        'reachable': sorted(reachable),
+        'solver_status': status,
+    }
 
 
 # ---------- MIR machine CFG ----------
@@ -637,4 +664,3 @@ def mul_bounds(a: Bound,b: Bound)->Bound:
     lo=None if a.lower is None or b.lower is None else a.lower*b.lower
     hi=None if a.upper is None or b.upper is None else a.upper*b.upper
     return Bound(lo,hi)
-

@@ -54,9 +54,16 @@ RUNTIME_TRANSLATION_UNITS = (
         "src/syslib/barrier.c",
         frozenset({"barrier_wait"}),
     ),
+    RuntimeTranslationUnit(
+        "syslib_handshake",
+        "src/syslib/handshake.c",
+        frozenset({"handshake_notify", "handshake_wait_for"}),
+    ),
 )
 
-DEFAULT_RUNTIME_FUNCTIONS = frozenset({"mem_alloc", "mem_reset"})
+DEFAULT_RUNTIME_FUNCTIONS = frozenset(
+    {"mem_alloc", "mem_reset", "handshake_notify", "handshake_wait_for"}
+)
 
 
 def _run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:

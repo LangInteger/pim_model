@@ -7,29 +7,29 @@
     "size": 4194304
   },
   "unknown_loop_backedge_uppers": {},
-  "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive late MIR machine blocks + target-lowered runtime helper expansion",
-  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Collective runtime primitives remain explicitly unexpanded.",
+  "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive post-macro-expansion MCInst machine blocks + target-lowered runtime helper expansion",
+  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Final annotated assembly is used for ordinary functions so DPU backend macros that emit multiple instructions are charged at their emitted size. TRNS phase 2 uses an amortized per-tasklet partition of its finite, atomically distributed tile domain to bound total DPU work without multiplying nested data-dependent loops. Collective runtime primitives and failed atomic-acquire retries remain explicitly unexpanded.",
   "dynamic_instruction_bound_direct": {
-    "lower": 69697.0,
-    "upper": 73803.0,
+    "lower": 73784.0,
+    "upper": 77900.0,
     "exact": false
   },
   "dynamic_instruction_bound": {
-    "lower": 2187364.0,
-    "upper": 2191470.0,
+    "lower": 2715731.0,
+    "upper": 2719859.0,
     "exact": false
   },
   "per_tasklet": [
     {
       "tid": 0,
       "instruction_bound_direct_function": {
-        "lower": 34853.0,
-        "upper": 36906.0,
+        "lower": 36892.0,
+        "upper": 38955.0,
         "exact": false
       },
       "instruction_bound_with_internal_callees": {
-        "lower": 1093689.0,
-        "upper": 1095742.0,
+        "lower": 1357868.0,
+        "upper": 1359937.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -144,7 +144,19 @@
             "exact": true,
             "value": 5
           },
-          "callee_unexpanded_calls": []
+          "callee_unexpanded_calls": [
+            {
+              "callee": "__atomic_acquire_retry",
+              "block": "bb.0.bb",
+              "call_bound": {
+                "lower": 1.0,
+                "upper": 1.0,
+                "exact": true,
+                "value": 1
+              },
+              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
+            }
+          ]
         },
         {
           "call_index": 2,
@@ -167,18 +179,28 @@
             "value": 7
           },
           "callee_expanded_bound_per_call": {
-            "lower": 15.0,
-            "upper": 15.0,
-            "exact": true,
-            "value": 15
+            "lower": 11.0,
+            "upper": 17.0,
+            "exact": false
           },
           "contribution": {
-            "lower": 15.0,
-            "upper": 15.0,
-            "exact": true,
-            "value": 15
+            "lower": 11.0,
+            "upper": 17.0,
+            "exact": false
           },
-          "callee_unexpanded_calls": []
+          "callee_unexpanded_calls": [
+            {
+              "callee": "__atomic_acquire_retry",
+              "block": "bb.0.bb",
+              "call_bound": {
+                "lower": 1.0,
+                "upper": 1.0,
+                "exact": true,
+                "value": 1
+              },
+              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
+            }
+          ]
         },
         {
           "call_index": 4,
@@ -195,22 +217,22 @@
             "1": 128
           },
           "callee_direct_bound_per_call": {
-            "lower": 517.0,
-            "upper": 517.0,
+            "lower": 645.0,
+            "upper": 645.0,
             "exact": true,
-            "value": 517
+            "value": 645
           },
           "callee_expanded_bound_per_call": {
-            "lower": 517.0,
-            "upper": 517.0,
+            "lower": 645.0,
+            "upper": 645.0,
             "exact": true,
-            "value": 517
+            "value": 645
           },
           "contribution": {
-            "lower": 1058816.0,
-            "upper": 1058816.0,
+            "lower": 1320960.0,
+            "upper": 1320960.0,
             "exact": true,
-            "value": 1058816
+            "value": 1320960
           },
           "callee_unexpanded_calls": []
         }
@@ -246,11 +268,9 @@
               "bb.0.bb"
             ],
             "ir_block": "bb",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.0.bb"
-            ],
-            "representative_machine_block": "bb.0.bb",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -263,11 +283,9 @@
               "bb.1.bb2"
             ],
             "ir_block": "bb2",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.1.bb2"
-            ],
-            "representative_machine_block": "bb.1.bb2",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -280,11 +298,9 @@
               "bb.2.bb4"
             ],
             "ir_block": "bb4",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.2.bb4"
-            ],
-            "representative_machine_block": "bb.2.bb4",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -314,11 +330,9 @@
               "bb.7.bb10"
             ],
             "ir_block": "bb10",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.7.bb10"
-            ],
-            "representative_machine_block": "bb.7.bb10",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -331,11 +345,9 @@
               "bb.8.bb31"
             ],
             "ir_block": "bb31",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.8.bb31"
-            ],
-            "representative_machine_block": "bb.8.bb31",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -348,11 +360,9 @@
               "bb.9.bb36"
             ],
             "ir_block": "bb36",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.9.bb36"
-            ],
-            "representative_machine_block": "bb.9.bb36",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -369,20 +379,15 @@
             "label": "bb.0.bb",
             "ir_block": "bb",
             "successors": [
-              1,
-              2
+              2,
+              1
             ],
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {
               "2": 7
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -398,12 +403,7 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -412,8 +412,8 @@
             "label": "bb.2.bb4",
             "ir_block": "bb4",
             "successors": [
-              3,
-              7
+              7,
+              3
             ],
             "instructions": 9,
             "calls": [
@@ -423,18 +423,13 @@
             "edge_instruction_costs": {
               "7": 9
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.3.bb13.preheader",
+            "key": "bb.3",
             "number": 3,
-            "label": "bb.3.bb13.preheader",
+            "label": "bb.3",
             "ir_block": null,
             "successors": [
               4
@@ -444,35 +439,26 @@
             "edge_instruction_costs": {
               "4": 5
             },
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": 1.0,
-              "exact": false
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.6.select.end",
+            "key": "bb.6",
             "number": 6,
-            "label": "bb.6.select.end",
+            "label": "bb.6",
             "ir_block": null,
             "successors": [
-              4,
-              7
+              7,
+              4
             ],
-            "instructions": 15,
+            "instructions": 16,
             "calls": [
               "reduction"
             ],
             "edge_instruction_costs": {
-              "7": 15
+              "7": 16
             },
-            "execution_bound": {
-              "lower": 2048.0,
-              "upper": 2048.0,
-              "exact": true,
-              "value": 2048
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -489,18 +475,13 @@
             "edge_instruction_costs": {
               "6": 2
             },
-            "execution_bound": {
-              "lower": 2048.0,
-              "upper": 2048.0,
-              "exact": true,
-              "value": 2048
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.5.select.false",
+            "key": "bb.5",
             "number": 5,
-            "label": "bb.5.select.false",
+            "label": "bb.5",
             "ir_block": null,
             "successors": [
               6
@@ -510,11 +491,7 @@
             "edge_instruction_costs": {
               "6": 1
             },
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": 2048.0,
-              "exact": false
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -523,8 +500,8 @@
             "label": "bb.7.bb10",
             "ir_block": "bb10",
             "successors": [
-              8,
-              9
+              9,
+              8
             ],
             "instructions": 5,
             "calls": [
@@ -533,12 +510,7 @@
             "edge_instruction_costs": {
               "9": 5
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -549,15 +521,10 @@
             "successors": [
               9
             ],
-            "instructions": 8,
+            "instructions": 9,
             "calls": [],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -569,12 +536,7 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           }
         ]
       },
@@ -583,13 +545,13 @@
     {
       "tid": 1,
       "instruction_bound_direct_function": {
-        "lower": 34844.0,
-        "upper": 36897.0,
+        "lower": 36892.0,
+        "upper": 38945.0,
         "exact": false
       },
       "instruction_bound_with_internal_callees": {
-        "lower": 1093675.0,
-        "upper": 1095728.0,
+        "lower": 1357863.0,
+        "upper": 1359922.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -695,18 +657,28 @@
             "value": 7
           },
           "callee_expanded_bound_per_call": {
-            "lower": 15.0,
-            "upper": 15.0,
-            "exact": true,
-            "value": 15
+            "lower": 11.0,
+            "upper": 17.0,
+            "exact": false
           },
           "contribution": {
-            "lower": 15.0,
-            "upper": 15.0,
-            "exact": true,
-            "value": 15
+            "lower": 11.0,
+            "upper": 17.0,
+            "exact": false
           },
-          "callee_unexpanded_calls": []
+          "callee_unexpanded_calls": [
+            {
+              "callee": "__atomic_acquire_retry",
+              "block": "bb.0.bb",
+              "call_bound": {
+                "lower": 1.0,
+                "upper": 1.0,
+                "exact": true,
+                "value": 1
+              },
+              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
+            }
+          ]
         },
         {
           "call_index": 3,
@@ -723,22 +695,22 @@
             "1": 128
           },
           "callee_direct_bound_per_call": {
-            "lower": 517.0,
-            "upper": 517.0,
+            "lower": 645.0,
+            "upper": 645.0,
             "exact": true,
-            "value": 517
+            "value": 645
           },
           "callee_expanded_bound_per_call": {
-            "lower": 517.0,
-            "upper": 517.0,
+            "lower": 645.0,
+            "upper": 645.0,
             "exact": true,
-            "value": 517
+            "value": 645
           },
           "contribution": {
-            "lower": 1058816.0,
-            "upper": 1058816.0,
+            "lower": 1320960.0,
+            "upper": 1320960.0,
             "exact": true,
-            "value": 1058816
+            "value": 1320960
           },
           "callee_unexpanded_calls": []
         }
@@ -774,11 +746,9 @@
               "bb.0.bb"
             ],
             "ir_block": "bb",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.0.bb"
-            ],
-            "representative_machine_block": "bb.0.bb",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -808,11 +778,9 @@
               "bb.2.bb4"
             ],
             "ir_block": "bb4",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.2.bb4"
-            ],
-            "representative_machine_block": "bb.2.bb4",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -842,11 +810,9 @@
               "bb.7.bb10"
             ],
             "ir_block": "bb10",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.7.bb10"
-            ],
-            "representative_machine_block": "bb.7.bb10",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -876,11 +842,9 @@
               "bb.9.bb36"
             ],
             "ir_block": "bb36",
-            "anchor_kind": "common_group_representative",
-            "entry_machine_blocks": [
-              "bb.9.bb36"
-            ],
-            "representative_machine_block": "bb.9.bb36",
+            "anchor_kind": "machine_flow_only",
+            "entry_machine_blocks": [],
+            "representative_machine_block": null,
             "bound": {
               "lower": 1.0,
               "upper": 1.0,
@@ -897,20 +861,15 @@
             "label": "bb.0.bb",
             "ir_block": "bb",
             "successors": [
-              1,
-              2
+              2,
+              1
             ],
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {
               "2": 7
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -926,12 +885,7 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": -0.0,
-              "exact": true,
-              "value": 0
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -940,8 +894,8 @@
             "label": "bb.2.bb4",
             "ir_block": "bb4",
             "successors": [
-              3,
-              7
+              7,
+              3
             ],
             "instructions": 9,
             "calls": [
@@ -951,18 +905,13 @@
             "edge_instruction_costs": {
               "7": 9
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.3.bb13.preheader",
+            "key": "bb.3",
             "number": 3,
-            "label": "bb.3.bb13.preheader",
+            "label": "bb.3",
             "ir_block": null,
             "successors": [
               4
@@ -972,35 +921,26 @@
             "edge_instruction_costs": {
               "4": 5
             },
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": 1.0,
-              "exact": false
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.6.select.end",
+            "key": "bb.6",
             "number": 6,
-            "label": "bb.6.select.end",
+            "label": "bb.6",
             "ir_block": null,
             "successors": [
-              4,
-              7
+              7,
+              4
             ],
-            "instructions": 15,
+            "instructions": 16,
             "calls": [
               "reduction"
             ],
             "edge_instruction_costs": {
-              "7": 15
+              "7": 16
             },
-            "execution_bound": {
-              "lower": 2048.0,
-              "upper": 2048.0,
-              "exact": true,
-              "value": 2048
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -1017,18 +957,13 @@
             "edge_instruction_costs": {
               "6": 2
             },
-            "execution_bound": {
-              "lower": 2048.0,
-              "upper": 2048.0,
-              "exact": true,
-              "value": 2048
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
-            "key": "bb.5.select.false",
+            "key": "bb.5",
             "number": 5,
-            "label": "bb.5.select.false",
+            "label": "bb.5",
             "ir_block": null,
             "successors": [
               6
@@ -1038,11 +973,7 @@
             "edge_instruction_costs": {
               "6": 1
             },
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": 2048.0,
-              "exact": false
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -1051,8 +982,8 @@
             "label": "bb.7.bb10",
             "ir_block": "bb10",
             "successors": [
-              8,
-              9
+              9,
+              8
             ],
             "instructions": 5,
             "calls": [
@@ -1061,12 +992,7 @@
             "edge_instruction_costs": {
               "9": 5
             },
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -1077,15 +1003,10 @@
             "successors": [
               9
             ],
-            "instructions": 8,
+            "instructions": 9,
             "calls": [],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 0.0,
-              "upper": -0.0,
-              "exact": true,
-              "value": 0
-            }
+            "execution_bound": null
           },
           {
             "function": "main_kernel1",
@@ -1097,12 +1018,7 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
-            "execution_bound": {
-              "lower": 1.0,
-              "upper": 1.0,
-              "exact": true,
-              "value": 1
-            }
+            "execution_bound": null
           }
         ]
       },
@@ -1118,6 +1034,7 @@
         "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/kernel.ll",
         "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/kernel.named.ll",
         "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/kernel.late.mir",
+        "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/kernel.annotated.s",
         "functions": [
           "main",
           "main_kernel1",
@@ -1176,6 +1093,7 @@
         "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/runtime/syslib_alloc/module.ll",
         "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/runtime/syslib_alloc/module.named.ll",
         "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/runtime/syslib_alloc/module.late.mir",
+        "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/RED/tasklet_sweep_RED_dpu1_tasklets2_size524288/phases/2f86401e8f14791c/runtime/syslib_alloc/module.annotated.s",
         "functions": [
           "mem_alloc",
           "mem_alloc_nolock",

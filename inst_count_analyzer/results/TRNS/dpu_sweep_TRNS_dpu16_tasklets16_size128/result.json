@@ -28,19 +28,20 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 623536,
-    "upper": 13501586800,
+    "lower": 619944,
+    "upper": 4087152,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -55,11 +56,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
@@ -74,19 +76,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -99,11 +100,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_0.bin",
@@ -118,19 +120,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_0.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -143,11 +144,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_0.bin",
@@ -162,19 +164,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_0.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -187,11 +188,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_0.bin",
@@ -206,27 +208,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_0.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 1,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -241,11 +242,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
@@ -260,19 +262,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_1.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -285,11 +286,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_1.bin",
@@ -304,19 +306,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_1.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -329,11 +330,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_1.bin",
@@ -348,19 +350,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_1.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -373,11 +374,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_1.bin",
@@ -392,27 +394,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_1.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 2,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -427,11 +428,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
@@ -446,19 +448,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_2.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -471,11 +472,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_2.bin",
@@ -490,19 +492,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_2.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -515,11 +516,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_2.bin",
@@ -534,19 +536,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_2.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -559,11 +560,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_2.bin",
@@ -578,27 +580,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_2.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 3,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -613,11 +614,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
@@ -632,19 +634,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_3.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -657,11 +658,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_3.bin",
@@ -676,19 +678,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_3.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -701,11 +702,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_3.bin",
@@ -720,19 +722,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_3.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -745,11 +746,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_3.bin",
@@ -764,27 +766,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_3.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 4,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -799,11 +800,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_4.bin",
@@ -818,19 +820,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_4.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -843,11 +844,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_4.bin",
@@ -862,19 +864,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_4.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -887,11 +888,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_4.bin",
@@ -906,19 +908,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_4.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -931,11 +932,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_4.bin",
@@ -950,27 +952,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_4.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 5,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -985,11 +986,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_5.bin",
@@ -1004,19 +1006,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_5.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1029,11 +1030,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_5.bin",
@@ -1048,19 +1050,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_5.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -1073,11 +1074,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_5.bin",
@@ -1092,19 +1094,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_5.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -1117,11 +1118,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_5.bin",
@@ -1136,27 +1138,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_5.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 6,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -1171,11 +1172,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_6.bin",
@@ -1190,19 +1192,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_6.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1215,11 +1216,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_6.bin",
@@ -1234,19 +1236,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_6.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -1259,11 +1260,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_6.bin",
@@ -1278,19 +1280,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_6.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -1303,11 +1304,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_6.bin",
@@ -1322,27 +1324,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_6.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 7,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -1357,11 +1358,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_7.bin",
@@ -1376,19 +1378,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_7.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1401,11 +1402,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_7.bin",
@@ -1420,19 +1422,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_7.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -1445,11 +1446,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_7.bin",
@@ -1464,19 +1466,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_7.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -1489,11 +1490,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_7.bin",
@@ -1508,27 +1510,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_7.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 8,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -1543,11 +1544,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_8.bin",
@@ -1562,19 +1564,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_8.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1587,11 +1588,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_8.bin",
@@ -1606,19 +1608,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_8.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -1631,11 +1632,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_8.bin",
@@ -1650,19 +1652,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_8.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -1675,11 +1676,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_8.bin",
@@ -1694,27 +1696,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_8.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 9,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -1729,11 +1730,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_9.bin",
@@ -1748,19 +1750,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_9.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1773,11 +1774,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_9.bin",
@@ -1792,19 +1794,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_9.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -1817,11 +1818,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_9.bin",
@@ -1836,19 +1838,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_9.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -1861,11 +1862,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_9.bin",
@@ -1880,27 +1882,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_9.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 10,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -1915,11 +1916,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_10.bin",
@@ -1934,19 +1936,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_10.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -1959,11 +1960,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_10.bin",
@@ -1978,19 +1980,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_10.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2003,11 +2004,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_10.bin",
@@ -2022,19 +2024,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_10.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2047,11 +2048,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_10.bin",
@@ -2066,27 +2068,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_10.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 11,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -2101,11 +2102,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_11.bin",
@@ -2120,19 +2122,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_11.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -2145,11 +2146,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_11.bin",
@@ -2164,19 +2166,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_11.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2189,11 +2190,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_11.bin",
@@ -2208,19 +2210,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_11.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2233,11 +2234,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_11.bin",
@@ -2252,27 +2254,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_11.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 12,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -2287,11 +2288,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_12.bin",
@@ -2306,19 +2308,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_12.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -2331,11 +2332,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_12.bin",
@@ -2350,19 +2352,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_12.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2375,11 +2376,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_12.bin",
@@ -2394,19 +2396,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_12.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2419,11 +2420,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_12.bin",
@@ -2438,27 +2440,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_12.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 13,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -2473,11 +2474,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_13.bin",
@@ -2492,19 +2494,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_13.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -2517,11 +2518,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_13.bin",
@@ -2536,19 +2538,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_13.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2561,11 +2562,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_13.bin",
@@ -2580,19 +2582,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_13.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2605,11 +2606,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_13.bin",
@@ -2624,27 +2626,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_13.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 14,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -2659,11 +2660,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_14.bin",
@@ -2678,19 +2680,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_14.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -2703,11 +2704,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_14.bin",
@@ -2722,19 +2724,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_14.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2747,11 +2748,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_14.bin",
@@ -2766,19 +2768,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_14.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2791,11 +2792,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_14.bin",
@@ -2810,27 +2812,26 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_14.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     },
     {
       "dpu": 15,
       "bound": {
-        "lower": 623536.0,
-        "upper": 13501586800.0,
+        "lower": 619944.0,
+        "upper": 4087152.0,
         "exact": false
       },
       "phases": [
@@ -2845,11 +2846,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_15.bin",
@@ -2864,19 +2866,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_15.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 2,
@@ -2889,11 +2890,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_15.bin",
@@ -2908,19 +2910,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_3_15.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 4,
@@ -2933,11 +2934,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_4_15.bin",
@@ -2952,19 +2954,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_5_15.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         },
         {
           "execution": 6,
@@ -2977,11 +2978,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 154166,
-            "upper": 421030,
+            "lower": 153461,
+            "upper": 421094,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_6_15.bin",
@@ -2996,19 +2998,18 @@
             "M_": 128,
             "kernel": 1
           },
-          "unknown_loop_backedge_uppers": {
-            "main_kernel2": 1023
-          },
+          "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1718,
-            "upper": 3374975670,
+            "lower": 1525,
+            "upper": 600694,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_7_15.bin",
-          "result_path": "phases/821dfe26f51710e1/result.json"
+          "result_path": "phases/ff7eeeda77698e57/result.json"
         }
       ]
     }

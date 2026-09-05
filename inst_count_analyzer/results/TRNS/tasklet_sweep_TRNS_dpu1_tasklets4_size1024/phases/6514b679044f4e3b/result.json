@@ -1,0 +1,25 @@
+{
+  "benchmark": "TRNS",
+  "tasklets": 4,
+  "params": {
+    "M_": 1024,
+    "kernel": 1,
+    "m": 16,
+    "n": 4
+  },
+  "dynamic_instruction_bound": {
+    "lower": 385,
+    "upper": 2959810,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry",
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 1024,
+    "setting_id": "tasklet_sweep_TRNS_dpu1_tasklets4_size1024"
+  }
+}

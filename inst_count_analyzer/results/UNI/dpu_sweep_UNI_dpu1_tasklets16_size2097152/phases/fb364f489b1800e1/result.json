@@ -6,11 +6,12 @@
     "size": 16777216
   },
   "dynamic_instruction_bound": {
-    "lower": 5295082,
-    "upper": 5934058,
+    "lower": 7392053,
+    "upper": 16321578,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "simulator_match": {

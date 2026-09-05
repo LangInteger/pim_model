@@ -8,11 +8,12 @@
     "n": 4
   },
   "dynamic_instruction_bound": {
-    "lower": 2338098,
-    "upper": 6500782,
+    "lower": 2333953,
+    "upper": 6500798,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "simulator_match": {

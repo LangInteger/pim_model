@@ -28,19 +28,20 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 2457711,
-    "upper": 2457719,
+    "lower": 3248222,
+    "upper": 3248253,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 2457711.0,
-        "upper": 2457719.0,
+        "lower": 3248222.0,
+        "upper": 3248253.0,
         "exact": false
       },
       "phases": [
@@ -54,11 +55,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1652804,
-            "upper": 1652808,
+            "lower": 2181176,
+            "upper": 2181196,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
@@ -74,11 +76,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 804907,
-            "upper": 804911,
+            "lower": 1067046,
+            "upper": 1067057,
             "exact": false
           },
           "unexpanded_callees": [
+            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",

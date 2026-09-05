@@ -11,11 +11,12 @@
     "ts_length": 2048
   },
   "dynamic_instruction_bound": {
-    "lower": 2889921,
-    "upper": 7081137,
+    "lower": 2889104,
+    "upper": 7081329,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "simulator_match": {

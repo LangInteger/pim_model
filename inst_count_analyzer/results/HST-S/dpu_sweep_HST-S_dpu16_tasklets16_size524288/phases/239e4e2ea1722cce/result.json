@@ -8,11 +8,12 @@
     "transfer_size": 131072
   },
   "dynamic_instruction_bound": {
-    "lower": 608657,
-    "upper": 1624641,
+    "lower": 608149,
+    "upper": 1624705,
     "exact": false
   },
   "unexpanded_callees": [
+    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "simulator_match": {

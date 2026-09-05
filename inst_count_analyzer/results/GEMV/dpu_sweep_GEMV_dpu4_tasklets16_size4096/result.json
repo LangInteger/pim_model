@@ -1,0 +1,169 @@
+{
+  "benchmark": "GEMV",
+  "tasklets": 16,
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "benchmark": "GEMV",
+    "num_dpus_configured": 4,
+    "num_tasklets": 16,
+    "data_prep_params": 4096,
+    "setting_id": "dpu_sweep_GEMV_dpu4_tasklets16_size4096"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "dpu_sweep",
+      "benchmark": "GEMV",
+      "num_tasklets": "16",
+      "num_dpus": "4",
+      "data_prep_params": "4096",
+      "start_time": "2026-08-28T15:08:44+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-28T15:10:26+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/GEMV",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 890358,
+    "upper": 890374,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait",
+    "puts"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 890358.0,
+        "upper": 890374.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 890358,
+            "upper": 890374,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait",
+            "puts"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/0fcecc31b121b12f/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 1,
+      "bound": {
+        "lower": 890358.0,
+        "upper": 890374.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 890358,
+            "upper": 890374,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait",
+            "puts"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
+          "result_path": "phases/0fcecc31b121b12f/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 2,
+      "bound": {
+        "lower": 890358.0,
+        "upper": 890374.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 890358,
+            "upper": 890374,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait",
+            "puts"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
+          "result_path": "phases/0fcecc31b121b12f/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 3,
+      "bound": {
+        "lower": 890358.0,
+        "upper": 890374.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 890358,
+            "upper": 890374,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait",
+            "puts"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
+          "result_path": "phases/0fcecc31b121b12f/result.json"
+        }
+      ]
+    }
+  ]
+}

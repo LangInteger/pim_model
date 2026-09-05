@@ -1,13 +1,13 @@
 {
   "benchmark": "GEMV",
-  "tasklets": 1,
+  "tasklets": 4,
   "simulator_match": {
     "experiment": "tasklet_sweep",
     "benchmark": "GEMV",
     "num_dpus_configured": 1,
-    "num_tasklets": 1,
+    "num_tasklets": 4,
     "data_prep_params": 2048,
-    "setting_id": "tasklet_sweep_GEMV_dpu1_tasklets1_size2048"
+    "setting_id": "tasklet_sweep_GEMV_dpu1_tasklets4_size2048"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
@@ -15,21 +15,21 @@
     "simulator_metadata": {
       "experiment": "tasklet_sweep",
       "benchmark": "GEMV",
-      "num_tasklets": "1",
+      "num_tasklets": "4",
       "num_dpus": "1",
       "data_prep_params": "2048",
-      "start_time": "2026-08-27T20:59:13+00:00",
+      "start_time": "2026-08-27T21:02:09+00:00",
       "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
       "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-27T21:00:56+00:00",
+      "end_time": "2026-08-27T21:03:05+00:00",
       "status": "success"
     },
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/GEMV",
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 1776771,
-    "upper": 1776772,
+    "lower": 1777154,
+    "upper": 1777158,
     "exact": false
   },
   "unexpanded_callees": [
@@ -40,8 +40,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 1776771.0,
-        "upper": 1776772.0,
+        "lower": 1777154.0,
+        "upper": 1777158.0,
         "exact": false
       },
       "phases": [
@@ -56,8 +56,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 1776771,
-            "upper": 1776772,
+            "lower": 1777154,
+            "upper": 1777158,
             "exact": false
           },
           "unexpanded_callees": [

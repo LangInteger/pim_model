@@ -1,13 +1,13 @@
 {
   "benchmark": "MLP",
-  "tasklets": 1,
+  "tasklets": 4,
   "simulator_match": {
     "experiment": "tasklet_sweep",
     "benchmark": "MLP",
     "num_dpus_configured": 1,
-    "num_tasklets": 1,
+    "num_tasklets": 4,
     "data_prep_params": 256,
-    "setting_id": "tasklet_sweep_MLP_dpu1_tasklets1_size256"
+    "setting_id": "tasklet_sweep_MLP_dpu1_tasklets4_size256"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
@@ -15,21 +15,21 @@
     "simulator_metadata": {
       "experiment": "tasklet_sweep",
       "benchmark": "MLP",
-      "num_tasklets": "1",
+      "num_tasklets": "4",
       "num_dpus": "1",
       "data_prep_params": "256",
-      "start_time": "2026-08-27T21:23:03+00:00",
+      "start_time": "2026-08-27T21:26:27+00:00",
       "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
       "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-27T21:25:06+00:00",
+      "end_time": "2026-08-27T21:27:26+00:00",
       "status": "success"
     },
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/MLP",
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 2583561,
-    "upper": 2583564,
+    "lower": 2584710,
+    "upper": 2584722,
     "exact": false
   },
   "unexpanded_callees": [
@@ -40,8 +40,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 2583561.0,
-        "upper": 2583564.0,
+        "lower": 2584710.0,
+        "upper": 2584722.0,
         "exact": false
       },
       "phases": [
@@ -56,8 +56,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 861570,
+            "upper": 861574,
             "exact": false
           },
           "unexpanded_callees": [
@@ -78,8 +78,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 861570,
+            "upper": 861574,
             "exact": false
           },
           "unexpanded_callees": [
@@ -100,8 +100,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 861187,
-            "upper": 861188,
+            "lower": 861570,
+            "upper": 861574,
             "exact": false
           },
           "unexpanded_callees": [

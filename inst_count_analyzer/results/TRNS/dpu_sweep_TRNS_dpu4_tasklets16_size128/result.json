@@ -28,8 +28,8 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 1593792,
-    "upper": 24174947264,
+    "lower": 2494144,
+    "upper": 54006347200,
     "exact": false
   },
   "unexpanded_callees": [
@@ -39,8 +39,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 1593792.0,
-        "upper": 24174947264.0,
+        "lower": 2494144.0,
+        "upper": 54006347200.0,
         "exact": false
       },
       "phases": [
@@ -55,8 +55,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -78,8 +78,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -99,8 +99,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -122,8 +122,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -143,8 +143,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -166,8 +166,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -187,8 +187,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -210,8 +210,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -231,8 +231,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -254,8 +254,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -275,8 +275,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -298,8 +298,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -319,8 +319,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -342,8 +342,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -363,8 +363,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -386,8 +386,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -407,8 +407,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -430,8 +430,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -451,8 +451,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -474,8 +474,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -495,8 +495,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -518,8 +518,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -539,8 +539,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -562,8 +562,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -583,8 +583,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -606,8 +606,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -627,8 +627,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -650,8 +650,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -671,8 +671,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -694,8 +694,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -715,8 +715,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -738,8 +738,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -753,8 +753,8 @@
     {
       "dpu": 1,
       "bound": {
-        "lower": 1593792.0,
-        "upper": 24174947264.0,
+        "lower": 2494144.0,
+        "upper": 54006347200.0,
         "exact": false
       },
       "phases": [
@@ -769,8 +769,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -792,8 +792,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -813,8 +813,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -836,8 +836,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -857,8 +857,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -880,8 +880,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -901,8 +901,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -924,8 +924,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -945,8 +945,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -968,8 +968,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -989,8 +989,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1012,8 +1012,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1033,8 +1033,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1056,8 +1056,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1077,8 +1077,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1100,8 +1100,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1121,8 +1121,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1144,8 +1144,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1165,8 +1165,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1188,8 +1188,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1209,8 +1209,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1232,8 +1232,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1253,8 +1253,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1276,8 +1276,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1297,8 +1297,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1320,8 +1320,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1341,8 +1341,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1364,8 +1364,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1385,8 +1385,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1408,8 +1408,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1429,8 +1429,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1452,8 +1452,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1467,8 +1467,8 @@
     {
       "dpu": 2,
       "bound": {
-        "lower": 1593792.0,
-        "upper": 24174947264.0,
+        "lower": 2494144.0,
+        "upper": 54006347200.0,
         "exact": false
       },
       "phases": [
@@ -1483,8 +1483,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1506,8 +1506,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1527,8 +1527,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1550,8 +1550,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1571,8 +1571,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1594,8 +1594,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1615,8 +1615,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1638,8 +1638,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1659,8 +1659,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1682,8 +1682,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1703,8 +1703,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1726,8 +1726,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1747,8 +1747,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1770,8 +1770,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1791,8 +1791,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1814,8 +1814,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1835,8 +1835,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1858,8 +1858,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1879,8 +1879,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1902,8 +1902,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1923,8 +1923,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1946,8 +1946,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1967,8 +1967,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -1990,8 +1990,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2011,8 +2011,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2034,8 +2034,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2055,8 +2055,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2078,8 +2078,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2099,8 +2099,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2122,8 +2122,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2143,8 +2143,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2166,8 +2166,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2181,8 +2181,8 @@
     {
       "dpu": 3,
       "bound": {
-        "lower": 1593792.0,
-        "upper": 24174947264.0,
+        "lower": 2494144.0,
+        "upper": 54006347200.0,
         "exact": false
       },
       "phases": [
@@ -2197,8 +2197,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2220,8 +2220,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2241,8 +2241,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2264,8 +2264,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2285,8 +2285,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2308,8 +2308,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2329,8 +2329,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2352,8 +2352,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2373,8 +2373,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2396,8 +2396,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2417,8 +2417,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2440,8 +2440,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2461,8 +2461,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2484,8 +2484,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2505,8 +2505,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2528,8 +2528,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2549,8 +2549,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2572,8 +2572,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2593,8 +2593,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2616,8 +2616,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2637,8 +2637,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2660,8 +2660,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2681,8 +2681,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2704,8 +2704,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2725,8 +2725,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2748,8 +2748,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2769,8 +2769,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2792,8 +2792,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2813,8 +2813,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2836,8 +2836,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2857,8 +2857,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 98118,
-            "upper": 98502,
+            "lower": 154166,
+            "upper": 421030,
             "exact": false
           },
           "unexpanded_callees": [
@@ -2880,8 +2880,8 @@
             "main_kernel2": 1023
           },
           "bound": {
-            "lower": 1494,
-            "upper": 1510835702,
+            "lower": 1718,
+            "upper": 3374975670,
             "exact": false
           },
           "unexpanded_callees": [

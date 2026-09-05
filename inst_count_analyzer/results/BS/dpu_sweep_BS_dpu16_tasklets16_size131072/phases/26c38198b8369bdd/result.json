@@ -7,8 +7,8 @@
     "slice_per_dpu": 1024
   },
   "dynamic_instruction_bound": {
-    "lower": 39414,
-    "upper": 3823094,
+    "lower": 39526,
+    "upper": 3809366,
     "exact": false
   },
   "unexpanded_callees": [

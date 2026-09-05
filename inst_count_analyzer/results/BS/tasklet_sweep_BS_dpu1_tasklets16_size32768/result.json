@@ -28,8 +28,8 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 153078,
-    "upper": 13321718,
+    "lower": 153190,
+    "upper": 13273174,
     "exact": false
   },
   "unexpanded_callees": [
@@ -39,8 +39,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 153078.0,
-        "upper": 13321718.0,
+        "lower": 153190.0,
+        "upper": 13273174.0,
         "exact": false
       },
       "phases": [
@@ -57,8 +57,8 @@
             "main_kernel1": 12
           },
           "bound": {
-            "lower": 153078,
-            "upper": 13321718,
+            "lower": 153190,
+            "upper": 13273174,
             "exact": false
           },
           "unexpanded_callees": [

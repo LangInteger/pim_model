@@ -8,8 +8,8 @@
     "n": 8
   },
   "dynamic_instruction_bound": {
-    "lower": 98118,
-    "upper": 98502,
+    "lower": 154166,
+    "upper": 421030,
     "exact": false
   },
   "unexpanded_callees": [

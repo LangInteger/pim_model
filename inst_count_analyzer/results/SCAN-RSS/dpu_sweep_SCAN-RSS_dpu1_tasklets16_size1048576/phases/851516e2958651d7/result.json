@@ -6,8 +6,8 @@
     "size": 8388608
   },
   "dynamic_instruction_bound": {
-    "lower": 6891961,
-    "upper": 6915065,
+    "lower": 6884793,
+    "upper": 6907897,
     "exact": false
   },
   "unexpanded_callees": [

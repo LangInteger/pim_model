@@ -1,0 +1,1345 @@
+{
+  "benchmark": "BS",
+  "tasklets": 1,
+  "function": "main_kernel1",
+  "params": {
+    "input_size": 32768,
+    "kernel": 0,
+    "slice_per_dpu": 4096
+  },
+  "unknown_loop_backedge_uppers": {
+    "main_kernel1": 12,
+    "search": 32
+  },
+  "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive late MIR machine blocks + target-lowered runtime helper expansion",
+  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Collective runtime primitives remain explicitly unexpanded.",
+  "dynamic_instruction_bound_direct": {
+    "lower": 118832.0,
+    "upper": 1978416.0,
+    "exact": false
+  },
+  "dynamic_instruction_bound": {
+    "lower": 139369.0,
+    "upper": 13258888.0,
+    "exact": false
+  },
+  "per_tasklet": [
+    {
+      "tid": 0,
+      "instruction_bound_direct_function": {
+        "lower": 118832.0,
+        "upper": 1978416.0,
+        "exact": false
+      },
+      "instruction_bound_with_internal_callees": {
+        "lower": 139369.0,
+        "upper": 13258888.0,
+        "exact": false
+      },
+      "ir_block_bounds": {
+        "bb": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb3": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb5": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb18": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb28.loopexit": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb28": {
+          "lower": 1.0,
+          "upper": 1.0,
+          "exact": true,
+          "value": 1
+        },
+        "bb29": {
+          "lower": 4096.0,
+          "upper": 4096.0,
+          "exact": true,
+          "value": 4096
+        },
+        "bb34": {
+          "lower": 4096.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb42": {
+          "lower": 0.0,
+          "upper": 4096.0,
+          "exact": false
+        },
+        "bb47": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb48": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb51": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb54": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb59": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb64": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb69": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb73": {
+          "lower": 0.0,
+          "upper": 4096.0,
+          "exact": false
+        },
+        "bb79": {
+          "lower": 0.0,
+          "upper": 4096.0,
+          "exact": false
+        },
+        "bb84": {
+          "lower": 0.0,
+          "upper": 53248.0,
+          "exact": false
+        },
+        "bb85.loopexit": {
+          "lower": 0.0,
+          "upper": 4096.0,
+          "exact": false
+        },
+        "bb85": {
+          "lower": 4096.0,
+          "upper": 4096.0,
+          "exact": true,
+          "value": 4096
+        }
+      },
+      "ir_analysis": {
+        "unknown_loops": [],
+        "bounded_unknown_loops": [
+          {
+            "header": "bb34",
+            "backedge_lower": null,
+            "backedge_upper": 12,
+            "source_specific": false
+          }
+        ],
+        "loops": [
+          {
+            "header": "bb29",
+            "depth": 1,
+            "blocks": [
+              "bb29",
+              "bb34",
+              "bb47",
+              "bb51",
+              "bb48",
+              "bb54",
+              "bb59",
+              "bb64",
+              "bb69",
+              "bb84",
+              "bb85.loopexit",
+              "bb73",
+              "bb79",
+              "bb42",
+              "bb85"
+            ],
+            "backedge_count": 4095,
+            "trip_count": 4096
+          },
+          {
+            "header": "bb34",
+            "depth": 2,
+            "blocks": [
+              "bb34",
+              "bb47",
+              "bb51",
+              "bb48",
+              "bb54",
+              "bb59",
+              "bb64",
+              "bb69",
+              "bb84"
+            ],
+            "backedge_count": null,
+            "trip_count": null
+          }
+        ],
+        "replacements": {
+          "tid": 1,
+          "dpu_args": 5,
+          "skipped_non_integer": [],
+          "fields": [
+            "input_size",
+            "slice_per_dpu",
+            "kernel"
+          ]
+        }
+      },
+      "expanded_calls": [
+        {
+          "call_index": 0,
+          "callee": "mem_reset",
+          "callee_module": "syslib_alloc",
+          "block": "bb3",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "constant_integer_args": {},
+          "callee_direct_bound_per_call": {
+            "lower": 5.0,
+            "upper": 5.0,
+            "exact": true,
+            "value": 5
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 5.0,
+            "upper": 5.0,
+            "exact": true,
+            "value": 5
+          },
+          "contribution": {
+            "lower": 5.0,
+            "upper": 5.0,
+            "exact": true,
+            "value": 5
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 2,
+          "callee": "mem_alloc",
+          "callee_module": "syslib_alloc",
+          "block": "bb5",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "constant_integer_args": {
+            "0": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 7.0,
+            "upper": 7.0,
+            "exact": true,
+            "value": 7
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "contribution": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 3,
+          "callee": "mem_alloc",
+          "callee_module": "syslib_alloc",
+          "block": "bb5",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "constant_integer_args": {
+            "0": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 7.0,
+            "upper": 7.0,
+            "exact": true,
+            "value": 7
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "contribution": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 4,
+          "callee": "mem_alloc",
+          "callee_module": "syslib_alloc",
+          "block": "bb5",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "constant_integer_args": {
+            "0": 256
+          },
+          "callee_direct_bound_per_call": {
+            "lower": 7.0,
+            "upper": 7.0,
+            "exact": true,
+            "value": 7
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "contribution": {
+            "lower": 15.0,
+            "upper": 15.0,
+            "exact": true,
+            "value": 15
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 5,
+          "callee": "search",
+          "callee_module": "benchmark",
+          "block": "bb34",
+          "call_bound": {
+            "lower": 4096.0,
+            "upper": 53248.0,
+            "exact": false
+          },
+          "constant_integer_args": {},
+          "callee_direct_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "contribution": {
+            "lower": 20480.0,
+            "upper": 5431296.0,
+            "exact": false
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 6,
+          "callee": "search",
+          "callee_module": "benchmark",
+          "block": "bb59",
+          "call_bound": {
+            "lower": 0.0,
+            "upper": 53248.0,
+            "exact": false
+          },
+          "constant_integer_args": {},
+          "callee_direct_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "contribution": {
+            "lower": 0.0,
+            "upper": 5431296.0,
+            "exact": false
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 7,
+          "callee": "search",
+          "callee_module": "benchmark",
+          "block": "bb73",
+          "call_bound": {
+            "lower": 0.0,
+            "upper": 4096.0,
+            "exact": false
+          },
+          "constant_integer_args": {},
+          "callee_direct_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 5.0,
+            "upper": 102.0,
+            "exact": false
+          },
+          "contribution": {
+            "lower": 0.0,
+            "upper": 417792.0,
+            "exact": false
+          },
+          "callee_unexpanded_calls": []
+        },
+        {
+          "call_index": 0,
+          "callee": "__mulsi3",
+          "callee_module": "syslib_mul32",
+          "block": "bb18",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "origin": "target_lowering",
+          "operation": "mul i32",
+          "constant_integer_args": {},
+          "callee_direct_bound_per_call": {
+            "lower": 7.0,
+            "upper": 38.0,
+            "exact": false
+          },
+          "callee_expanded_bound_per_call": {
+            "lower": 7.0,
+            "upper": 38.0,
+            "exact": false
+          },
+          "contribution": {
+            "lower": 7.0,
+            "upper": 38.0,
+            "exact": false
+          },
+          "callee_unexpanded_calls": []
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "block": "bb5",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+        }
+      ],
+      "machine": {
+        "anchors": [
+          {
+            "machine_blocks": [
+              "bb.0.bb"
+            ],
+            "ir_block": "bb",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.0.bb"
+            ],
+            "representative_machine_block": "bb.0.bb",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.1.bb3"
+            ],
+            "ir_block": "bb3",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.1.bb3"
+            ],
+            "representative_machine_block": "bb.1.bb3",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.2.bb5"
+            ],
+            "ir_block": "bb5",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.2.bb5"
+            ],
+            "representative_machine_block": "bb.2.bb5",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.3.bb18"
+            ],
+            "ir_block": "bb18",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.3.bb18"
+            ],
+            "representative_machine_block": "bb.3.bb18",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.16.bb73"
+            ],
+            "ir_block": "bb73",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.16.bb73"
+            ],
+            "representative_machine_block": "bb.16.bb73",
+            "bound": {
+              "lower": 0.0,
+              "upper": 4096.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.6.bb42"
+            ],
+            "ir_block": "bb42",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.6.bb42"
+            ],
+            "representative_machine_block": "bb.6.bb42",
+            "bound": {
+              "lower": 0.0,
+              "upper": 4096.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.18.bb85"
+            ],
+            "ir_block": "bb85",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.18.bb85"
+            ],
+            "representative_machine_block": "bb.18.bb85",
+            "bound": {
+              "lower": 4096.0,
+              "upper": 4096.0,
+              "exact": true,
+              "value": 4096
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.4.bb29"
+            ],
+            "ir_block": "bb29",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.4.bb29"
+            ],
+            "representative_machine_block": "bb.4.bb29",
+            "bound": {
+              "lower": 4096.0,
+              "upper": 4096.0,
+              "exact": true,
+              "value": 4096
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.5.bb34"
+            ],
+            "ir_block": "bb34",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.5.bb34"
+            ],
+            "representative_machine_block": "bb.5.bb34",
+            "bound": {
+              "lower": 4096.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.7.bb47",
+              "bb.8.bb47"
+            ],
+            "ir_block": "bb47",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.7.bb47"
+            ],
+            "representative_machine_block": "bb.7.bb47",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.9.bb48"
+            ],
+            "ir_block": "bb48",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.9.bb48"
+            ],
+            "representative_machine_block": "bb.9.bb48",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.10.bb51"
+            ],
+            "ir_block": "bb51",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.10.bb51"
+            ],
+            "representative_machine_block": "bb.10.bb51",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.11.bb54",
+              "bb.12.bb54"
+            ],
+            "ir_block": "bb54",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.11.bb54",
+              "bb.12.bb54"
+            ],
+            "representative_machine_block": "bb.12.bb54",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.13.bb59"
+            ],
+            "ir_block": "bb59",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.13.bb59"
+            ],
+            "representative_machine_block": "bb.13.bb59",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.14.bb64"
+            ],
+            "ir_block": "bb64",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.14.bb64"
+            ],
+            "representative_machine_block": "bb.14.bb64",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.15.bb69"
+            ],
+            "ir_block": "bb69",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.15.bb69"
+            ],
+            "representative_machine_block": "bb.15.bb69",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.17.bb84"
+            ],
+            "ir_block": "bb84",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.17.bb84"
+            ],
+            "representative_machine_block": "bb.17.bb84",
+            "bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "machine_blocks": [
+              "bb.19.bb28"
+            ],
+            "ir_block": "bb28",
+            "anchor_kind": "common_group_representative",
+            "entry_machine_blocks": [
+              "bb.19.bb28"
+            ],
+            "representative_machine_block": "bb.19.bb28",
+            "bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ],
+        "machine_blocks": [
+          {
+            "function": "main_kernel1",
+            "key": "bb.0.bb",
+            "number": 0,
+            "label": "bb.0.bb",
+            "ir_block": "bb",
+            "successors": [
+              1,
+              2
+            ],
+            "instructions": 7,
+            "calls": [],
+            "edge_instruction_costs": {
+              "2": 7
+            },
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.1.bb3",
+            "number": 1,
+            "label": "bb.1.bb3",
+            "ir_block": "bb3",
+            "successors": [
+              2
+            ],
+            "instructions": 1,
+            "calls": [
+              "mem_reset"
+            ],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.2.bb5",
+            "number": 2,
+            "label": "bb.2.bb5",
+            "ir_block": "bb5",
+            "successors": [
+              19,
+              3
+            ],
+            "instructions": 18,
+            "calls": [
+              "barrier_wait",
+              "mem_alloc",
+              "mem_alloc",
+              "mem_alloc"
+            ],
+            "edge_instruction_costs": {
+              "19": 18
+            },
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.3.bb18",
+            "number": 3,
+            "label": "bb.3.bb18",
+            "ir_block": "bb18",
+            "successors": [
+              4
+            ],
+            "instructions": 15,
+            "calls": [],
+            "edge_instruction_costs": {
+              "4": 15
+            },
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.16.bb73",
+            "number": 16,
+            "label": "bb.16.bb73",
+            "ir_block": "bb73",
+            "successors": [
+              6,
+              18
+            ],
+            "instructions": 6,
+            "calls": [
+              "search"
+            ],
+            "edge_instruction_costs": {
+              "18": 6
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 4096.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.6.bb42",
+            "number": 6,
+            "label": "bb.6.bb42",
+            "ir_block": "bb42",
+            "successors": [
+              18
+            ],
+            "instructions": 7,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 4096.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.18.bb85",
+            "number": 18,
+            "label": "bb.18.bb85",
+            "ir_block": "bb85",
+            "successors": [
+              4,
+              19
+            ],
+            "instructions": 5,
+            "calls": [],
+            "edge_instruction_costs": {
+              "19": 5
+            },
+            "execution_bound": {
+              "lower": 4096.0,
+              "upper": 4096.0,
+              "exact": true,
+              "value": 4096
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.4.bb29",
+            "number": 4,
+            "label": "bb.4.bb29",
+            "ir_block": "bb29",
+            "successors": [
+              5
+            ],
+            "instructions": 11,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 4096.0,
+              "upper": 4096.0,
+              "exact": true,
+              "value": 4096
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.5.bb34",
+            "number": 5,
+            "label": "bb.5.bb34",
+            "ir_block": "bb34",
+            "successors": [
+              6,
+              7
+            ],
+            "instructions": 6,
+            "calls": [
+              "search"
+            ],
+            "edge_instruction_costs": {
+              "6": 6
+            },
+            "execution_bound": {
+              "lower": 4096.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.7.bb47",
+            "number": 7,
+            "label": "bb.7.bb47",
+            "ir_block": "bb47",
+            "successors": [
+              10,
+              8
+            ],
+            "instructions": 2,
+            "calls": [],
+            "edge_instruction_costs": {
+              "10": 2
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.8.bb47",
+            "number": 8,
+            "label": "bb.8.bb47",
+            "ir_block": "bb47",
+            "successors": [
+              9,
+              12
+            ],
+            "instructions": 2,
+            "calls": [],
+            "edge_instruction_costs": {
+              "12": 2
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.9.bb48",
+            "number": 9,
+            "label": "bb.9.bb48",
+            "ir_block": "bb48",
+            "successors": [
+              11
+            ],
+            "instructions": 3,
+            "calls": [],
+            "edge_instruction_costs": {
+              "11": 3
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.10.bb51",
+            "number": 10,
+            "label": "bb.10.bb51",
+            "ir_block": "bb51",
+            "successors": [
+              11
+            ],
+            "instructions": 3,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.11.bb54",
+            "number": 11,
+            "label": "bb.11.bb54",
+            "ir_block": "bb54",
+            "successors": [
+              12
+            ],
+            "instructions": 1,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.12.bb54",
+            "number": 12,
+            "label": "bb.12.bb54",
+            "ir_block": "bb54",
+            "successors": [
+              13,
+              15
+            ],
+            "instructions": 4,
+            "calls": [],
+            "edge_instruction_costs": {
+              "15": 4
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.13.bb59",
+            "number": 13,
+            "label": "bb.13.bb59",
+            "ir_block": "bb59",
+            "successors": [
+              14,
+              15
+            ],
+            "instructions": 7,
+            "calls": [
+              "search"
+            ],
+            "edge_instruction_costs": {
+              "15": 7
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.14.bb64",
+            "number": 14,
+            "label": "bb.14.bb64",
+            "ir_block": "bb64",
+            "successors": [
+              15
+            ],
+            "instructions": 7,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.15.bb69",
+            "number": 15,
+            "label": "bb.15.bb69",
+            "ir_block": "bb69",
+            "successors": [
+              16,
+              17
+            ],
+            "instructions": 2,
+            "calls": [],
+            "edge_instruction_costs": {
+              "16": 2
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.17.bb84",
+            "number": 17,
+            "label": "bb.17.bb84",
+            "ir_block": "bb84",
+            "successors": [
+              18,
+              5
+            ],
+            "instructions": 2,
+            "calls": [],
+            "edge_instruction_costs": {
+              "5": 1,
+              "18": 2
+            },
+            "execution_bound": {
+              "lower": 0.0,
+              "upper": 53248.0,
+              "exact": false
+            }
+          },
+          {
+            "function": "main_kernel1",
+            "key": "bb.19.bb28",
+            "number": 19,
+            "label": "bb.19.bb28",
+            "ir_block": "bb28",
+            "successors": [],
+            "instructions": 7,
+            "calls": [],
+            "edge_instruction_costs": {},
+            "execution_bound": {
+              "lower": 1.0,
+              "upper": 1.0,
+              "exact": true,
+              "value": 1
+            }
+          }
+        ]
+      },
+      "runtime_cost_semantics": null
+    }
+  ],
+  "artifacts": {
+    "modules": [
+      {
+        "name": "benchmark",
+        "kind": "benchmark",
+        "source": null,
+        "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/kernel.ll",
+        "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/kernel.named.ll",
+        "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/kernel.late.mir",
+        "functions": [
+          "main",
+          "main_kernel1",
+          "search"
+        ],
+        "emit_info": {
+          "original_compile": {
+            "argv": [
+              "dpu-upmem-dpurte-clang",
+              "-S",
+              "-w",
+              "-Isupport",
+              "-O2",
+              "-DNR_TASKLETS=1",
+              "-o",
+              "bin/dpu_code.S",
+              "dpu/task.c"
+            ],
+            "sources": [
+              "dpu/task.c"
+            ],
+            "output": "bin/dpu_code.S"
+          },
+          "emit_llvm_argv": [
+            "dpu-upmem-dpurte-clang",
+            "-S",
+            "-w",
+            "-Isupport",
+            "-O2",
+            "-DNR_TASKLETS=1",
+            "dpu/task.c",
+            "-S",
+            "-emit-llvm",
+            "-o",
+            "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/kernel.ll"
+          ],
+          "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/kernel.ll"
+        }
+      },
+      {
+        "name": "syslib_alloc",
+        "kind": "runtime",
+        "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/alloc.c",
+        "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_alloc/module.ll",
+        "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_alloc/module.named.ll",
+        "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_alloc/module.late.mir",
+        "functions": [
+          "mem_alloc",
+          "mem_alloc_nolock",
+          "mem_reset"
+        ],
+        "emit_info": {
+          "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/alloc.c",
+          "emit_llvm_argv": [
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/bin/dpu-upmem-dpurte-clang",
+            "-std=c11",
+            "-O2",
+            "-g",
+            "-DNDEBUG",
+            "-DCOMPILER_TIMESTAMP=0",
+            "-nostdlib",
+            "-nostdinc",
+            "-Wno-incompatible-library-redeclaration",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/stdlib",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib",
+            "-S",
+            "-emit-llvm",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/alloc.c",
+            "-o",
+            "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_alloc/module.ll"
+          ]
+        }
+      },
+      {
+        "name": "syslib_mul32",
+        "kind": "runtime",
+        "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c",
+        "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_mul32/module.ll",
+        "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_mul32/module.named.ll",
+        "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_mul32/module.late.mir",
+        "functions": [
+          "__mulsi3"
+        ],
+        "emit_info": {
+          "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c",
+          "emit_llvm_argv": [
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/bin/dpu-upmem-dpurte-clang",
+            "-std=c11",
+            "-O2",
+            "-g",
+            "-DNDEBUG",
+            "-DCOMPILER_TIMESTAMP=0",
+            "-nostdlib",
+            "-nostdinc",
+            "-Wno-incompatible-library-redeclaration",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/stdlib",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib",
+            "-S",
+            "-emit-llvm",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c",
+            "-o",
+            "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/BS/tasklet_sweep_BS_dpu1_tasklets1_size32768/phases/c7af8e1da65e5ab5/runtime/syslib_mul32/module.ll"
+          ]
+        }
+      }
+    ],
+    "function_index": {
+      "__mulsi3": "syslib_mul32",
+      "main": "benchmark",
+      "main_kernel1": "benchmark",
+      "mem_alloc": "syslib_alloc",
+      "mem_alloc_nolock": "syslib_alloc",
+      "mem_reset": "syslib_alloc",
+      "search": "benchmark"
+    }
+  },
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 32768,
+    "setting_id": "tasklet_sweep_BS_dpu1_tasklets1_size32768"
+  }
+}

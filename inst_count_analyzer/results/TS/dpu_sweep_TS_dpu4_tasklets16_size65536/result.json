@@ -28,8 +28,8 @@
     "make_args": []
   },
   "dynamic_instruction_bound": {
-    "lower": 16209857,
-    "upper": 17286993,
+    "lower": 23749921,
+    "upper": 58218769,
     "exact": false
   },
   "unexpanded_callees": [
@@ -39,8 +39,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 16209857.0,
-        "upper": 17286993.0,
+        "lower": 23749921.0,
+        "upper": 58218769.0,
         "exact": false
       },
       "phases": [
@@ -58,8 +58,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 16209857,
-            "upper": 17286993,
+            "lower": 23749921,
+            "upper": 58218769,
             "exact": false
           },
           "unexpanded_callees": [
@@ -73,8 +73,8 @@
     {
       "dpu": 1,
       "bound": {
-        "lower": 16209857.0,
-        "upper": 17286993.0,
+        "lower": 23749921.0,
+        "upper": 58218769.0,
         "exact": false
       },
       "phases": [
@@ -92,8 +92,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 16209857,
-            "upper": 17286993,
+            "lower": 23749921,
+            "upper": 58218769,
             "exact": false
           },
           "unexpanded_callees": [
@@ -107,8 +107,8 @@
     {
       "dpu": 2,
       "bound": {
-        "lower": 16209857.0,
-        "upper": 17286993.0,
+        "lower": 23749921.0,
+        "upper": 58218769.0,
         "exact": false
       },
       "phases": [
@@ -126,8 +126,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 16209857,
-            "upper": 17286993,
+            "lower": 23749921,
+            "upper": 58218769,
             "exact": false
           },
           "unexpanded_callees": [
@@ -141,8 +141,8 @@
     {
       "dpu": 3,
       "bound": {
-        "lower": 16209857.0,
-        "upper": 17286993.0,
+        "lower": 23749921.0,
+        "upper": 58218769.0,
         "exact": false
       },
       "phases": [
@@ -160,8 +160,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 16209857,
-            "upper": 17286993,
+            "lower": 23749921,
+            "upper": 58218769,
             "exact": false
           },
           "unexpanded_callees": [

@@ -31,8 +31,8 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 7935896,
-    "upper": 7940056,
+    "lower": 11605912,
+    "upper": 27863000,
     "exact": false
   },
   "unexpanded_callees": [
@@ -42,8 +42,8 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 7935896.0,
-        "upper": 7940056.0,
+        "lower": 11605912.0,
+        "upper": 27863000.0,
         "exact": false
       },
       "phases": [
@@ -58,8 +58,8 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 7935896,
-            "upper": 7940056,
+            "lower": 11605912,
+            "upper": 27863000,
             "exact": false
           },
           "unexpanded_callees": [

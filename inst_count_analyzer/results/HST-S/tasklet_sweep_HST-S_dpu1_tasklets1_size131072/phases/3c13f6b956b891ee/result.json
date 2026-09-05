@@ -8,8 +8,8 @@
     "transfer_size": 524288
   },
   "dynamic_instruction_bound": {
-    "lower": 1458270,
-    "upper": 1458786,
+    "lower": 2375774,
+    "upper": 6439522,
     "exact": false
   },
   "unexpanded_callees": [

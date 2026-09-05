@@ -11,8 +11,8 @@
     "ts_length": 65536
   },
   "dynamic_instruction_bound": {
-    "lower": 16209857,
-    "upper": 17286993,
+    "lower": 23749921,
+    "upper": 58218769,
     "exact": false
   },
   "unexpanded_callees": [

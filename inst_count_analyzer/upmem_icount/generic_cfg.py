@@ -451,6 +451,7 @@ def solve_ir_block_bounds(
     loops: list[LoopInfo],
     entry: str = 'bb',
     unknown_loop_backedge_upper: int | None = None,
+    unknown_loop_backedge_bounds: dict[str, Bound] | None = None,
 ) -> tuple[dict[str,Bound], dict]:
     names=list(blocks)
     if entry not in blocks:
@@ -496,20 +497,38 @@ def solve_ir_block_bounds(
         back=[e for e in edges if e[1]==li.header and e[0] in loopset]
         ext=[e for e in edges if e[1]==li.header and e[0] not in loopset]
         if li.backedge_count is None:
-            if unknown_loop_backedge_upper is None:
+            source_bound=(unknown_loop_backedge_bounds or {}).get(li.header)
+            lower=source_bound.lower if source_bound is not None else None
+            upper=source_bound.upper if source_bound is not None else None
+            if upper is None:
+                upper=unknown_loop_backedge_upper
+            if upper is None:
                 unknown_loops.append(li.header); continue
-            # backedges <= U * loop entries. A function-entry loop receives
-            # one implicit entry from the invocation itself.
-            row=np.zeros(nvar)
-            for e in back: row[ei[e]]+=1
-            for e in ext: row[ei[e]]-=unknown_loop_backedge_upper
-            Aub.append(row)
-            bub.append(
-                float(unknown_loop_backedge_upper)
-                if li.header==entry else 0.0
-            )
+            implicit_entry=1.0 if li.header==entry else 0.0
+            if lower is not None and lower==upper:
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                for e in ext: row[ei[e]]-=upper
+                eq(row,float(upper)*implicit_entry)
+            else:
+                # backedges <= U * loop entries. A function-entry loop
+                # receives one implicit entry from the invocation itself.
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                for e in ext: row[ei[e]]-=upper
+                Aub.append(row); bub.append(float(upper)*implicit_entry)
+                if lower is not None and lower>0:
+                    row=np.zeros(nvar)
+                    for e in back: row[ei[e]]-=1
+                    for e in ext: row[ei[e]]+=lower
+                    Aub.append(row); bub.append(-float(lower)*implicit_entry)
             bounded_unknown_loops.append(
-                {"header": li.header, "backedge_upper": unknown_loop_backedge_upper}
+                {
+                    "header": li.header,
+                    "backedge_lower": lower,
+                    "backedge_upper": upper,
+                    "source_specific": source_bound is not None,
+                }
             )
             continue
         row=np.zeros(nvar)
@@ -628,15 +647,84 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
         for e in edges:
             if e[0]==b.number: row[ei[e]]+=1
         eq(row,0)
+    # One IR basic block may lower to several machine basic blocks.  In
+    # particular, PHI elimination can create several predecessor-specific MBBs
+    # carrying the same ``%ir-block`` annotation before they converge on the
+    # block that contains the actual instructions.  Constraining *each* such
+    # MBB to the IR execution count is incorrect: only one predecessor path is
+    # taken per IR-block execution, and the resulting constraints can become
+    # infeasible.
+    #
+    # Anchor the execution count to a representative MBB that is reached from
+    # every external entry into the group.  With ordinary one-to-one lowering
+    # that is the sole MBB.  With PHI/critical-edge lowering it is the first
+    # common convergence block (for example, two predecessor-specific copies
+    # followed by the actual IR block).  Anchoring external *flow* instead is
+    # insufficient for a loop consisting of one self-looping MBB: external
+    # flow counts loop entries, whereas the IR bound counts all iterations.
+    groups: dict[str, set[int]] = {}
+    for block in blocks:
+        if block.ir_block and block.ir_block in ir_bounds:
+            groups.setdefault(block.ir_block, set()).add(block.number)
+
     anchors=[]
-    for b in blocks:
-        if b.ir_block and b.ir_block in ir_bounds:
-            bd=ir_bounds[b.ir_block]
+    def reachable_within(start: int, members: set[int]) -> dict[int, int]:
+        distance={start:0}
+        pending=[start]
+        while pending:
+            current=pending.pop(0)
+            for successor in bynum[current].successors:
+                if successor in members and successor not in distance:
+                    distance[successor]=distance[current]+1
+                    pending.append(successor)
+        return distance
+
+    for ir_block, members in groups.items():
+        bd=ir_bounds[ir_block]
+        entry_targets={
+            edge[1] for edge in edges
+            if edge[1] in members and edge[0] not in members
+        }
+        if entry in members:
+            entry_targets.add(entry)
+        if not entry_targets:
+            # An unreachable group has no external predecessor.  Any member is
+            # sufficient; its IR bound will normally be exactly zero.
+            entry_targets.add(min(members))
+        reachability=[reachable_within(target,members) for target in entry_targets]
+        common=set.intersection(*(set(paths) for paths in reachability))
+        representative=None
+        if common:
+            # Choose the earliest common convergence point.  This minimizes
+            # the maximum distance from any alternative group entry.
+            representative=min(
+                common,
+                key=lambda number:(
+                    max(paths[number] for paths in reachability), number
+                ),
+            )
             if bd.lower is not None:
-                row=np.zeros(nvar); row[xi[b.number]]=-1; ub(row,-bd.lower)
+                row=np.zeros(nvar); row[xi[representative]]=-1
+                ub(row,-bd.lower)
             if bd.upper is not None:
-                row=np.zeros(nvar); row[xi[b.number]]=1; ub(row,bd.upper)
-            anchors.append({'machine_block':b.label,'ir_block':b.ir_block,'bound':bd.to_dict()})
+                row=np.zeros(nvar); row[xi[representative]]=1
+                ub(row,bd.upper)
+        else:
+            # Conservatively bound every fragment.  This fallback is expected
+            # only for target lowering that branches out of an IR block before
+            # reconverging; it prevents artificial unbounded machine cycles.
+            for number in members:
+                if bd.upper is not None:
+                    row=np.zeros(nvar); row[xi[number]]=1
+                    ub(row,bd.upper)
+        anchors.append({
+            'machine_blocks':[bynum[number].label for number in sorted(members)],
+            'ir_block':ir_block,
+            'anchor_kind':'common_group_representative' if representative is not None else 'per_fragment_upper_fallback',
+            'entry_machine_blocks':[bynum[number].label for number in sorted(entry_targets)],
+            'representative_machine_block':bynum[representative].label if representative is not None else None,
+            'bound':bd.to_dict(),
+        })
     bounds=[(0,None)]*nvar
     AeqN=np.array(Aeq) if Aeq else None;beqN=np.array(beq) if beq else None
     AubN=np.array(Aub) if Aub else None;bubN=np.array(bub) if bub else None

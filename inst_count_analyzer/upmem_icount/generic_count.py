@@ -23,6 +23,7 @@ from .runtime import (
     prepare_runtime_modules,
 )
 from .runtime_semantics import is_collective_runtime_primitive
+from .source_loop_semantics import source_loop_backedge_bounds
 from .toolchain import discover_toolchain
 
 
@@ -211,6 +212,9 @@ def generic_dynamic_instruction_count(
                 cfg,
                 loops,
                 unknown_loop_backedge_upper=(unknown_loop_backedge_uppers or {}).get(fn),
+                unknown_loop_backedge_bounds=source_loop_backedge_bounds(
+                    benchmark_dir.name, fn, loops, params
+                ),
             )
             direct, machine_bounds, machine_meta = solve_machine_total(
                 owner.machine[fn], ir_bounds

@@ -179,12 +179,6 @@ def loop_backedge_uppers(
             "search": block_elements,
             "main_kernel1": math.ceil(math.log2(blocks)) + 2,
         }
-    if benchmark in {"GEMV", "MLP"}:
-        # The source has an error-check break in its remainder loop. Its
-        # iteration count cannot exceed either the row or column extent.
-        return {
-            "main": max(params["nr_rows"], params["n_size"], 1),
-        }
     if benchmark == "TRNS" and params.get("kernel") == 1:
         # get_tile() assigns at most M*n-1 non-sentinel tiles. A permutation
         # cycle cannot visit more tiles than that same finite domain.

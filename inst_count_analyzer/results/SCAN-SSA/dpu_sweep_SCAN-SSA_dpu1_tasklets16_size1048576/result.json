@@ -1,0 +1,90 @@
+{
+  "benchmark": "SCAN-SSA",
+  "tasklets": 16,
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "benchmark": "SCAN-SSA",
+    "num_dpus_configured": 1,
+    "num_tasklets": 16,
+    "data_prep_params": 1048576,
+    "setting_id": "dpu_sweep_SCAN-SSA_dpu1_tasklets16_size1048576"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "dpu_sweep",
+      "benchmark": "SCAN-SSA",
+      "num_tasklets": "16",
+      "num_dpus": "1",
+      "data_prep_params": "1048576",
+      "start_time": "2026-08-28T16:41:03+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-28T16:45:32+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-SSA",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 10112015,
+    "upper": 10135183,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 10112015.0,
+        "upper": 10135183.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 8388608,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 6891961,
+            "upper": 6915065,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/5ae196d3dd423959/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 8388608,
+            "kernel": 1,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 3220054,
+            "upper": 3220118,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
+          "result_path": "phases/851516e2958651d7/result.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "benchmark": "GEMV",
+  "tasklets": 1,
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "GEMV",
+    "num_dpus_configured": 1,
+    "num_tasklets": 1,
+    "data_prep_params": 2048,
+    "setting_id": "tasklet_sweep_GEMV_dpu1_tasklets1_size2048"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "tasklet_sweep",
+      "benchmark": "GEMV",
+      "num_tasklets": "1",
+      "num_dpus": "1",
+      "data_prep_params": "2048",
+      "start_time": "2026-08-27T20:59:13+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-27T21:00:56+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/GEMV",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 60547,
+    "upper": 55941590148,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait",
+    "puts"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 60547.0,
+        "upper": 55941590148.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 2048,
+            "max_rows": 2048
+          },
+          "unknown_loop_backedge_uppers": {
+            "main": 2048
+          },
+          "bound": {
+            "lower": 60547,
+            "upper": 55941590148,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait",
+            "puts"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/646a9d61f51d7837/result.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "benchmark": "SCAN-SSA",
+  "tasklets": 16,
+  "params": {
+    "kernel": 0,
+    "size": 2097152
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1723705,
+    "upper": 1729529,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "num_dpus_configured": 4,
+    "data_prep_params": 1048576,
+    "setting_id": "dpu_sweep_SCAN-SSA_dpu4_tasklets16_size1048576"
+  }
+}

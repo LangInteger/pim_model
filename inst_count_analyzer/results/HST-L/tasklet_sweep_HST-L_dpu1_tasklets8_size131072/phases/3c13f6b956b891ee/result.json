@@ -1,0 +1,24 @@
+{
+  "benchmark": "HST-L",
+  "tasklets": 8,
+  "params": {
+    "bins": 256,
+    "kernel": 0,
+    "size": 524288,
+    "transfer_size": 524288
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1984992,
+    "upper": 1986048,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 131072,
+    "setting_id": "tasklet_sweep_HST-L_dpu1_tasklets8_size131072"
+  }
+}

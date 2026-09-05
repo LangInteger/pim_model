@@ -1,0 +1,22 @@
+{
+  "benchmark": "SCAN-RSS",
+  "tasklets": 2,
+  "params": {
+    "kernel": 1,
+    "size": 2097152
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1679487,
+    "upper": 1682567,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 262144,
+    "setting_id": "tasklet_sweep_SCAN-RSS_dpu1_tasklets2_size262144"
+  }
+}

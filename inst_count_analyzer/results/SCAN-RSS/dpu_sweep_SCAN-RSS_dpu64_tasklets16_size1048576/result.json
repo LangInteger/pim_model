@@ -1,0 +1,3240 @@
+{
+  "benchmark": "SCAN-RSS",
+  "tasklets": 16,
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "benchmark": "SCAN-RSS",
+    "num_dpus_configured": 64,
+    "num_tasklets": 16,
+    "data_prep_params": 1048576,
+    "setting_id": "dpu_sweep_SCAN-RSS_dpu64_tasklets16_size1048576"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "dpu_sweep",
+      "benchmark": "SCAN-RSS",
+      "num_tasklets": "16",
+      "num_dpus": "64",
+      "data_prep_params": "1048576",
+      "start_time": "2026-08-28T16:39:31+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-28T16:41:03+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-RSS",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 143113,
+    "upper": 143553,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 1,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 814949
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_1.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 2,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 1622804
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_2.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 3,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 2432823
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_3.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 4,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_4.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 3239732
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_4.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 5,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_5.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 4052523
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_5.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 6,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_6.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 4861742
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_6.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 7,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_7.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 5666809
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_7.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 8,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_8.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 6475328
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_8.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 9,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_9.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 7285838
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_9.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 10,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_10.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 8094103
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_10.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 11,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_11.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 8906447
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_11.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 12,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_12.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 9714037
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_12.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 13,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_13.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 10536096
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_13.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 14,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_14.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 11341703
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_14.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 15,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_15.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 12156753
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_15.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 16,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_16.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 12968536
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_16.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 17,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_17.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 13780525
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_17.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 18,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_18.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 14598063
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_18.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 19,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_19.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 15403846
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_19.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 20,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_20.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 16214136
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_20.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 21,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_21.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 17020013
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_21.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 22,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_22.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 17830709
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_22.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 23,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_23.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 18640742
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_23.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 24,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_24.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 19452303
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_24.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 25,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_25.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 20257471
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_25.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 26,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_26.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 21072352
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_26.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 27,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_27.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 21879554
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_27.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 28,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_28.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 22691319
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_28.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 29,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_29.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 23496740
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_29.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 30,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_30.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 24304354
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_30.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 31,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_31.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 25111496
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_31.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 32,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_32.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 25921914
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_32.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 33,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_33.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 26733399
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_33.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 34,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_34.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 27543910
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_34.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 35,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_35.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 28357707
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_35.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 36,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_36.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 29173047
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_36.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 37,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_37.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 29989903
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_37.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 38,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_38.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 30804721
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_38.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 39,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_39.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 31616119
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_39.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 40,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_40.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 32423107
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_40.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 41,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_41.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 33232109
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_41.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 42,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_42.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 34042518
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_42.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 43,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_43.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 34853065
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_43.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 44,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_44.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 35666117
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_44.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 45,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_45.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 36471753
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_45.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 46,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_46.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 37285106
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_46.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 47,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_47.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 38095752
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_47.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 48,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_48.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 38907701
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_48.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 49,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_49.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 39718897
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_49.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 50,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_50.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 40529204
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_50.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 51,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_51.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 41344626
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_51.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 52,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_52.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 42150699
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_52.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 53,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_53.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 42965392
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_53.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 54,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_54.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 43778711
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_54.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 55,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_55.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 44588910
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_55.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 56,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_56.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 45399156
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_56.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 57,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_57.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 46213015
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_57.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 58,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_58.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 47031559
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_58.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 59,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_59.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 47842721
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_59.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 60,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_60.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 48651624
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_60.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 61,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_61.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 49462738
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_61.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 62,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_62.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 50278455
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_62.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 63,
+      "bound": {
+        "lower": 143113.0,
+        "upper": 143553.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 131072,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 34488,
+            "upper": 34504,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_63.bin",
+          "result_path": "phases/8ca36ac78e08a97e/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 131072,
+            "kernel": 1,
+            "t_count": 51087807
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 108625,
+            "upper": 109049,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_63.bin",
+          "result_path": "phases/315bf4fd208b0a5d/result.json"
+        }
+      ]
+    }
+  ]
+}

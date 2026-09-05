@@ -1,0 +1,70 @@
+{
+  "benchmark": "VA",
+  "tasklets": 16,
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "benchmark": "VA",
+    "num_dpus_configured": 1,
+    "num_tasklets": 16,
+    "data_prep_params": 2097152,
+    "setting_id": "dpu_sweep_VA_dpu1_tasklets16_size2097152"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "dpu_sweep",
+      "benchmark": "VA",
+      "num_tasklets": "16",
+      "num_dpus": "1",
+      "data_prep_params": "2097152",
+      "start_time": "2026-08-27T20:26:45+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-27T20:30:35+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/VA",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 14877606,
+    "upper": 14885894,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 14877606.0,
+        "upper": 14885894.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 8388608,
+            "transfer_size": 8388608,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 14877606,
+            "upper": 14885894,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/cd96f5bf99aaabe8/result.json"
+        }
+      ]
+    }
+  ]
+}

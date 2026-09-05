@@ -1,0 +1,73 @@
+{
+  "benchmark": "BS",
+  "tasklets": 1,
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "BS",
+    "num_dpus_configured": 1,
+    "num_tasklets": 1,
+    "data_prep_params": 32768,
+    "setting_id": "tasklet_sweep_BS_dpu1_tasklets1_size32768"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "tasklet_sweep",
+      "benchmark": "BS",
+      "num_tasklets": "1",
+      "num_dpus": "1",
+      "data_prep_params": "32768",
+      "start_time": "2026-08-27T22:21:57+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-27T22:23:38+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/BS",
+    "make_args": []
+  },
+  "dynamic_instruction_bound": {
+    "lower": 139362,
+    "upper": 13308002,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 139362.0,
+        "upper": 13308002.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "input_size": 32768,
+            "slice_per_dpu": 4096,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {
+            "search": 32,
+            "main_kernel1": 12
+          },
+          "bound": {
+            "lower": 139362,
+            "upper": 13308002,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/c7af8e1da65e5ab5/result.json"
+        }
+      ]
+    }
+  ]
+}

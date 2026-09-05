@@ -1,0 +1,74 @@
+{
+  "benchmark": "HST-L",
+  "tasklets": 16,
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "HST-L",
+    "num_dpus_configured": 1,
+    "num_tasklets": 16,
+    "data_prep_params": 131072,
+    "setting_id": "tasklet_sweep_HST-L_dpu1_tasklets16_size131072"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "provenance": {
+    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
+    "simulator_metadata": {
+      "experiment": "tasklet_sweep",
+      "benchmark": "HST-L",
+      "num_tasklets": "16",
+      "num_dpus": "1",
+      "data_prep_params": "131072",
+      "start_time": "2026-08-27T21:12:21+00:00",
+      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
+      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
+      "end_time": "2026-08-27T21:14:32+00:00",
+      "status": "success"
+    },
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/HST-L",
+    "make_args": [
+      "BL=10",
+      "NR_HISTO=1"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1985432,
+    "upper": 1986520,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 1985432.0,
+        "upper": 1986520.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 524288,
+            "transfer_size": 524288,
+            "bins": 256,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1985432,
+            "upper": 1986520,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "barrier_wait"
+          ],
+          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
+          "result_path": "phases/3c13f6b956b891ee/result.json"
+        }
+      ]
+    }
+  ]
+}

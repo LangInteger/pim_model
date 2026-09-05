@@ -1,0 +1,22 @@
+{
+  "benchmark": "SEL",
+  "tasklets": 2,
+  "params": {
+    "kernel": 0,
+    "size": 4194304
+  },
+  "dynamic_instruction_bound": {
+    "lower": 2052222,
+    "upper": 3627138,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 524288,
+    "setting_id": "tasklet_sweep_SEL_dpu1_tasklets2_size524288"
+  }
+}

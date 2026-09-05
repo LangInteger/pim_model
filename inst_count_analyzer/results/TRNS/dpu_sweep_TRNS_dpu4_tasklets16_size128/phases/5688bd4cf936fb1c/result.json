@@ -1,0 +1,24 @@
+{
+  "benchmark": "TRNS",
+  "tasklets": 16,
+  "params": {
+    "M_": 128,
+    "kernel": 0,
+    "m": 4,
+    "n": 8
+  },
+  "dynamic_instruction_bound": {
+    "lower": 98118,
+    "upper": 98502,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "num_dpus_configured": 4,
+    "data_prep_params": 128,
+    "setting_id": "dpu_sweep_TRNS_dpu4_tasklets16_size128"
+  }
+}

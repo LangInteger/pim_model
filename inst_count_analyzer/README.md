@@ -40,19 +40,23 @@ Old cost models and VA-specific counters are not included.
 `DPU_INPUT_ARGUMENTS` byte dumps only to recover each DPU's runtime parameters;
 simulator instruction counts are not inputs to the analysis.
 
-On the Linux server, after sourcing the SDK environment, run all benchmarks:
+From the repository root on the Linux server, run all benchmarks:
 
 ```bash
-python3 inst_count_analyzer/run_benchmark_sweeps.py \
-  --sdk-root sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64
+./run_inst_count_sweeps.sh
 ```
 
-Or run selected benchmarks while bringing up the migration in stages:
+Or run selected benchmarks:
 
 ```bash
-python3 inst_count_analyzer/run_benchmark_sweeps.py RED HST-S TS \
-  --sdk-root sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64
+./run_inst_count_sweeps.sh RED HST-S TS
 ```
+
+The wrapper creates/reuses the repository `.venv`, installs the analyzer
+requirements, prepares the LoCaLUT compatibility environment without modifying
+the SDK, and invokes `run_benchmark_sweeps.py`. It accepts the runner's options,
+for example `--force`, `--debug`, and `--fail-fast`. Set `UPMEM_SDK_ROOT` when
+the SDK is not at the repository's default `sdk/LoCaLUT/...` path.
 
 The runner discovers only settings that survived aggregation, so removed
 tasklet-11 points and failed simulator settings are not recreated. Sequential

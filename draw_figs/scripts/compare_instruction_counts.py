@@ -11,7 +11,21 @@ from typing import Any
 from aggregate_simulator_results import aggregate_setting
 
 
-SUPPORTED_BENCHMARKS = ("va",)
+SUPPORTED_BENCHMARKS = (
+    "bs",
+    "gemv",
+    "hst-l",
+    "hst-s",
+    "mlp",
+    "red",
+    "scan-rss",
+    "scan-ssa",
+    "sel",
+    "trns",
+    "ts",
+    "uni",
+    "va",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -57,7 +71,9 @@ def load_static_rows(
         for row in csv.DictReader(input_file):
             if row["benchmark"].lower() != benchmark:
                 continue
-            tasklets = int(row["tasklets"])
+            if row.get("experiment") != "tasklet_sweep":
+                continue
+            tasklets = int(row["num_tasklets"])
             lower = float(row["instructions_lower"])
             upper = float(row["instructions_upper"])
             rows[tasklets] = {
@@ -90,6 +106,8 @@ def load_simulator_rows(
     # The main aggregation intentionally excludes T=11. Read any missing
     # tasklet setting through the same per-setting aggregation function.
     for metadata_path in sorted(raw_results.rglob("metadata.txt")):
+        if not (metadata_path.parent / "log.txt").is_file():
+            continue
         setting = aggregate_setting(metadata_path.parent)
         if not setting:
             continue
@@ -252,8 +270,16 @@ def write_plot(
     count_range = max(all_counts) - min(all_counts)
     padding = max(300.0, 0.10 * count_range)
     count_axis.set_ylim(min(all_counts) - padding, max(all_counts) + padding)
-    error_padding = max(0.01, 0.12 * (max(errors) - min(errors)))
-    error_axis.set_ylim(min(errors) - error_padding, error_padding)
+    error_range = max(errors) - min(errors)
+    error_padding = max(
+        0.01,
+        0.12 * error_range,
+        0.05 * max(abs(error) for error in errors),
+    )
+    error_axis.set_ylim(
+        min(0.0, min(errors) - error_padding),
+        max(0.0, max(errors) + error_padding),
+    )
     error_axis.set_xlim(min(tasklets) - 0.5, max(tasklets) + 0.5)
 
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -268,7 +294,7 @@ def run_benchmark(args: argparse.Namespace, benchmark: str) -> None:
         project_root
         / "inst_count_analyzer"
         / "results"
-        / f"{benchmark_upper}_tasklet_sweep"
+        / benchmark_upper
         / "instruction_counts.csv"
     )
     simulator_summary = args.simulator_summary or (

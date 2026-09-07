@@ -11,5 +11,5 @@ fi
 .venv/bin/pip install -r draw_figs/requirements.txt \
 && cd "$SCRIPT_DIR" \
 && .venv/bin/python3 draw_figs/scripts/aggregate_simulator_results.py \
-&& .venv/bin/python3 draw_figs/scripts/estimate_cost.py
-
+&& .venv/bin/python3 draw_figs/scripts/estimate_cost.py \
+&& .venv/bin/python3 draw_figs/scripts/compare_instruction_counts.py

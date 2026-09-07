@@ -1,0 +1,6 @@
+num_tasklets,static_instructions_lower,static_instructions_midpoint,static_instructions_upper,simulator_instructions,static_midpoint_minus_simulator,static_midpoint_error_percent,simulator_within_static_interval,unexpanded_callees,simulator_source
+1,2901573.0,4933721.5,6965870.0,3935923.0,997798.5,25.351067589482824,True,__atomic_acquire_retry;barrier_wait,aggregated_summary
+2,2902134.0,4934285.0,6966436.0,3938006.0,996279.0,25.29907267789841,True,__atomic_acquire_retry;barrier_wait,aggregated_summary
+4,2902236.0,4934397.0,6966558.0,3948903.0,985494.0,24.956146048662124,True,__atomic_acquire_retry;barrier_wait,aggregated_summary
+8,2902440.0,4934621.0,6966802.0,6392593.0,-1457972.0,-22.807208279957756,True,__atomic_acquire_retry;barrier_wait,aggregated_summary
+16,2902848.0,4935069.0,6967290.0,12690206.0,-7755137.0,-61.11119866769696,False,__atomic_acquire_retry;barrier_wait,aggregated_summary

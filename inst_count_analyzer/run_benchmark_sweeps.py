@@ -72,7 +72,6 @@ def load_experiment_settings(summary_path: Path) -> list[dict[str, Any]]:
     with summary_path.open(newline="", encoding="utf-8") as input_file:
         rows = list(csv.DictReader(input_file))
     settings: list[dict[str, Any]] = []
-    seen: set[tuple[str, int, int, int]] = set()
     for row in rows:
         setting = {
             "experiment": row["experiment"],
@@ -83,15 +82,6 @@ def load_experiment_settings(summary_path: Path) -> list[dict[str, Any]]:
             "dpu_build_options": json.loads(row["dpu_build_options_json"]),
             "dpu_execution_inputs": json.loads(row["dpu_execution_inputs_json"]),
         }
-        key = (
-            setting["experiment"],
-            setting["num_dpus"],
-            setting["num_tasklets"],
-            setting["data_prep_params"],
-        )
-        if key in seen:
-            raise ValueError(f"duplicate experiment setting in {summary_path}: {key}")
-        seen.add(key)
         settings.append(setting)
     return settings
 

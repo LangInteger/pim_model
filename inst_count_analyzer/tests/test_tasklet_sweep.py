@@ -28,14 +28,14 @@ class TaskletSweepTests(unittest.TestCase):
                     "exact": False,
                 },
                 "per_tasklet": [],
-                "simulator_match": {
+                "experiment_setting": {
                     "experiment": "dpu_sweep",
-                    "num_dpus_configured": 4,
+                    "num_dpus": 4,
                     "data_prep_params": 2097152,
                 },
             }
         )
-        self.assertEqual(compact["simulator_match"]["num_dpus_configured"], 4)
+        self.assertEqual(compact["experiment_setting"]["num_dpus"], 4)
 
     def test_default_tasklet_set_matches_simulator_sweep(self) -> None:
         self.assertEqual(run_tasklet_sweep.DEFAULT_TASKLETS, (1, 2, 4, 8, 11, 16))

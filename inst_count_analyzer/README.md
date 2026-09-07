@@ -33,12 +33,13 @@ inst_count_analyzer/
 
 Old cost models and VA-specific counters are not included.
 
-## Analyze the simulator experiment matrix
+## Analyze the experiment matrix
 
 `run_benchmark_sweeps.py` analyzes the exact settings present in
-`draw_figs/results/<benchmark>/summary.csv`. It reads the saved
-`DPU_INPUT_ARGUMENTS` byte dumps only to recover each DPU's runtime parameters;
-simulator instruction counts are not inputs to the analysis.
+`draw_figs/results/<benchmark>/summary.csv`. Each row contains the experiment
+configuration and the exact per-DPU/execution `DPU_INPUT_ARGUMENTS` records, so
+the analyzer does not access the raw simulator artifact tree. Simulator
+instruction counts are not inputs to the analysis.
 
 From the repository root on the Linux server, run all benchmarks:
 
@@ -208,7 +209,7 @@ For the matching row:
 ```text
 benchmark          = VA
 experiment         = tasklet_sweep
-num_dpus_configured= 1
+num_dpus           = 1
 num_tasklets       = 16
 data_prep_params   = 524288
 instructions_mean  = 3727420

@@ -178,7 +178,7 @@ def load_static_instruction_counts(
                 )
             key = (
                 row["experiment"],
-                int(row["num_dpus_configured"]),
+                int(row["num_dpus"]),
                 int(row["num_tasklets"]),
                 int(row["data_prep_params"]),
             )
@@ -249,7 +249,7 @@ def static_instruction_bound_for_setting(
     if index["format"] == "exact":
         key = (
             measured["experiment"],
-            int(measured["num_dpus_configured"]),
+            int(measured["num_dpus"]),
             tasklets,
             int(measured["data_prep_params"]),
         )
@@ -746,7 +746,7 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
     estimates: list[dict[str, Any]] = []
     for measured in simulator_rows:
         tasklets = int(measured["num_tasklets"])
-        num_dpus = int(measured["num_dpus_configured"])
+        num_dpus = int(measured["num_dpus"])
         total_elements = int(measured["data_prep_params"])
         element_size = int(spec["element_size"])
         block_size = int(spec["block_size"])
@@ -994,9 +994,8 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
         conservative_serial = compute_conservative + memory_cycles_upper
         actual_cycles = float(measured["cycles_max"])
         interval_width = ideal_serial - ideal_hidden
-        observed_dpus = int(measured["num_dpus_observed"])
-        if observed_dpus <= 0:
-            raise ValueError(f"invalid num_dpus_observed: {observed_dpus}")
+        if num_dpus <= 0:
+            raise ValueError(f"invalid num_dpus: {num_dpus}")
 
         row: dict[str, Any] = {
             "experiment": measured["experiment"],
@@ -1022,10 +1021,10 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             "memory_write_transactions_lower_per_dpu": memory_write_tx_lower,
             "memory_write_transactions_upper_per_dpu": memory_write_tx,
             "observed_row_reads_per_dpu": (
-                float(measured["num_reads_sum"]) / observed_dpus
+                float(measured["num_reads_sum"]) / num_dpus
             ),
             "observed_row_writes_per_dpu": (
-                float(measured["num_writes_sum"]) / observed_dpus
+                float(measured["num_writes_sum"]) / num_dpus
             ),
             "memory_transactions_lower_per_dpu": memory_transactions_lower,
             "memory_transactions_upper_per_dpu": memory_transactions_upper,
@@ -1039,9 +1038,9 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
                 float(measured["breakdown_run_sum"])
                 + float(measured["breakdown_etc_sum"])
                 + float(measured["backpressure_sum"])
-            ) / observed_dpus,
+            ) / num_dpus,
             "observed_dma_component_cycles": (
-                float(measured["breakdown_dma_sum"]) / observed_dpus
+                float(measured["breakdown_dma_sum"]) / num_dpus
             ),
             "actual_within_overlap_bounds": (
                 ideal_hidden <= actual_cycles <= ideal_serial

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run static instruction counting for the exact simulator settings."""
+"""Run static instruction counting for settings declared in summary.csv."""
 from __future__ import annotations
 
 import argparse
@@ -15,11 +15,10 @@ from typing import Any
 from upmem_icount.benchmark_settings import (
     BENCHMARK_CONFIGS,
     DpuPhase,
-    load_setting_phases,
+    load_summary_phases,
     loop_backedge_uppers,
     normalize_benchmark,
     setting_id,
-    simulator_setting_dir,
 )
 
 
@@ -31,8 +30,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
             "Analyze every setting present in draw_figs/results/<benchmark>/summary.csv. "
-            "DPU_INPUT_ARGUMENTS dumps supply runtime parameters; simulator instruction "
-            "counts are never read by the analyzer."
+            "Each summary row supplies both the experiment configuration and exact "
+            "per-DPU/execution input arguments."
         )
     )
     parser.add_argument(
@@ -48,11 +47,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--sdk-root", type=Path, required=True)
     parser.add_argument(
         "--summary-root", type=Path, default=REPO_ROOT / "draw_figs" / "results"
-    )
-    parser.add_argument(
-        "--simulator-artifact-root",
-        type=Path,
-        default=REPO_ROOT / "draw_figs" / "simulator_results",
     )
     parser.add_argument(
         "--results-root", type=Path, default=ANALYZER_ROOT / "results"
@@ -74,7 +68,7 @@ def discover_benchmarks(summary_root: Path) -> list[str]:
     )
 
 
-def load_simulator_settings(summary_path: Path) -> list[dict[str, Any]]:
+def load_experiment_settings(summary_path: Path) -> list[dict[str, Any]]:
     with summary_path.open(newline="", encoding="utf-8") as input_file:
         rows = list(csv.DictReader(input_file))
     settings: list[dict[str, Any]] = []
@@ -83,32 +77,22 @@ def load_simulator_settings(summary_path: Path) -> list[dict[str, Any]]:
         setting = {
             "experiment": row["experiment"],
             "benchmark": normalize_benchmark(row["benchmark"]),
-            "num_dpus_configured": int(row["num_dpus_configured"]),
+            "num_dpus": int(row["num_dpus"]),
             "num_tasklets": int(row["num_tasklets"]),
             "data_prep_params": int(row["data_prep_params"]),
+            "dpu_input_arguments_json": row["dpu_input_arguments_json"],
         }
         key = (
             setting["experiment"],
-            setting["num_dpus_configured"],
+            setting["num_dpus"],
             setting["num_tasklets"],
             setting["data_prep_params"],
         )
         if key in seen:
-            raise ValueError(f"duplicate simulator setting in {summary_path}: {key}")
+            raise ValueError(f"duplicate experiment setting in {summary_path}: {key}")
         seen.add(key)
         settings.append(setting)
     return settings
-
-
-def load_metadata(path: Path) -> dict[str, str]:
-    metadata: dict[str, str] = {}
-    if not path.is_file():
-        return metadata
-    for line in path.read_text(encoding="utf-8").splitlines():
-        if "=" in line:
-            name, value = line.split("=", 1)
-            metadata[name] = value
-    return metadata
 
 
 def analysis_params(benchmark: str, phase: DpuPhase) -> dict[str, int]:
@@ -155,7 +139,7 @@ def analyze_setting(
     sid = setting_id(
         setting["experiment"],
         benchmark,
-        setting["num_dpus_configured"],
+        setting["num_dpus"],
         setting["num_tasklets"],
         setting["data_prep_params"],
     )
@@ -163,17 +147,27 @@ def analyze_setting(
     output_path = output_dir / "result.json"
     if output_path.is_file() and not args.force:
         print(f"SKIP {sid}")
-        return json.loads(output_path.read_text(encoding="utf-8"))
+        cached = json.loads(output_path.read_text(encoding="utf-8"))
+        cached["experiment_setting"] = {
+            "experiment": setting["experiment"],
+            "benchmark": benchmark,
+            "num_dpus": setting["num_dpus"],
+            "num_tasklets": setting["num_tasklets"],
+            "data_prep_params": setting["data_prep_params"],
+            "setting_id": sid,
+        }
+        return cached
 
-    artifact_dir = simulator_setting_dir(
-        args.simulator_artifact_root,
-        setting["experiment"],
-        benchmark,
-        setting["num_dpus_configured"],
-        setting["num_tasklets"],
-        setting["data_prep_params"],
+    phases = load_summary_phases(
+        setting["dpu_input_arguments_json"], benchmark
     )
-    phases = load_setting_phases(artifact_dir, benchmark)
+    phase_dpus = {phase.dpu for phase in phases}
+    expected_dpus = set(range(setting["num_dpus"]))
+    if phase_dpus != expected_dpus:
+        raise ValueError(
+            f"{sid} argument DPU IDs do not match num_dpus: "
+            f"expected {sorted(expected_dpus)}, observed {sorted(phase_dpus)}"
+        )
     output_dir.mkdir(parents=True, exist_ok=True)
     work_dir = args.work_root / benchmark / sid
     config = BENCHMARK_CONFIGS[benchmark]
@@ -203,7 +197,7 @@ def analyze_setting(
                 "--experiment",
                 setting["experiment"],
                 "--num-dpus",
-                str(setting["num_dpus_configured"]),
+                str(setting["num_dpus"]),
                 "--data-prep-param",
                 str(setting["data_prep_params"]),
                 "--setting-id",
@@ -255,17 +249,17 @@ def analyze_setting(
                 ),
                 "bound": phase_result["dynamic_instruction_bound"],
                 "unexpanded_callees": phase_result.get("unexpanded_callees", []),
-                "arguments_file": phase.arguments_path.name,
+                "arguments_source": phase.arguments_source,
                 "result_path": str(phase_result_path.relative_to(output_dir)),
             }
         )
 
     per_dpu: list[dict[str, Any]] = []
     all_unexpanded: set[str] = set()
-    for dpu in range(setting["num_dpus_configured"]):
+    for dpu in range(setting["num_dpus"]):
         phase_rows = sorted(dpu_phases.get(dpu, []), key=lambda row: row["execution"])
         if not phase_rows:
-            continue
+            raise ValueError(f"{sid} has no argument record for DPU {dpu}")
         bound = add_bounds([row["bound"] for row in phase_rows])
         for row in phase_rows:
             all_unexpanded.update(row["unexpanded_callees"])
@@ -278,14 +272,17 @@ def analyze_setting(
     result = {
         "benchmark": benchmark,
         "tasklets": setting["num_tasklets"],
-        "simulator_match": {
-            **setting,
+        "experiment_setting": {
+            "experiment": setting["experiment"],
+            "benchmark": benchmark,
+            "num_dpus": setting["num_dpus"],
+            "num_tasklets": setting["num_tasklets"],
+            "data_prep_params": setting["data_prep_params"],
             "setting_id": sid,
         },
         "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
         "provenance": {
-            "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-            "simulator_metadata": load_metadata(artifact_dir / "metadata.txt"),
+            "argument_source": "summary_csv_dpu_input_arguments",
             "benchmark_source_dir": str((args.benchmark_root / benchmark).resolve()),
             "make_args": list(config.make_args),
         },
@@ -316,7 +313,7 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
     path = benchmark_dir / "instruction_counts.csv"
     rows = []
     for result in results:
-        match = result["simulator_match"]
+        match = result["experiment_setting"]
         bound = result["dynamic_instruction_bound"]
         lower = float(bound["lower"])
         upper = float(bound["upper"])
@@ -324,7 +321,7 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
             {
                 "benchmark": benchmark,
                 "experiment": match["experiment"],
-                "num_dpus_configured": match["num_dpus_configured"],
+                "num_dpus": match["num_dpus"],
                 "num_tasklets": result["tasklets"],
                 "data_prep_params": match["data_prep_params"],
                 "setting_id": match["setting_id"],
@@ -340,13 +337,13 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
     rows.sort(
         key=lambda row: (
             row["experiment"],
-            int(row["num_dpus_configured"]),
+            int(row["num_dpus"]),
             int(row["num_tasklets"]),
             int(row["data_prep_params"]),
         )
     )
     fields = list(rows[0]) if rows else [
-        "benchmark", "experiment", "num_dpus_configured", "num_tasklets",
+        "benchmark", "experiment", "num_dpus", "num_tasklets",
         "data_prep_params", "setting_id", "instructions_lower",
         "instructions_upper", "instructions_midpoint", "exact",
         "instruction_scope", "unexpanded_callees", "result_path",
@@ -370,7 +367,7 @@ def main(argv: list[str] | None = None) -> int:
         summary_path = args.summary_root / benchmark.lower() / "summary.csv"
         results: list[dict[str, Any]] = []
         try:
-            settings = load_simulator_settings(summary_path)
+            settings = load_experiment_settings(summary_path)
         except Exception as error:
             failures.append((benchmark, "summary", error))
             if args.fail_fast:
@@ -382,7 +379,7 @@ def main(argv: list[str] | None = None) -> int:
             except Exception as error:
                 sid = setting_id(
                     setting["experiment"], benchmark,
-                    setting["num_dpus_configured"], setting["num_tasklets"],
+                    setting["num_dpus"], setting["num_tasklets"],
                     setting["data_prep_params"],
                 )
                 failures.append((benchmark, sid, error))

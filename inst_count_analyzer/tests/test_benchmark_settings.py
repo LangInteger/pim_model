@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import json
 import sys
 import tempfile
 import unittest
@@ -15,7 +16,7 @@ sys.path.insert(0, str(ANALYZER_ROOT))
 
 from upmem_icount.benchmark_settings import (  # noqa: E402
     decode_arguments,
-    load_setting_phases,
+    load_summary_phases,
     loop_backedge_uppers,
     setting_id,
 )
@@ -51,15 +52,17 @@ class BenchmarkSettingTests(unittest.TestCase):
             with self.subTest(benchmark=benchmark):
                 self.assertTrue(decode_arguments(benchmark, data))
 
-    def test_loads_sequential_kernel_phases(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            first = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 0))
-            second = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 1))
-            (root / "input_DPU_INPUT_ARGUMENTS_0_0.bin").write_text("\n".join(map(str, first)))
-            (root / "input_DPU_INPUT_ARGUMENTS_1_0.bin").write_text("\n".join(map(str, second)))
-            phases = load_setting_phases(root, "trns")
-            self.assertEqual([phase.function for phase in phases], ["main_kernel1", "main_kernel2"])
+    def test_loads_phases_embedded_in_summary(self):
+        first = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 0))
+        second = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 1))
+        encoded = json.dumps(
+            [
+                {"execution": 1, "dpu": 0, "data_hex": second.hex()},
+                {"execution": 0, "dpu": 0, "data_hex": first.hex()},
+            ]
+        )
+        phases = load_summary_phases(encoded, "trns")
+        self.assertEqual([phase.function for phase in phases], ["main_kernel1", "main_kernel2"])
 
     def test_setting_id_is_complete(self):
         self.assertEqual(
@@ -84,7 +87,7 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             summary = Path(temporary) / "instruction_counts.csv"
             fields = [
-                "benchmark", "experiment", "num_dpus_configured", "num_tasklets",
+                "benchmark", "experiment", "num_dpus", "num_tasklets",
                 "data_prep_params", "instructions_lower", "instructions_upper",
                 "instructions_midpoint", "instruction_scope", "unexpanded_callees",
             ]
@@ -94,7 +97,7 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
                 writer.writerow(
                     {
                         "benchmark": "RED", "experiment": "dpu_sweep",
-                        "num_dpus_configured": 4, "num_tasklets": 16,
+                        "num_dpus": 4, "num_tasklets": 16,
                         "data_prep_params": 2097152, "instructions_lower": 100,
                         "instructions_upper": 120, "instructions_midpoint": 110,
                         "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
@@ -103,7 +106,7 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
                 )
             index = estimate_cost.load_static_instruction_counts(summary, "red")
             measured = {
-                "experiment": "dpu_sweep", "num_dpus_configured": "4",
+                "experiment": "dpu_sweep", "num_dpus": "4",
                 "num_tasklets": "16", "data_prep_params": "2097152",
             }
             bound = estimate_cost.static_instruction_bound_for_setting(
@@ -131,7 +134,7 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
             instruction_row = {
                 "benchmark": "RED",
                 "experiment": simulator_row["experiment"],
-                "num_dpus_configured": simulator_row["num_dpus_configured"],
+                "num_dpus": simulator_row["num_dpus"],
                 "num_tasklets": simulator_row["num_tasklets"],
                 "data_prep_params": simulator_row["data_prep_params"],
                 "instructions_lower": 90,

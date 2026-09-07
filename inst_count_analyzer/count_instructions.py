@@ -71,8 +71,8 @@ def compact_result(result: dict) -> dict:
         ),
         "unexpanded_callees": collect_unexpanded_callees(result),
     }
-    if result.get("simulator_match"):
-        compact["simulator_match"] = result["simulator_match"]
+    if result.get("experiment_setting"):
+        compact["experiment_setting"] = result["experiment_setting"]
     if result.get("unknown_loop_backedge_uppers"):
         compact["unknown_loop_backedge_uppers"] = result[
             "unknown_loop_backedge_uppers"
@@ -128,7 +128,7 @@ def main(argv: list[str] | None = None) -> int:
         help="override the final result path (default: <outdir>/result.json)",
     )
 
-    # Optional metadata used only to align this result with simulator summary.csv.
+    # Optional metadata used to identify an experiment setting.
     p.add_argument("--experiment")
     p.add_argument("--num-dpus", type=int)
     p.add_argument("--data-prep-param")
@@ -190,13 +190,13 @@ def main(argv: list[str] | None = None) -> int:
 
     setting = {
         "experiment": a.experiment,
-        "num_dpus_configured": a.num_dpus,
+        "num_dpus": a.num_dpus,
         "data_prep_params": _parse_scalar(a.data_prep_param) if a.data_prep_param is not None else None,
         "setting_id": a.setting_id,
     }
     setting = {k: v for k, v in setting.items() if v is not None}
     if setting:
-        result["simulator_match"] = setting
+        result["experiment_setting"] = setting
 
     result_path = Path(a.output).resolve() if a.output else result_dir / "result.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)

@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import re
+import json
 import math
 from dataclasses import dataclass
-from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -27,7 +26,7 @@ class DpuPhase:
     dpu: int
     function: str
     params: dict[str, int]
-    arguments_path: Path
+    arguments_source: str
 
 
 F = ArgumentField
@@ -80,11 +79,6 @@ BENCHMARK_CONFIGS: dict[str, BenchmarkConfig] = {
 }
 
 
-ARGUMENT_FILE_RE = re.compile(
-    r"^input_DPU_INPUT_ARGUMENTS_(?P<execution>\d+)_(?P<dpu>\d+)\.bin$"
-)
-
-
 def normalize_benchmark(name: str) -> str:
     benchmark = name.upper()
     if benchmark not in BENCHMARK_CONFIGS:
@@ -99,37 +93,6 @@ def setting_id(
         f"{experiment}_{normalize_benchmark(benchmark)}_dpu{num_dpus}_"
         f"tasklets{tasklets}_size{data_prep}"
     )
-
-
-def simulator_setting_dir(
-    simulator_root: Path,
-    experiment: str,
-    benchmark: str,
-    num_dpus: int,
-    tasklets: int,
-    data_prep: int,
-) -> Path:
-    benchmark_upper = normalize_benchmark(benchmark)
-    parent = simulator_root / benchmark_upper.lower() / experiment
-    basename = (
-        f"{benchmark_upper}_dpu{num_dpus}_tasklets{tasklets}_size{data_prep}"
-    )
-    path = parent / basename
-    if not path.is_dir():
-        raise FileNotFoundError(
-            f"simulator artifacts for {basename} do not exist under {parent}"
-        )
-    return path
-
-
-def read_byte_dump(path: Path) -> bytes:
-    values: list[int] = []
-    for token in path.read_text(encoding="utf-8").split():
-        value = int(token, 0)
-        if not 0 <= value <= 255:
-            raise ValueError(f"invalid byte {value} in {path}")
-        values.append(value)
-    return bytes(values)
 
 
 def decode_arguments(benchmark: str, data: bytes) -> dict[str, int]:
@@ -182,22 +145,33 @@ def loop_backedge_uppers(
     return {}
 
 
-def load_setting_phases(setting_dir: Path, benchmark: str) -> list[DpuPhase]:
+def load_summary_phases(encoded: str, benchmark: str) -> list[DpuPhase]:
+    """Decode per-DPU/execution argument records embedded in summary.csv."""
+    try:
+        records = json.loads(encoded)
+    except json.JSONDecodeError as error:
+        raise ValueError("invalid dpu_input_arguments_json") from error
+    if not isinstance(records, list) or not records:
+        raise ValueError("dpu_input_arguments_json must be a non-empty list")
+
     phases: list[DpuPhase] = []
-    for path in sorted(setting_dir.glob("input_DPU_INPUT_ARGUMENTS_*.bin")):
-        match = ARGUMENT_FILE_RE.match(path.name)
-        if match is None:
-            continue
-        params = decode_arguments(benchmark, read_byte_dump(path))
+    for record in records:
+        if not isinstance(record, dict):
+            raise ValueError("DPU argument record must be an object")
+        try:
+            execution = int(record["execution"])
+            dpu = int(record["dpu"])
+            data = bytes.fromhex(str(record["data_hex"]))
+        except (KeyError, TypeError, ValueError) as error:
+            raise ValueError(f"invalid DPU argument record: {record!r}") from error
+        params = decode_arguments(benchmark, data)
         phases.append(
             DpuPhase(
-                execution=int(match.group("execution")),
-                dpu=int(match.group("dpu")),
+                execution=execution,
+                dpu=dpu,
                 function=entry_function(benchmark, params),
                 params=params,
-                arguments_path=path,
+                arguments_source=str(record.get("source", "summary.csv")),
             )
         )
-    if not phases:
-        raise ValueError(f"no DPU_INPUT_ARGUMENTS dumps found in {setting_dir}")
     return sorted(phases, key=lambda phase: (phase.dpu, phase.execution))

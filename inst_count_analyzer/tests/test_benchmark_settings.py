@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import csv
 import importlib.util
-import json
 import sys
 import tempfile
 import unittest
@@ -15,7 +14,6 @@ REPO_ROOT = ANALYZER_ROOT.parent
 sys.path.insert(0, str(ANALYZER_ROOT))
 
 from upmem_icount.benchmark_settings import (  # noqa: E402
-    decode_arguments,
     load_summary_phases,
     loop_backedge_uppers,
     setting_id,
@@ -32,36 +30,22 @@ def load_estimate_cost_module():
 
 
 class BenchmarkSettingTests(unittest.TestCase):
-    def test_decode_all_argument_schemas(self):
-        fixtures = {
-            "BS": (32768).to_bytes(8, "little") + (4096).to_bytes(8, "little") + bytes(4),
-            "VA": (2097152).to_bytes(4, "little") * 2 + bytes(4),
-            "RED": (4194304).to_bytes(4, "little") + bytes(8),
-            "HST-L": (524288).to_bytes(4, "little") * 2 + (256).to_bytes(4, "little") + bytes(4),
-            "HST-S": (524288).to_bytes(4, "little") * 2 + (256).to_bytes(4, "little") + bytes(4),
-            "GEMV": b"".join(value.to_bytes(4, "little") for value in (64, 64, 2048, 2048)),
-            "MLP": b"".join(value.to_bytes(4, "little") for value in (256, 256, 256, 256)),
-            "SEL": (4194304).to_bytes(4, "little") + bytes(4),
-            "UNI": (4201472).to_bytes(4, "little") + bytes(4),
-            "TRNS": b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 1)),
-            "TS": b"".join(value.to_bytes(4, "little", signed=True) for value in (2048, 64, 31, 18, 2048, 0, 0)),
-            "SCAN-RSS": (2097152).to_bytes(4, "little") + bytes(12),
-            "SCAN-SSA": (2097152).to_bytes(4, "little") + bytes(12),
-        }
-        for benchmark, data in fixtures.items():
-            with self.subTest(benchmark=benchmark):
-                self.assertTrue(decode_arguments(benchmark, data))
-
     def test_loads_phases_embedded_in_summary(self):
-        first = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 0))
-        second = b"".join(value.to_bytes(4, "little") for value in (16, 4, 1024, 1))
-        encoded = json.dumps(
-            [
-                {"execution": 1, "dpu": 0, "data_hex": second.hex()},
-                {"execution": 0, "dpu": 0, "data_hex": first.hex()},
-            ]
-        )
-        phases = load_summary_phases(encoded, "trns")
+        records = [
+            {
+                "execution": 1,
+                "dpu": 0,
+                "function": "main_kernel2",
+                "params": {"m": 16, "n": 4, "M_": 1024, "kernel": 1},
+            },
+            {
+                "execution": 0,
+                "dpu": 0,
+                "function": "main_kernel1",
+                "params": {"m": 16, "n": 4, "M_": 1024, "kernel": 0},
+            },
+        ]
+        phases = load_summary_phases(records)
         self.assertEqual([phase.function for phase in phases], ["main_kernel1", "main_kernel2"])
 
     def test_setting_id_is_complete(self):

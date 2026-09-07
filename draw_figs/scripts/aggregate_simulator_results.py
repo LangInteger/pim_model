@@ -12,6 +12,8 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from simulator_abi import decode_execution_input
+
 
 LOG_LINE_RE = re.compile(
     r"^[^[]+\[(?P<channel>\d+)_(?P<rank>\d+)_(?P<dpu>\d+)\]"
@@ -29,7 +31,7 @@ IDENTITY_FIELDS = [
     "num_dpus",
     "num_tasklets",
     "data_prep_params",
-    "dpu_input_arguments_json",
+    "dpu_execution_inputs_json",
 ]
 
 SUMMED_METRICS = [
@@ -130,9 +132,11 @@ def required_metadata_int(
         ) from error
 
 
-def encode_dpu_input_arguments(setting_dir: Path, num_dpus: int) -> str:
-    """Pack exact per-DPU/execution argument dumps into one summary field."""
-    records: list[dict[str, int | str]] = []
+def encode_dpu_execution_inputs(
+    setting_dir: Path, benchmark: str, num_dpus: int
+) -> str:
+    """Translate binary argument dumps into semantic per-DPU execution inputs."""
+    records: list[dict[str, Any]] = []
     for path in setting_dir.glob("input_DPU_INPUT_ARGUMENTS_*.bin"):
         match = ARGUMENT_FILE_RE.match(path.name)
         if match is None:
@@ -143,12 +147,13 @@ def encode_dpu_input_arguments(setting_dir: Path, num_dpus: int) -> str:
             if not 0 <= value <= 255:
                 raise ValueError(f"invalid byte {value} in {path}")
             values.append(value)
+        function, params = decode_execution_input(benchmark, bytes(values))
         records.append(
             {
                 "execution": int(match.group("execution")),
                 "dpu": int(match.group("dpu")),
-                "data_hex": bytes(values).hex(),
-                "source": path.name,
+                "function": function,
+                "params": params,
             }
         )
 
@@ -182,8 +187,8 @@ def make_identity(
         "data_prep_params": required_metadata_int(
             metadata, "data_prep_params", setting_dir
         ),
-        "dpu_input_arguments_json": encode_dpu_input_arguments(
-            setting_dir, num_dpus
+        "dpu_execution_inputs_json": encode_dpu_execution_inputs(
+            setting_dir, metadata.get("benchmark", ""), num_dpus
         ),
     }
 

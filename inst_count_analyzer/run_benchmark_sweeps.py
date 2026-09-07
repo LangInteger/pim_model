@@ -80,7 +80,7 @@ def load_experiment_settings(summary_path: Path) -> list[dict[str, Any]]:
             "num_dpus": int(row["num_dpus"]),
             "num_tasklets": int(row["num_tasklets"]),
             "data_prep_params": int(row["data_prep_params"]),
-            "dpu_input_arguments_json": row["dpu_input_arguments_json"],
+            "dpu_execution_inputs": json.loads(row["dpu_execution_inputs_json"]),
         }
         key = (
             setting["experiment"],
@@ -158,9 +158,7 @@ def analyze_setting(
         }
         return cached
 
-    phases = load_summary_phases(
-        setting["dpu_input_arguments_json"], benchmark
-    )
+    phases = load_summary_phases(setting["dpu_execution_inputs"])
     phase_dpus = {phase.dpu for phase in phases}
     expected_dpus = set(range(setting["num_dpus"]))
     if phase_dpus != expected_dpus:
@@ -282,7 +280,7 @@ def analyze_setting(
         },
         "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
         "provenance": {
-            "argument_source": "summary_csv_dpu_input_arguments",
+            "argument_source": "summary_csv_semantic_execution_inputs",
             "benchmark_source_dir": str((args.benchmark_root / benchmark).resolve()),
             "make_args": list(config.make_args),
         },

@@ -37,9 +37,11 @@ Old cost models and VA-specific counters are not included.
 
 `run_benchmark_sweeps.py` analyzes the exact settings present in
 `draw_figs/results/<benchmark>/summary.csv`. Each row contains the experiment
-configuration and the exact per-DPU/execution `DPU_INPUT_ARGUMENTS` records, so
-the analyzer does not access the raw simulator artifact tree. Simulator
-instruction counts are not inputs to the analysis.
+configuration and semantic per-DPU/execution inputs (`function` plus named
+`params`). Binary `DPU_INPUT_ARGUMENTS` layout and endianness are decoded by the
+simulator-results aggregator and are not known by this analyzer. The analyzer
+does not access the raw simulator artifact tree, and simulator instruction
+counts are not inputs to the analysis.
 
 From the repository root on the Linux server, run all benchmarks:
 

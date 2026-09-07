@@ -1,0 +1,23 @@
+{
+  "benchmark": "RED",
+  "tasklets": 16,
+  "params": {
+    "kernel": 0,
+    "size": 1048576
+  },
+  "dynamic_instruction_bound": {
+    "lower": 679541,
+    "upper": 680793,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry",
+    "barrier_wait"
+  ],
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 16,
+    "data_prep_params": 2097152,
+    "setting_id": "dpu_sweep_RED_dpu16_tasklets16_size2097152"
+  }
+}

@@ -1,31 +1,26 @@
 {
   "benchmark": "SCAN-SSA",
   "tasklets": 16,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "dpu_sweep",
     "benchmark": "SCAN-SSA",
-    "num_dpus_configured": 64,
+    "num_dpus": 64,
     "num_tasklets": 16,
     "data_prep_params": 1048576,
+    "dpu_build_options": {
+      "BL": 10,
+      "TYPE": "INT64"
+    },
     "setting_id": "dpu_sweep_SCAN-SSA_dpu64_tasklets16_size1048576"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "dpu_sweep",
-      "benchmark": "SCAN-SSA",
-      "num_tasklets": "16",
-      "num_dpus": "64",
-      "data_prep_params": "1048576",
-      "start_time": "2026-08-28T16:53:38+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-28T16:55:24+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-SSA",
-    "make_args": []
+    "make_args": [
+      "BL=10",
+      "TYPE=INT64"
+    ]
   },
   "dynamic_instruction_bound": {
     "lower": 207946,
@@ -63,8 +58,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -84,8 +79,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -115,8 +110,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -136,8 +131,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_1.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -167,8 +162,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -188,8 +183,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_2.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -219,8 +214,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -240,8 +235,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_3.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -271,8 +266,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_4.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -292,8 +287,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_4.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -323,8 +318,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_5.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -344,8 +339,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_5.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -375,8 +370,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_6.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -396,8 +391,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_6.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -427,8 +422,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_7.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -448,8 +443,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_7.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -479,8 +474,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_8.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -500,8 +495,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_8.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -531,8 +526,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_9.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -552,8 +547,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_9.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -583,8 +578,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_10.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -604,8 +599,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_10.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -635,8 +630,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_11.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -656,8 +651,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_11.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -687,8 +682,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_12.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -708,8 +703,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_12.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -739,8 +734,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_13.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -760,8 +755,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_13.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -791,8 +786,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_14.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -812,8 +807,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_14.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -843,8 +838,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_15.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -864,8 +859,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_15.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -895,8 +890,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_16.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -916,8 +911,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_16.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -947,8 +942,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_17.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -968,8 +963,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_17.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -999,8 +994,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_18.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1020,8 +1015,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_18.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1051,8 +1046,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_19.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1072,8 +1067,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_19.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1103,8 +1098,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_20.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1124,8 +1119,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_20.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1155,8 +1150,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_21.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1176,8 +1171,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_21.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1207,8 +1202,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_22.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1228,8 +1223,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_22.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1259,8 +1254,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_23.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1280,8 +1275,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_23.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1311,8 +1306,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_24.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1332,8 +1327,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_24.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1363,8 +1358,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_25.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1384,8 +1379,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_25.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1415,8 +1410,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_26.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1436,8 +1431,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_26.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1467,8 +1462,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_27.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1488,8 +1483,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_27.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1519,8 +1514,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_28.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1540,8 +1535,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_28.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1571,8 +1566,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_29.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1592,8 +1587,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_29.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1623,8 +1618,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_30.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1644,8 +1639,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_30.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1675,8 +1670,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_31.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1696,8 +1691,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_31.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1727,8 +1722,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_32.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1748,8 +1743,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_32.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1779,8 +1774,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_33.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1800,8 +1795,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_33.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1831,8 +1826,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_34.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1852,8 +1847,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_34.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1883,8 +1878,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_35.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1904,8 +1899,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_35.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1935,8 +1930,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_36.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -1956,8 +1951,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_36.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -1987,8 +1982,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_37.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2008,8 +2003,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_37.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2039,8 +2034,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_38.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2060,8 +2055,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_38.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2091,8 +2086,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_39.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2112,8 +2107,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_39.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2143,8 +2138,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_40.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2164,8 +2159,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_40.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2195,8 +2190,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_41.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2216,8 +2211,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_41.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2247,8 +2242,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_42.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2268,8 +2263,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_42.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2299,8 +2294,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_43.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2320,8 +2315,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_43.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2351,8 +2346,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_44.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2372,8 +2367,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_44.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2403,8 +2398,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_45.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2424,8 +2419,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_45.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2455,8 +2450,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_46.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2476,8 +2471,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_46.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2507,8 +2502,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_47.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2528,8 +2523,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_47.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2559,8 +2554,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_48.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2580,8 +2575,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_48.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2611,8 +2606,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_49.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2632,8 +2627,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_49.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2663,8 +2658,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_50.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2684,8 +2679,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_50.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2715,8 +2710,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_51.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2736,8 +2731,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_51.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2767,8 +2762,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_52.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2788,8 +2783,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_52.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2819,8 +2814,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_53.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2840,8 +2835,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_53.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2871,8 +2866,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_54.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2892,8 +2887,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_54.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2923,8 +2918,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_55.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2944,8 +2939,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_55.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -2975,8 +2970,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_56.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -2996,8 +2991,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_56.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3027,8 +3022,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_57.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3048,8 +3043,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_57.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3079,8 +3074,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_58.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3100,8 +3095,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_58.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3131,8 +3126,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_59.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3152,8 +3147,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_59.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3183,8 +3178,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_60.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3204,8 +3199,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_60.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3235,8 +3230,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_61.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3256,8 +3251,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_61.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3287,8 +3282,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_62.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3308,8 +3303,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_62.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     },
@@ -3339,8 +3334,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_63.bin",
-          "result_path": "phases/8ca36ac78e08a97e/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/19418bdbd06f4f13/result.json"
         },
         {
           "execution": 1,
@@ -3360,8 +3355,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_63.bin",
-          "result_path": "phases/315bf4fd208b0a5d/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/43a96911e0e5c748/result.json"
         }
       ]
     }

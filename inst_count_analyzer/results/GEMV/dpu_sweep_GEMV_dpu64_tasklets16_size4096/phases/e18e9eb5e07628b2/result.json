@@ -1,0 +1,25 @@
+{
+  "benchmark": "GEMV",
+  "tasklets": 16,
+  "params": {
+    "max_rows": 64,
+    "n_size": 64,
+    "n_size_pad": 64,
+    "nr_rows": 64
+  },
+  "dynamic_instruction_bound": {
+    "lower": 82213,
+    "upper": 211750,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry",
+    "barrier_wait"
+  ],
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 64,
+    "data_prep_params": 4096,
+    "setting_id": "dpu_sweep_GEMV_dpu64_tasklets16_size4096"
+  }
+}

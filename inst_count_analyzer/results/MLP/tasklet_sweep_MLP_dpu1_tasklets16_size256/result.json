@@ -1,31 +1,24 @@
 {
   "benchmark": "MLP",
   "tasklets": 16,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "tasklet_sweep",
     "benchmark": "MLP",
-    "num_dpus_configured": 1,
+    "num_dpus": 1,
     "num_tasklets": 16,
     "data_prep_params": 256,
+    "dpu_build_options": {
+      "BL": 10
+    },
     "setting_id": "tasklet_sweep_MLP_dpu1_tasklets16_size256"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "tasklet_sweep",
-      "benchmark": "MLP",
-      "num_tasklets": "16",
-      "num_dpus": "1",
-      "data_prep_params": "256",
-      "start_time": "2026-08-27T21:29:04+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-27T21:29:55+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/MLP",
-    "make_args": []
+    "make_args": [
+      "BL=10"
+    ]
   },
   "dynamic_instruction_bound": {
     "lower": 3771759,
@@ -64,8 +57,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/a9f7a23e6cbbf9ef/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
         },
         {
           "execution": 1,
@@ -86,8 +79,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
-          "result_path": "phases/a9f7a23e6cbbf9ef/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
         },
         {
           "execution": 2,
@@ -108,8 +101,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_2_0.bin",
-          "result_path": "phases/a9f7a23e6cbbf9ef/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
         }
       ]
     }

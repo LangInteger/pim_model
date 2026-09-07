@@ -1,31 +1,26 @@
 {
   "benchmark": "SCAN-SSA",
   "tasklets": 2,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "tasklet_sweep",
     "benchmark": "SCAN-SSA",
-    "num_dpus_configured": 1,
+    "num_dpus": 1,
     "num_tasklets": 2,
     "data_prep_params": 262144,
+    "dpu_build_options": {
+      "BL": 10,
+      "TYPE": "INT64"
+    },
     "setting_id": "tasklet_sweep_SCAN-SSA_dpu1_tasklets2_size262144"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "tasklet_sweep",
-      "benchmark": "SCAN-SSA",
-      "num_tasklets": "2",
-      "num_dpus": "1",
-      "data_prep_params": "262144",
-      "start_time": "2026-08-27T21:44:45+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-27T21:46:13+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-SSA",
-    "make_args": []
+    "make_args": [
+      "BL=10",
+      "TYPE=INT64"
+    ]
   },
   "dynamic_instruction_bound": {
     "lower": 3272882,
@@ -63,8 +58,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/66b3b6b78be49d40/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
         },
         {
           "execution": 1,
@@ -84,8 +79,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
-          "result_path": "phases/05c082c31e9771c5/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
         }
       ]
     }

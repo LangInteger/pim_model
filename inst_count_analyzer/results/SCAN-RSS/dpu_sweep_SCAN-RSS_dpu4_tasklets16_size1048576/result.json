@@ -1,31 +1,26 @@
 {
   "benchmark": "SCAN-RSS",
   "tasklets": 16,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "dpu_sweep",
     "benchmark": "SCAN-RSS",
-    "num_dpus_configured": 4,
+    "num_dpus": 4,
     "num_tasklets": 16,
     "data_prep_params": 1048576,
+    "dpu_build_options": {
+      "BL": 10,
+      "TYPE": "INT64"
+    },
     "setting_id": "dpu_sweep_SCAN-RSS_dpu4_tasklets16_size1048576"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "dpu_sweep",
-      "benchmark": "SCAN-RSS",
-      "num_tasklets": "16",
-      "num_dpus": "4",
-      "data_prep_params": "1048576",
-      "start_time": "2026-08-28T16:32:42+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-28T16:36:51+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-RSS",
-    "make_args": []
+    "make_args": [
+      "BL=10",
+      "TYPE=INT64"
+    ]
   },
   "dynamic_instruction_bound": {
     "lower": 3042698,
@@ -63,8 +58,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/66b3b6b78be49d40/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
         },
         {
           "execution": 1,
@@ -84,8 +79,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_0.bin",
-          "result_path": "phases/05c082c31e9771c5/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
         }
       ]
     },
@@ -115,8 +110,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
-          "result_path": "phases/66b3b6b78be49d40/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
         },
         {
           "execution": 1,
@@ -136,8 +131,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_1.bin",
-          "result_path": "phases/05c082c31e9771c5/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
         }
       ]
     },
@@ -167,8 +162,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
-          "result_path": "phases/66b3b6b78be49d40/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
         },
         {
           "execution": 1,
@@ -188,8 +183,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_2.bin",
-          "result_path": "phases/05c082c31e9771c5/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
         }
       ]
     },
@@ -219,8 +214,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
-          "result_path": "phases/66b3b6b78be49d40/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
         },
         {
           "execution": 1,
@@ -240,8 +235,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_1_3.bin",
-          "result_path": "phases/05c082c31e9771c5/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
         }
       ]
     }

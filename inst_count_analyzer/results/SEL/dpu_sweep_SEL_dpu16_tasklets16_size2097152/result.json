@@ -1,31 +1,24 @@
 {
   "benchmark": "SEL",
   "tasklets": 16,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "dpu_sweep",
     "benchmark": "SEL",
-    "num_dpus_configured": 16,
+    "num_dpus": 16,
     "num_tasklets": 16,
     "data_prep_params": 2097152,
+    "dpu_build_options": {
+      "BL": 10
+    },
     "setting_id": "dpu_sweep_SEL_dpu16_tasklets16_size2097152"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "dpu_sweep",
-      "benchmark": "SEL",
-      "num_tasklets": "16",
-      "num_dpus": "16",
-      "data_prep_params": "2097152",
-      "start_time": "2026-08-28T17:04:52+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-28T17:07:57+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SEL",
-    "make_args": []
+    "make_args": [
+      "BL=10"
+    ]
   },
   "dynamic_instruction_bound": {
     "lower": 791157,
@@ -62,8 +55,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -92,8 +85,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -122,8 +115,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -152,8 +145,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -182,8 +175,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_4.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -212,8 +205,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_5.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -242,8 +235,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_6.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -272,8 +265,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_7.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -302,8 +295,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_8.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -332,8 +325,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_9.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -362,8 +355,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_10.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -392,8 +385,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_11.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -422,8 +415,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_12.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -452,8 +445,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_13.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -482,8 +475,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_14.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     },
@@ -512,8 +505,8 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_15.bin",
-          "result_path": "phases/ddc5843cf7fe272c/result.json"
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/c0479440c5dc353c/result.json"
         }
       ]
     }

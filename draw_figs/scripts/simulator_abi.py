@@ -71,12 +71,43 @@ SIMULATOR_ARGUMENT_ABIS: dict[str, SimulatorArgumentABI] = {
     ),
 }
 
+# Effective Make/CMake variables that change the generated DPU program.
+# NR_TASKLETS has a dedicated summary column. TS spells its CMake flag as
+# ``-DBL${BL}`` and TRNS leaves BL unset, so both use the common header's
+# default BL=8, as does BS, which does not pass BL.
+DPU_BUILD_OPTIONS_BY_BENCHMARK: dict[str, dict[str, str | int]] = {
+    "BS": {"BL": 8},
+    "GEMV": {"BL": 10},
+    "HST-L": {"BL": 10, "NR_HISTO": 1},
+    "HST-S": {"BL": 10},
+    "MLP": {"BL": 10},
+    "RED": {
+        "BL": 10,
+        "TYPE": "INT64",
+        "VERSION": "SINGLE",
+        "SYNC": "HAND",
+        "PERF": 0,
+    },
+    "SCAN-RSS": {"BL": 10, "TYPE": "INT64"},
+    "SCAN-SSA": {"BL": 10, "TYPE": "INT64"},
+    "SEL": {"BL": 10},
+    "TRNS": {"BL": 8},
+    "TS": {"BL": 8},
+    "UNI": {"BL": 10},
+    "VA": {"BL": 10, "TYPE": "INT32"},
+}
+
 
 def normalize_benchmark(name: str) -> str:
     benchmark = name.upper()
     if benchmark not in SIMULATOR_ARGUMENT_ABIS:
         raise ValueError(f"unsupported simulator argument ABI for {name!r}")
     return benchmark
+
+
+def dpu_build_options(benchmark: str) -> dict[str, str | int]:
+    """Return other effective compile-time benchmark options."""
+    return dict(DPU_BUILD_OPTIONS_BY_BENCHMARK[normalize_benchmark(benchmark)])
 
 
 def decode_execution_input(benchmark: str, data: bytes) -> tuple[str, dict[str, int]]:

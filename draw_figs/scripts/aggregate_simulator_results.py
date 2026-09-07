@@ -12,7 +12,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from simulator_abi import decode_execution_input
+from simulator_abi import decode_execution_input, dpu_build_options
 
 
 LOG_LINE_RE = re.compile(
@@ -31,6 +31,7 @@ IDENTITY_FIELDS = [
     "num_dpus",
     "num_tasklets",
     "data_prep_params",
+    "dpu_build_options_json",
     "dpu_execution_inputs_json",
 ]
 
@@ -186,6 +187,10 @@ def make_identity(
         "num_tasklets": required_metadata_int(metadata, "num_tasklets", setting_dir),
         "data_prep_params": required_metadata_int(
             metadata, "data_prep_params", setting_dir
+        ),
+        "dpu_build_options_json": json.dumps(
+            dpu_build_options(metadata.get("benchmark", "")),
+            separators=(",", ":"),
         ),
         "dpu_execution_inputs_json": encode_dpu_execution_inputs(
             setting_dir, metadata.get("benchmark", ""), num_dpus

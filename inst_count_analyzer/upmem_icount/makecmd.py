@@ -4,6 +4,28 @@ from pathlib import Path
 from .build import discover_dpu_target
 
 
+def apply_required_compile_defines(
+    argv: list[str], make_assignments: list[str] | None
+) -> list[str]:
+    """Make effective BL explicit even when a benchmark Makefile ignores it."""
+    assignments = {}
+    for item in make_assignments or []:
+        if "=" in item:
+            name, value = item.split("=", 1)
+            assignments[name] = value
+    if "BL" not in assignments:
+        return list(argv)
+
+    define = f"-DBL={assignments['BL']}"
+    result = [
+        token
+        for token in argv
+        if token != "-DBL" and not token.startswith("-DBL=")
+    ]
+    result.append(define)
+    return result
+
+
 def dry_run_dpu_command(benchmark_dir: Path, tasklets: int, extra_make: list[str] | None=None) -> list[str]:
     target=discover_dpu_target(benchmark_dir)
     cmd=['make','-B','-n',target,f'NR_TASKLETS={tasklets}'] + (extra_make or [])
@@ -16,7 +38,7 @@ def dry_run_dpu_command(benchmark_dir: Path, tasklets: int, extra_make: list[str
     # Last DPU compiler line is normally the link/compile target command.
     line=lines[-1]
     # Make recipes in these benchmarks do not use shell pipes; shlex is sufficient.
-    return shlex.split(line)
+    return apply_required_compile_defines(shlex.split(line), extra_make)
 
 
 def compile_command_info(argv: list[str]) -> dict:

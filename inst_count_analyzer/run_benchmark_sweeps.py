@@ -80,6 +80,7 @@ def load_experiment_settings(summary_path: Path) -> list[dict[str, Any]]:
             "num_dpus": int(row["num_dpus"]),
             "num_tasklets": int(row["num_tasklets"]),
             "data_prep_params": int(row["data_prep_params"]),
+            "dpu_build_options": json.loads(row["dpu_build_options_json"]),
             "dpu_execution_inputs": json.loads(row["dpu_execution_inputs_json"]),
         }
         key = (
@@ -101,17 +102,39 @@ def analysis_params(benchmark: str, phase: DpuPhase) -> dict[str, int]:
     return {name: value for name, value in phase.params.items() if name not in ignored}
 
 
-def phase_cache_key(benchmark: str, phase: DpuPhase) -> str:
+def make_args_for_setting(benchmark: str, setting: dict[str, Any]) -> list[str]:
+    options = setting["dpu_build_options"]
+    if not isinstance(options, dict) or any(
+        not isinstance(name, str)
+        or not name
+        or isinstance(value, (dict, list, bool))
+        or not isinstance(value, (str, int, float))
+        for name, value in options.items()
+    ):
+        raise ValueError(f"invalid dpu_build_options for {benchmark}: {options!r}")
+    return [
+        *(f"{name}={value}" for name, value in sorted(options.items())),
+    ]
+
+
+def phase_cache_key(
+    benchmark: str, phase: DpuPhase, make_args: list[str]
+) -> str:
     payload = json.dumps(
         {
             "function": phase.function,
             "params": analysis_params(benchmark, phase),
             "loop_backedge_uppers": loop_backedge_uppers(benchmark, phase.params),
+            "make_args": make_args,
         },
         sort_keys=True,
         separators=(",", ":"),
     ).encode()
     return hashlib.sha256(payload).hexdigest()[:16]
+
+
+def cached_build_matches(cached: dict[str, Any], make_args: list[str]) -> bool:
+    return cached.get("provenance", {}).get("make_args") == make_args
 
 
 def add_bounds(bounds: list[dict[str, Any]]) -> dict[str, Any]:
@@ -145,18 +168,22 @@ def analyze_setting(
     )
     output_dir = args.results_root / benchmark / sid
     output_path = output_dir / "result.json"
+    make_args = make_args_for_setting(benchmark, setting)
     if output_path.is_file() and not args.force:
-        print(f"SKIP {sid}")
         cached = json.loads(output_path.read_text(encoding="utf-8"))
-        cached["experiment_setting"] = {
-            "experiment": setting["experiment"],
-            "benchmark": benchmark,
-            "num_dpus": setting["num_dpus"],
-            "num_tasklets": setting["num_tasklets"],
-            "data_prep_params": setting["data_prep_params"],
-            "setting_id": sid,
-        }
-        return cached
+        if cached_build_matches(cached, make_args):
+            print(f"SKIP {sid}")
+            cached["experiment_setting"] = {
+                "experiment": setting["experiment"],
+                "benchmark": benchmark,
+                "num_dpus": setting["num_dpus"],
+                "num_tasklets": setting["num_tasklets"],
+                "data_prep_params": setting["data_prep_params"],
+                "dpu_build_options": setting["dpu_build_options"],
+                "setting_id": sid,
+            }
+            return cached
+        print(f"RERUN {sid}: cached build options do not match summary")
 
     phases = load_summary_phases(setting["dpu_execution_inputs"])
     phase_dpus = {phase.dpu for phase in phases}
@@ -168,13 +195,12 @@ def analyze_setting(
         )
     output_dir.mkdir(parents=True, exist_ok=True)
     work_dir = args.work_root / benchmark / sid
-    config = BENCHMARK_CONFIGS[benchmark]
 
     result_cache: dict[str, dict[str, Any]] = {}
     dpu_phases: dict[int, list[dict[str, Any]]] = defaultdict(list)
     print(f"RUN {sid}: {len(phases)} DPU/execution argument records")
     for phase in phases:
-        cache_key = phase_cache_key(benchmark, phase)
+        cache_key = phase_cache_key(benchmark, phase, make_args)
         phase_output_dir = output_dir / "phases" / cache_key
         phase_result_path = phase_output_dir / "result.json"
         phase_work_dir = work_dir / "phases" / cache_key
@@ -207,7 +233,7 @@ def analyze_setting(
             ]
             for name, value in sorted(analysis_params(benchmark, phase).items()):
                 command.extend(["--param", f"{name}={value}"])
-            for make_arg in config.make_args:
+            for make_arg in make_args:
                 command.extend(["--make-arg", make_arg])
             for function, bound in sorted(
                 loop_backedge_uppers(benchmark, phase.params).items()
@@ -276,13 +302,14 @@ def analyze_setting(
             "num_dpus": setting["num_dpus"],
             "num_tasklets": setting["num_tasklets"],
             "data_prep_params": setting["data_prep_params"],
+            "dpu_build_options": setting["dpu_build_options"],
             "setting_id": sid,
         },
         "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
         "provenance": {
             "argument_source": "summary_csv_semantic_execution_inputs",
             "benchmark_source_dir": str((args.benchmark_root / benchmark).resolve()),
-            "make_args": list(config.make_args),
+            "make_args": make_args,
         },
         "dynamic_instruction_bound": {
             "lower": clean_number(lower),
@@ -322,6 +349,9 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
                 "num_dpus": match["num_dpus"],
                 "num_tasklets": result["tasklets"],
                 "data_prep_params": match["data_prep_params"],
+                "dpu_build_options_json": json.dumps(
+                    match["dpu_build_options"], separators=(",", ":")
+                ),
                 "setting_id": match["setting_id"],
                 "instructions_lower": clean_number(lower),
                 "instructions_upper": clean_number(upper),
@@ -342,7 +372,8 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
     )
     fields = list(rows[0]) if rows else [
         "benchmark", "experiment", "num_dpus", "num_tasklets",
-        "data_prep_params", "setting_id", "instructions_lower",
+        "data_prep_params", "dpu_build_options_json",
+        "setting_id", "instructions_lower",
         "instructions_upper", "instructions_midpoint", "exact",
         "instruction_scope", "unexpanded_callees", "result_path",
     ]

@@ -43,6 +43,12 @@ simulator-results aggregator and are not known by this analyzer. The analyzer
 does not access the raw simulator artifact tree, and simulator instruction
 counts are not inputs to the analysis.
 
+The summary records code-generating choices in `dpu_build_options_json`,
+including the effective compile-time `BL` value and options such as `TYPE`,
+`NR_HISTO`, `VERSION`, and `SYNC`. The sweep runner passes them back to the
+benchmark build; it does not infer these settings from the analyzer's current
+source tree.
+
 From the repository root on the Linux server, run all benchmarks:
 
 ```bash

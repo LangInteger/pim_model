@@ -18,6 +18,8 @@ from upmem_icount.benchmark_settings import (  # noqa: E402
     loop_backedge_uppers,
     setting_id,
 )
+from upmem_icount.makecmd import apply_required_compile_defines  # noqa: E402
+from run_benchmark_sweeps import cached_build_matches  # noqa: E402
 
 
 def load_estimate_cost_module():
@@ -30,6 +32,25 @@ def load_estimate_cost_module():
 
 
 class BenchmarkSettingTests(unittest.TestCase):
+    def test_cache_requires_exact_summary_build_options(self):
+        cached = {"provenance": {"make_args": ["BL=10", "TYPE=INT32"]}}
+        self.assertTrue(cached_build_matches(cached, ["BL=10", "TYPE=INT32"]))
+        self.assertFalse(cached_build_matches(cached, ["BL=8", "TYPE=INT32"]))
+        self.assertFalse(cached_build_matches({}, ["BL=10"]))
+
+    def test_summary_bl_is_forced_into_compile_command(self):
+        original = ["dpu-clang", "-O2", "-DBL=10", "dpu/task.c"]
+        self.assertEqual(
+            apply_required_compile_defines(original, ["BL=8"]),
+            ["dpu-clang", "-O2", "dpu/task.c", "-DBL=8"],
+        )
+
+        missing = ["dpu-clang", "-O2", "dpu/task.c"]
+        self.assertEqual(
+            apply_required_compile_defines(missing, ["BL=8"])[-1],
+            "-DBL=8",
+        )
+
     def test_loads_phases_embedded_in_summary(self):
         records = [
             {

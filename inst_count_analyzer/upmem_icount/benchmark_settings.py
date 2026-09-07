@@ -6,7 +6,6 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class BenchmarkConfig:
-    make_args: tuple[str, ...] = ()
     non_control_params: frozenset[str] = frozenset()
 
 
@@ -25,9 +24,7 @@ BENCHMARK_CONFIGS: dict[str, BenchmarkConfig] = {
     "RED": BenchmarkConfig(
         non_control_params=frozenset({"t_count"}),
     ),
-    "HST-L": BenchmarkConfig(
-        make_args=("BL=10", "NR_HISTO=1"),
-    ),
+    "HST-L": BenchmarkConfig(),
     "HST-S": BenchmarkConfig(),
     "GEMV": BenchmarkConfig(),
     "MLP": BenchmarkConfig(),

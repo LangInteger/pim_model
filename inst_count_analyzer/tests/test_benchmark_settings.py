@@ -115,7 +115,7 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
                 "num_tasklets": "16", "data_prep_params": "2097152",
             }
             bound = estimate_cost.static_instruction_bound_for_setting(
-                index, measured, 1, 1024
+                index, measured
             )
             self.assertEqual(bound["midpoint"], 110)
             self.assertEqual(bound["source"], "static_analyzer_exact_setting_midpoint")

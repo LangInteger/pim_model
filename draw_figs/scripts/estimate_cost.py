@@ -162,125 +162,61 @@ def parse_args() -> argparse.Namespace:
 def load_static_instruction_counts(
     path: Path, benchmark: str
 ) -> dict[str, Any]:
-    """Load exact-setting counts, with the old VA tasklet sweep as a fallback."""
+    """Load static instruction bounds for exact experiment settings."""
     with path.open(newline="", encoding="utf-8") as input_file:
         rows = list(csv.DictReader(input_file))
     if not rows:
         raise ValueError(f"no static instruction results found in {path}")
+    if "experiment" not in rows[0]:
+        raise ValueError(f"instruction summary lacks exact experiment settings: {path}")
 
     benchmark_upper = benchmark.upper()
-    if "experiment" in rows[0]:
-        counts: dict[tuple[str, int, int, int], dict[str, Any]] = {}
-        for row in rows:
-            if row.get("benchmark", "").upper() != benchmark_upper:
-                raise ValueError(
-                    f"non-{benchmark_upper} row in instruction summary: {row}"
-                )
-            key = (
-                row["experiment"],
-                int(row["num_dpus"]),
-                int(row["num_tasklets"]),
-                int(row["data_prep_params"]),
-            )
-            if key in counts:
-                raise ValueError(f"duplicate static instruction setting: {key}")
-            lower = float(row["instructions_lower"])
-            upper = float(row["instructions_upper"])
-            if lower > upper:
-                raise ValueError(f"invalid static instruction interval for {key}")
-            counts[key] = {
-                "lower": lower,
-                "upper": upper,
-                "midpoint": float(row.get("instructions_midpoint") or (lower + upper) / 2),
-                "source": "static_analyzer_exact_setting_midpoint",
-                "scope": row.get("instruction_scope", ""),
-                "unexpanded_callees": row.get("unexpanded_callees", ""),
-            }
-        return {"format": "exact", "settings": counts, "path": path}
-
-    if benchmark_upper != "VA":
-        raise ValueError(
-            f"legacy tasklet-only instruction summaries are supported only for VA: {path}"
-        )
-
-    legacy_counts: dict[int, dict[str, Any]] = {}
+    counts: dict[tuple[str, int, int, int], dict[str, Any]] = {}
     for row in rows:
-        if row.get("benchmark", "").upper() != "VA":
-            raise ValueError(f"non-VA row in VA instruction summary: {row}")
-        tasklets = int(row["tasklets"])
-        if tasklets in legacy_counts:
-            raise ValueError(f"duplicate VA instruction result for T={tasklets}")
+        if row.get("benchmark", "").upper() != benchmark_upper:
+            raise ValueError(
+                f"non-{benchmark_upper} row in instruction summary: {row}"
+            )
+        key = (
+            row["experiment"],
+            int(row["num_dpus"]),
+            int(row["num_tasklets"]),
+            int(row["data_prep_params"]),
+        )
+        if key in counts:
+            raise ValueError(f"duplicate static instruction setting: {key}")
         lower = float(row["instructions_lower"])
         upper = float(row["instructions_upper"])
         if lower > upper:
-            raise ValueError(f"invalid VA instruction interval for T={tasklets}")
-
-        # result_path records the server's absolute path, which is deliberately
-        # not portable. Resolve the compact result relative to the summary.
-        result_path = path.parent / f"T{tasklets}" / "result.json"
-        result = json.loads(result_path.read_text(encoding="utf-8"))
-        params = result.get("params", {})
-        if "size" not in params:
-            raise ValueError(f"{result_path} does not record the analyzed VA size")
-        reference_bytes = int(params["size"])
-        if reference_bytes <= 0:
-            raise ValueError(f"invalid VA reference size in {result_path}")
-
-        legacy_counts[tasklets] = {
+            raise ValueError(f"invalid static instruction interval for {key}")
+        counts[key] = {
             "lower": lower,
             "upper": upper,
-            "midpoint": (lower + upper) / 2,
-            "reference_bytes": reference_bytes,
-            "unexpanded_callees": ";".join(
-                str(callee) for callee in result.get("unexpanded_callees", [])
-            ),
+            "midpoint": float(row.get("instructions_midpoint") or (lower + upper) / 2),
+            "source": "static_analyzer_exact_setting_midpoint",
+            "scope": row.get("instruction_scope", ""),
+            "unexpanded_callees": row.get("unexpanded_callees", ""),
         }
-    return {"format": "legacy_va", "tasklets": legacy_counts, "path": path}
+    return {"settings": counts, "path": path}
 
 
 def static_instruction_bound_for_setting(
     index: dict[str, Any],
     measured: dict[str, str],
-    blocks_per_dpu: int,
-    block_size: int,
 ) -> dict[str, Any]:
-    """Return the exact static count, or scale the preserved legacy VA result."""
-    tasklets = int(measured["num_tasklets"])
-    if index["format"] == "exact":
-        key = (
-            measured["experiment"],
-            int(measured["num_dpus"]),
-            tasklets,
-            int(measured["data_prep_params"]),
-        )
-        try:
-            return index["settings"][key]
-        except KeyError as error:
-            raise ValueError(
-                f"no exact static instruction result for setting {key} in {index['path']}"
-            ) from error
-
-    counts = index["tasklets"]
-    if tasklets not in counts:
-        raise ValueError(f"no legacy static VA instruction result for T={tasklets}")
-    reference = counts[tasklets]
-    reference_blocks = math.ceil(reference["reference_bytes"] / block_size)
-    scale = blocks_per_dpu / reference_blocks
-    direct_match = blocks_per_dpu == reference_blocks
-    return {
-        "lower": reference["lower"] * scale,
-        "upper": reference["upper"] * scale,
-        "midpoint": reference["midpoint"] * scale,
-        "source": (
-            "static_analyzer_legacy_va_midpoint"
-            if direct_match
-            else "static_analyzer_legacy_va_midpoint_block_scaled"
-        ),
-        "scope": "legacy_tasklet_reference_scaled_by_blocks",
-        "reference_bytes": reference["reference_bytes"],
-        "scale": scale,
-        "unexpanded_callees": reference["unexpanded_callees"],
-    }
+    """Return the static instruction bound for one exact experiment setting."""
+    key = (
+        measured["experiment"],
+        int(measured["num_dpus"]),
+        int(measured["num_tasklets"]),
+        int(measured["data_prep_params"]),
+    )
+    try:
+        return index["settings"][key]
+    except KeyError as error:
+        raise ValueError(
+            f"no exact static instruction result for setting {key} in {index['path']}"
+        ) from error
 
 
 def load_kernel_features(
@@ -945,7 +881,7 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
         # feed the compute-cost equations below.
         measured_instructions = optional_float(measured.get("instructions_mean"))
         instruction_bound = static_instruction_bound_for_setting(
-            instruction_counts, measured, blocks, block_size
+            instruction_counts, measured
         )
         compute_instructions = float(instruction_bound["midpoint"])
         instruction_fields = {
@@ -959,10 +895,6 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
                 instruction_bound["upper"]
             ),
             "static_instructions_midpoint_per_dpu": compute_instructions,
-            "instruction_reference_bytes_per_dpu": instruction_bound.get(
-                "reference_bytes", ""
-            ),
-            "instruction_scale_from_reference": instruction_bound.get("scale", 1.0),
             "instruction_unexpanded_callees": str(
                 instruction_bound["unexpanded_callees"]
             ),
@@ -1212,15 +1144,7 @@ def run_benchmark(args: argparse.Namespace, benchmark: str) -> None:
     )
     if args.instruction_summary is None:
         instruction_root = draw_figs_dir.parent / "inst_count_analyzer" / "results"
-        exact_summary = instruction_root / benchmark_upper / "instruction_counts.csv"
-        legacy_va_summary = (
-            instruction_root / "VA_tasklet_sweep" / "instruction_counts.csv"
-        )
-        args.instruction_summary = (
-            exact_summary
-            if exact_summary.is_file() or benchmark_lower != "va"
-            else legacy_va_summary
-        )
+        args.instruction_summary = instruction_root / benchmark_upper / "instruction_counts.csv"
     if not args.instruction_summary.is_file():
         raise ValueError(
             f"static instruction summary does not exist: {args.instruction_summary}; "

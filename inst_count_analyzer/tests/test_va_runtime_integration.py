@@ -14,12 +14,8 @@ SIMULATOR_INSTRUCTIONS = 3_727_420
 
 
 class VaRuntimeExpansionTests(unittest.TestCase):
-    def test_pre_runtime_baseline_is_preserved(self) -> None:
+    def test_pre_runtime_regression_fixture_is_preserved(self) -> None:
         baseline = json.loads(BASELINE_PATH.read_text())
-        saved_result = json.loads(
-            (ANALYZER_ROOT / "results" / "VA_T16" / "result.json").read_text()
-        )
-        self.assertEqual(baseline, saved_result)
         self.assertEqual(
             baseline["dynamic_instruction_bound"],
             {"lower": 3_719_617, "upper": 3_721_761, "exact": False},

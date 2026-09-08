@@ -877,11 +877,17 @@ def compare_machine_cfgs(
 ) -> dict:
     """Describe and validate MIR-to-final-assembly machine-block mapping.
 
-    MIR supplies LLVM's explicit MachineBasicBlock successor relation.  The
-    annotated assembly supplies the post-macro-expansion MCInst count.  Block
-    numbers are the join key.  Missing blocks and different successor sets are
-    errors; differing IR provenance annotations are retained as warnings
-    because backend transformations may legitimately drop or duplicate them.
+    The final DPU macro-expansion pass may split a late-MIR block into several
+    new MachineBasicBlocks.  In particular, a ``Jcc64`` pseudo branch becomes
+    multiple 32-bit branches in assembly-only blocks.  Consequently the two
+    CFGs are not required to have identical block sets or direct edges.
+
+    Original blocks are joined by function name and ``bb.N``.  For each late-
+    MIR edge, final-assembly paths are contracted across assembly-only blocks;
+    the first original blocks reached by those paths must equal the MIR
+    successor set.  The final assembly remains authoritative for instruction
+    counts *and* for the CFG subsequently analyzed, so instructions introduced
+    by macro expansion are not discarded.
     """
     functions = []
     error_count = 0
@@ -896,6 +902,41 @@ def compare_machine_cfgs(
         function_errors = 0
         function_warnings = 0
 
+        original_numbers = set(mir_blocks)
+        lowering_numbers = set(assembly_blocks) - original_numbers
+        lowering_owners: dict[int, set[int]] = {
+            number: set() for number in lowering_numbers
+        }
+
+        def contracted_successors(number: int) -> tuple[list[int], list[int]]:
+            """Reach original blocks while traversing only lowering blocks."""
+            block = assembly_blocks.get(number)
+            if block is None:
+                return [], []
+            projected: set[int] = set()
+            traversed: set[int] = set()
+            pending = list(block.successors)
+            while pending:
+                successor = pending.pop()
+                if successor in original_numbers:
+                    projected.add(successor)
+                    continue
+                if successor in traversed:
+                    continue
+                lowering_block = assembly_blocks.get(successor)
+                if lowering_block is None:
+                    continue
+                traversed.add(successor)
+                pending.extend(lowering_block.successors)
+            return sorted(projected), sorted(traversed)
+
+        contracted_by_original: dict[int, list[int]] = {}
+        for number in sorted(original_numbers & set(assembly_blocks)):
+            projected, traversed = contracted_successors(number)
+            contracted_by_original[number] = projected
+            for lowering_number in traversed:
+                lowering_owners.setdefault(lowering_number, set()).add(number)
+
         for number in sorted(set(mir_blocks) | set(assembly_blocks)):
             mir_block = mir_blocks.get(number)
             assembly_block = assembly_blocks.get(number)
@@ -903,12 +944,17 @@ def compare_machine_cfgs(
             warnings: list[dict[str, object]] = []
 
             if mir_block is None:
-                errors.append(
-                    {
-                        "code": "block_missing_in_mir",
-                        "message": f"bb.{number} exists only in annotated assembly",
-                    }
-                )
+                owners = sorted(lowering_owners.get(number, set()))
+                if not owners:
+                    errors.append(
+                        {
+                            "code": "unanchored_assembly_lowering_block",
+                            "message": (
+                                f"assembly-only bb.{number} is not reachable from "
+                                "any late-MIR block"
+                            ),
+                        }
+                    )
             elif assembly_block is None:
                 errors.append(
                     {
@@ -918,14 +964,16 @@ def compare_machine_cfgs(
                 )
             else:
                 mir_successors = sorted(set(mir_block.successors))
-                assembly_successors = sorted(set(assembly_block.successors))
-                if mir_successors != assembly_successors:
+                projected_successors = contracted_by_original[number]
+                if mir_successors != projected_successors:
                     errors.append(
                         {
                             "code": "successors_mismatch",
                             "message": (
-                                f"bb.{number} successors differ: "
-                                f"MIR={mir_successors}, assembly={assembly_successors}"
+                                f"bb.{number} successors differ after contracting "
+                                "assembly-only lowering blocks: "
+                                f"MIR={mir_successors}, "
+                                f"assembly={projected_successors}"
                             ),
                         }
                     )
@@ -947,7 +995,7 @@ def compare_machine_cfgs(
                 {
                     "machine_block_number": number,
                     "mapping_status": (
-                        "missing_in_mir"
+                        "backend_lowering_block"
                         if mir_block is None
                         else "missing_in_assembly"
                         if assembly_block is None
@@ -968,6 +1016,16 @@ def compare_machine_cfgs(
                             "label": assembly_block.label,
                             "ir_block": assembly_block.ir_block,
                             "successors": sorted(set(assembly_block.successors)),
+                            "contracted_successors": (
+                                contracted_by_original.get(number)
+                                if mir_block is not None
+                                else None
+                            ),
+                            "reachable_from_original_blocks": (
+                                sorted(lowering_owners.get(number, set()))
+                                if mir_block is None
+                                else None
+                            ),
                             "emitted_mcinst_count": assembly_block.instructions,
                         }
                         if assembly_block is not None
@@ -992,6 +1050,9 @@ def compare_machine_cfgs(
                 ),
                 "errors": function_errors,
                 "warnings": function_warnings,
+                "late_mir_blocks": len(mir_blocks),
+                "final_assembly_blocks": len(assembly_blocks),
+                "backend_lowering_blocks": len(lowering_numbers),
                 "blocks": block_rows,
             }
         )
@@ -1005,7 +1066,11 @@ def compare_machine_cfgs(
             else "match"
         ),
         "join_key": "function name + machine block number (bb.N)",
-        "cfg_authority": "late MIR successors",
+        "cfg_authority": "final annotated-assembly successors",
+        "validation_method": (
+            "late-MIR successors compared with final-assembly successors after "
+            "contracting assembly-only backend-lowering blocks"
+        ),
         "instruction_count_source": "final annotated assembly MCInst stream",
         "errors": error_count,
         "warnings": warning_count,
@@ -1018,28 +1083,31 @@ def merge_machine_cfgs(
     assembly: dict[str, list[MachineBlock]],
     validation: dict,
 ) -> dict[str, list[MachineBlock]]:
-    """Combine authoritative MIR edges with final emitted instruction data."""
+    """Keep the validated final CFG and fill missing IR provenance from MIR."""
     if validation.get("status") == "error":
         raise ValueError("cannot merge inconsistent MIR and assembly machine CFGs")
 
     merged: dict[str, list[MachineBlock]] = {}
     for function, assembly_blocks in assembly.items():
-        mir_blocks = {block.number: block for block in mir[function]}
+        mir_blocks = {block.number: block for block in mir.get(function, [])}
         merged[function] = [
             MachineBlock(
                 function=block.function,
                 key=block.key,
                 number=block.number,
                 label=block.label,
-                ir_block=block.ir_block or mir_blocks[block.number].ir_block,
-                successors=sorted(set(mir_blocks[block.number].successors)),
+                ir_block=(
+                    block.ir_block
+                    or (
+                        mir_blocks[block.number].ir_block
+                        if block.number in mir_blocks
+                        else None
+                    )
+                ),
+                successors=sorted(set(block.successors)),
                 instructions=block.instructions,
                 calls=list(block.calls),
-                edge_instruction_costs={
-                    successor: cost
-                    for successor, cost in block.edge_instruction_costs.items()
-                    if successor in mir_blocks[block.number].successors
-                },
+                edge_instruction_costs=dict(block.edge_instruction_costs),
                 assembly_instructions=list(block.assembly_instructions),
             )
             for block in assembly_blocks

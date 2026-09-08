@@ -107,11 +107,11 @@ class MachineCfgValidationTests(unittest.TestCase):
             {
                 "successors_mismatch",
                 "block_missing_in_assembly",
-                "block_missing_in_mir",
+                "unanchored_assembly_lowering_block",
             },
         )
 
-    def test_merge_uses_mir_edges_and_assembly_instruction_counts(self) -> None:
+    def test_merge_uses_final_edges_and_assembly_instruction_counts(self) -> None:
         mir = {
             "f": [
                 MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
@@ -132,6 +132,44 @@ class MachineCfgValidationTests(unittest.TestCase):
         self.assertEqual(merged["f"][0].instructions, 4)
         self.assertEqual(merged["f"][0].ir_block, "a")
         self.assertEqual(merged["f"][0].calls, ["g"])
+
+    def test_accepts_and_preserves_post_mir_branch_expansion_blocks(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 2], 1, []),
+                MachineBlock("f", "bb.1.left", 1, "bb.1.left", "left", [], 1, []),
+                MachineBlock("f", "bb.2.right", 2, "bb.2.right", "right", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [3, 4], 2, []),
+                MachineBlock("f", "bb.3", 3, "bb.3", None, [1, 4], 2, []),
+                MachineBlock("f", "bb.4", 4, "bb.4", None, [2], 1, []),
+                MachineBlock("f", "bb.1.left", 1, "bb.1.left", "left", [], 1, []),
+                MachineBlock("f", "bb.2.right", 2, "bb.2.right", "right", [], 1, []),
+            ]
+        }
+
+        validation = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(validation["status"], "match")
+        function = validation["functions"][0]
+        self.assertEqual(function["backend_lowering_blocks"], 2)
+        rows = {row["machine_block_number"]: row for row in function["blocks"]}
+        self.assertEqual(
+            rows[0]["annotated_assembly"]["contracted_successors"], [1, 2]
+        )
+        self.assertEqual(rows[3]["mapping_status"], "backend_lowering_block")
+        self.assertEqual(
+            rows[3]["annotated_assembly"]["reachable_from_original_blocks"], [0]
+        )
+
+        merged = merge_machine_cfgs(mir, assembly, validation)
+        self.assertEqual([block.number for block in merged["f"]], [0, 3, 4, 1, 2])
+        self.assertEqual(merged["f"][0].successors, [3, 4])
+        self.assertEqual(merged["f"][1].instructions, 2)
+        self.assertIsNone(merged["f"][1].ir_block)
 
     def test_self_loop_uses_ir_execution_count_not_external_entry_count(self) -> None:
         blocks = [

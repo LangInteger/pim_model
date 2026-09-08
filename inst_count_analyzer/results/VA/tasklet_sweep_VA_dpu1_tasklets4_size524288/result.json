@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "runtime-sync-expansion-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 4,
   "experiment_setting": {
     "experiment": "tasklet_sweep",
@@ -25,19 +25,17 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 3719397,
-    "upper": 3721917,
+    "lower": 3719464,
+    "upper": 3722083,
     "exact": false
   },
-  "unexpanded_callees": [
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 3719397.0,
-        "upper": 3721917.0,
+        "lower": 3719464.0,
+        "upper": 3722083.0,
         "exact": false
       },
       "phases": [
@@ -51,13 +49,11 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 3719397,
-            "upper": 3721917,
+            "lower": 3719464,
+            "upper": 3722083,
             "exact": false
           },
-          "unexpanded_callees": [
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
           "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/8a594846cdbbdc14/result.json"

@@ -20,16 +20,16 @@
     "upper": 3723346.0,
     "exact": false
   },
-  "analysis_schema_version": "runtime-sync-expansion-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "collective_expansions": [
     {
       "callee": "barrier_wait",
       "call_path": [
         [
           "main_kernel1",
-          1,
           "bb4",
-          "barrier_wait"
+          "barrier_wait",
+          0
         ]
       ],
       "participants": 1,
@@ -796,6 +796,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 1,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -805,9 +806,9 @@
           "call_path": [
             [
               "main_kernel1",
-              1,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }

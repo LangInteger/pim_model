@@ -16,12 +16,563 @@
     "exact": false
   },
   "dynamic_instruction_bound": {
-    "lower": 233349.0,
-    "upper": 241905.0,
+    "lower": 233644.0,
+    "upper": 244135.0,
     "exact": false
   },
-  "analysis_schema_version": "runtime-sync-expansion-v1",
-  "collective_expansions": [],
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "collective_expansions": [
+    {
+      "callee": "barrier_wait",
+      "call_path": [
+        [
+          "main_kernel1",
+          "bb4",
+          "barrier_wait",
+          0
+        ]
+      ],
+      "participants": 16,
+      "generations": 1,
+      "nonlast_path_per_call": {
+        "lower": 15.0,
+        "upper": 16.0,
+        "exact": false
+      },
+      "last_path_per_call": {
+        "lower": 70.0,
+        "upper": 70.0,
+        "exact": true,
+        "value": 70
+      },
+      "static_generation_bound": {
+        "lower": 295.0,
+        "upper": 310.0,
+        "exact": false
+      },
+      "static_contribution": {
+        "lower": 295.0,
+        "upper": 310.0,
+        "exact": false
+      },
+      "atomic_retry_contribution": {
+        "lower": 0.0,
+        "upper": 1920.0,
+        "exact": false
+      },
+      "contribution": {
+        "lower": 295.0,
+        "upper": 2230.0,
+        "exact": false
+      },
+      "path_semantics": {
+        "kind": "barrier_generation_machine_cfg",
+        "participants": 16,
+        "stop_blocks": [
+          "bb.9.bb35"
+        ],
+        "cyclic_resume_blocks": [
+          "bb.3.bb15"
+        ],
+        "final_resume_blocks": [
+          "bb.4.bb21"
+        ],
+        "nonlast_machine_flow": {
+          "anchors": [],
+          "loop_flow_facts": [],
+          "runtime_machine_block_bounds": [
+            {
+              "machine_block": "bb.9.bb35",
+              "bound": {
+                "lower": 1,
+                "upper": 1,
+                "exact": true,
+                "value": 1
+              }
+            },
+            {
+              "machine_block": "bb.3.bb15",
+              "bound": {
+                "lower": 0,
+                "upper": 0,
+                "exact": true,
+                "value": 0
+              }
+            },
+            {
+              "machine_block": "bb.4.bb21",
+              "bound": {
+                "lower": 0,
+                "upper": 0,
+                "exact": true,
+                "value": 0
+              }
+            }
+          ],
+          "machine_blocks": [
+            {
+              "function": "barrier_wait",
+              "key": "bb.0.bb",
+              "number": 0,
+              "label": "bb.0.bb",
+              "ir_block": "bb",
+              "successors": [
+                1,
+                6
+              ],
+              "instructions": 5,
+              "calls": [
+                "__atomic_acquire_retry"
+              ],
+              "edge_instruction_costs": {
+                "1": 5
+              },
+              "assembly_instructions": [
+                "lbs r1, r0, 3",
+                "acquire r1, 0, nz, .Ltmp1+0",
+                "lbu r3, r0, 1",
+                "lbu r2, r0, 0",
+                "jeq r3, 1, .LBB0_1"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.6.bb25",
+              "number": 6,
+              "label": "bb.6.bb25",
+              "ir_block": "bb25",
+              "successors": [
+                7,
+                8
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "7": 2
+              },
+              "assembly_instructions": [
+                "move r4, id",
+                "jeq r2, 255, .LBB0_7"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.8.bb29",
+              "number": 8,
+              "label": "bb.8.bb29",
+              "ir_block": "bb29",
+              "successors": [
+                9
+              ],
+              "instructions": 3,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "lbs r5, r2, __sys_wq_table",
+                "sb r4, __sys_wq_table, r5",
+                "sb r2, __sys_wq_table, r4"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.9.bb35",
+              "number": 9,
+              "label": "bb.9.bb35",
+              "ir_block": "bb35",
+              "successors": [],
+              "instructions": 6,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "sb r0, 0, r4",
+                "add r2, r3, -1",
+                "sb r0, 1, r2",
+                "release r1, 0, nz, .Ltmp10+1",
+                "stop false, 0x0",
+                "jump r23"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.1.bb9",
+              "number": 1,
+              "label": "bb.1.bb9",
+              "ir_block": "bb9",
+              "successors": [
+                2,
+                5
+              ],
+              "instructions": 1,
+              "calls": [],
+              "edge_instruction_costs": {
+                "5": 1
+              },
+              "assembly_instructions": [
+                "jeq r2, 255, .LBB0_5"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.2.bb10",
+              "number": 2,
+              "label": "bb.2.bb10",
+              "ir_block": "bb10",
+              "successors": [
+                3,
+                4
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "4": 2
+              },
+              "assembly_instructions": [
+                "lbu r3, r2, __sys_wq_table",
+                "jeq r3, r2, .LBB0_4"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.3.bb15",
+              "number": 3,
+              "label": "bb.3.bb15",
+              "ir_block": "bb15",
+              "successors": [
+                3,
+                4
+              ],
+              "instructions": 4,
+              "calls": [],
+              "edge_instruction_costs": {
+                "3": 4
+              },
+              "assembly_instructions": [
+                "resume r3, 0, nz, .Ltmp16+0",
+                "and r3, r3, 255",
+                "lbu r3, r3, __sys_wq_table",
+                "jneq r3, r2, .LBB0_3"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.4.bb21",
+              "number": 4,
+              "label": "bb.4.bb21",
+              "ir_block": "bb21",
+              "successors": [
+                5
+              ],
+              "instructions": 4,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "resume r2, 0, nz, .Ltmp21+0",
+                "sb r0, 0, 255",
+                "lbs r2, r0, 2",
+                "sb r0, 1, r2"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.5.bb24",
+              "number": 5,
+              "label": "bb.5.bb24",
+              "ir_block": "bb24",
+              "successors": [],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "release r1, 0, nz, .Ltmp24+1",
+                "jump r23"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.7.bb26",
+              "number": 7,
+              "label": "bb.7.bb26",
+              "ir_block": "bb26",
+              "successors": [
+                9
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "9": 2
+              },
+              "assembly_instructions": [
+                "sb r4, __sys_wq_table, r4",
+                "jump .LBB0_9"
+              ],
+              "execution_bound": null
+            }
+          ]
+        },
+        "last_machine_flow": {
+          "anchors": [],
+          "loop_flow_facts": [],
+          "runtime_machine_block_bounds": [
+            {
+              "machine_block": "bb.9.bb35",
+              "bound": {
+                "lower": 0,
+                "upper": 0,
+                "exact": true,
+                "value": 0
+              }
+            },
+            {
+              "machine_block": "bb.3.bb15",
+              "bound": {
+                "lower": 14,
+                "upper": 14,
+                "exact": true,
+                "value": 14
+              }
+            },
+            {
+              "machine_block": "bb.4.bb21",
+              "bound": {
+                "lower": 1,
+                "upper": 1,
+                "exact": true,
+                "value": 1
+              }
+            }
+          ],
+          "machine_blocks": [
+            {
+              "function": "barrier_wait",
+              "key": "bb.0.bb",
+              "number": 0,
+              "label": "bb.0.bb",
+              "ir_block": "bb",
+              "successors": [
+                1,
+                6
+              ],
+              "instructions": 5,
+              "calls": [
+                "__atomic_acquire_retry"
+              ],
+              "edge_instruction_costs": {
+                "1": 5
+              },
+              "assembly_instructions": [
+                "lbs r1, r0, 3",
+                "acquire r1, 0, nz, .Ltmp1+0",
+                "lbu r3, r0, 1",
+                "lbu r2, r0, 0",
+                "jeq r3, 1, .LBB0_1"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.6.bb25",
+              "number": 6,
+              "label": "bb.6.bb25",
+              "ir_block": "bb25",
+              "successors": [
+                7,
+                8
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "7": 2
+              },
+              "assembly_instructions": [
+                "move r4, id",
+                "jeq r2, 255, .LBB0_7"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.8.bb29",
+              "number": 8,
+              "label": "bb.8.bb29",
+              "ir_block": "bb29",
+              "successors": [
+                9
+              ],
+              "instructions": 3,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "lbs r5, r2, __sys_wq_table",
+                "sb r4, __sys_wq_table, r5",
+                "sb r2, __sys_wq_table, r4"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.9.bb35",
+              "number": 9,
+              "label": "bb.9.bb35",
+              "ir_block": "bb35",
+              "successors": [],
+              "instructions": 6,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "sb r0, 0, r4",
+                "add r2, r3, -1",
+                "sb r0, 1, r2",
+                "release r1, 0, nz, .Ltmp10+1",
+                "stop false, 0x0",
+                "jump r23"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.1.bb9",
+              "number": 1,
+              "label": "bb.1.bb9",
+              "ir_block": "bb9",
+              "successors": [
+                2,
+                5
+              ],
+              "instructions": 1,
+              "calls": [],
+              "edge_instruction_costs": {
+                "5": 1
+              },
+              "assembly_instructions": [
+                "jeq r2, 255, .LBB0_5"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.2.bb10",
+              "number": 2,
+              "label": "bb.2.bb10",
+              "ir_block": "bb10",
+              "successors": [
+                3,
+                4
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "4": 2
+              },
+              "assembly_instructions": [
+                "lbu r3, r2, __sys_wq_table",
+                "jeq r3, r2, .LBB0_4"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.3.bb15",
+              "number": 3,
+              "label": "bb.3.bb15",
+              "ir_block": "bb15",
+              "successors": [
+                3,
+                4
+              ],
+              "instructions": 4,
+              "calls": [],
+              "edge_instruction_costs": {
+                "3": 4
+              },
+              "assembly_instructions": [
+                "resume r3, 0, nz, .Ltmp16+0",
+                "and r3, r3, 255",
+                "lbu r3, r3, __sys_wq_table",
+                "jneq r3, r2, .LBB0_3"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.4.bb21",
+              "number": 4,
+              "label": "bb.4.bb21",
+              "ir_block": "bb21",
+              "successors": [
+                5
+              ],
+              "instructions": 4,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "resume r2, 0, nz, .Ltmp21+0",
+                "sb r0, 0, 255",
+                "lbs r2, r0, 2",
+                "sb r0, 1, r2"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.5.bb24",
+              "number": 5,
+              "label": "bb.5.bb24",
+              "ir_block": "bb24",
+              "successors": [],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {},
+              "assembly_instructions": [
+                "release r1, 0, nz, .Ltmp24+1",
+                "jump r23"
+              ],
+              "execution_bound": null
+            },
+            {
+              "function": "barrier_wait",
+              "key": "bb.7.bb26",
+              "number": 7,
+              "label": "bb.7.bb26",
+              "ir_block": "bb26",
+              "successors": [
+                9
+              ],
+              "instructions": 2,
+              "calls": [],
+              "edge_instruction_costs": {
+                "9": 2
+              },
+              "assembly_instructions": [
+                "sb r4, __sys_wq_table, r4",
+                "jump .LBB0_9"
+              ],
+              "execution_bound": null
+            }
+          ]
+        }
+      },
+      "atomic_retry_semantics": {
+        "kind": "fair_round_robin_barrier_atomic_retry",
+        "assumption": "fair DPU revolver scheduling; stopped non-last participants no longer contend, and each remaining contender issues at most one failed acquire per instruction issued by the lock holder",
+        "participants": 16,
+        "contender_holder_pairs": 120,
+        "nonlast_holder_bound": {
+          "lower": 15.0,
+          "upper": 16.0,
+          "exact": false
+        }
+      }
+    }
+  ],
   "per_tasklet": [
     {
       "tid": 0,
@@ -239,6 +790,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 1,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -248,25 +800,14 @@
           "call_path": [
             [
               "main_kernel1",
-              1,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -783,6 +1324,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -792,25 +1334,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -1329,6 +1860,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -1338,25 +1870,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -1875,6 +2396,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -1884,25 +2406,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -2421,6 +2932,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -2430,25 +2942,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -2967,6 +3468,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -2976,25 +3478,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -3513,6 +4004,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -3522,25 +4014,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -4059,6 +4540,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -4068,25 +4550,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -4605,6 +5076,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -4614,25 +5086,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -5151,6 +5612,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -5160,25 +5622,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -5697,6 +6148,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -5706,25 +6158,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -6243,6 +6684,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -6252,25 +6694,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -6789,6 +7220,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -6798,25 +7230,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -7335,6 +7756,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -7344,25 +7766,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -7881,6 +8292,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -7890,25 +8302,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {
@@ -8427,6 +8828,7 @@
           "callee": "barrier_wait",
           "block": "bb4",
           "call_index": 0,
+          "stable_call_occurrence": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
@@ -8436,25 +8838,14 @@
           "call_path": [
             [
               "main_kernel1",
-              0,
               "bb4",
-              "barrier_wait"
+              "barrier_wait",
+              0
             ]
           ]
         }
       ],
-      "unexpanded_calls": [
-        {
-          "callee": "barrier_wait",
-          "call_bound": {
-            "lower": 1.0,
-            "upper": 1.0,
-            "exact": true,
-            "value": 1
-          },
-          "reason": "collective call counts are not equal exact integers across all tasklets"
-        }
-      ],
+      "unexpanded_calls": [],
       "machine": {
         "anchors": [
           {

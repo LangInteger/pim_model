@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "runtime-sync-expansion-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 8,
   "params": {
     "kernel": 0,
@@ -8,13 +8,11 @@
     "transfer_size": 2097152
   },
   "dynamic_instruction_bound": {
-    "lower": 3719621,
-    "upper": 3723705,
+    "lower": 3719764,
+    "upper": 3724303,
     "exact": false
   },
-  "unexpanded_callees": [
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",

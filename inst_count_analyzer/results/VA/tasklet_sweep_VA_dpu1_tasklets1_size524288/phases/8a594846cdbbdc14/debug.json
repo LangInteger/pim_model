@@ -125,7 +125,9 @@
                 6
               ],
               "instructions": 5,
-              "calls": [],
+              "calls": [
+                "__atomic_acquire_retry"
+              ],
               "edge_instruction_costs": {
                 "1": 5
               },
@@ -364,7 +366,9 @@
                 6
               ],
               "instructions": 5,
-              "calls": [],
+              "calls": [
+                "__atomic_acquire_retry"
+              ],
               "edge_instruction_costs": {
                 "1": 5
               },
@@ -561,16 +565,11 @@
         }
       },
       "atomic_retry_semantics": {
-        "kind": "fair_round_robin_atomic_retry",
-        "assumption": "fair DPU revolver scheduling; a runnable contender issues at most one failed acquire per instruction issued by the lock holder",
+        "kind": "fair_round_robin_barrier_atomic_retry",
+        "assumption": "fair DPU revolver scheduling; stopped non-last participants no longer contend, and each remaining contender issues at most one failed acquire per instruction issued by the lock holder",
         "participants": 1,
-        "successful_acquires": {
-          "lower": 1,
-          "upper": 1,
-          "exact": true,
-          "value": 1
-        },
-        "holder_instruction_bound": {
+        "contender_holder_pairs": 0,
+        "nonlast_holder_bound": {
           "lower": 15.0,
           "upper": 16.0,
           "exact": false

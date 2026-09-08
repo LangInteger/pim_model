@@ -1,6 +1,10 @@
-num_tasklets,static_instructions_lower,static_instructions_midpoint,static_instructions_upper,simulator_instructions,static_midpoint_minus_simulator,static_midpoint_error_percent,simulator_within_static_interval,unexpanded_callees,simulator_source
-1,2984034.0,2984049.0,2984064.0,3000673.0,-16624.0,-0.5540090506363072,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
-2,3008698.0,3010263.0,3011828.0,3051115.0,-40852.0,-1.3389203619004855,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
-4,3035498.0,3040417.0,3045336.0,3082044.0,-41627.0,-1.3506296470783674,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
-8,3039946.0,3046581.0,3053216.0,3093110.0,-46529.0,-1.5042788649611556,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
-16,3042698.0,3050269.0,3057840.0,3104550.0,-54281.0,-1.74843375046303,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+experiment,num_dpus,num_tasklets,static_instructions_lower,static_instructions_midpoint,static_instructions_upper,simulator_instructions,static_midpoint_minus_simulator,static_midpoint_error_percent,simulator_within_static_interval,unexpanded_callees,simulator_source
+tasklet_sweep,1,1,2984034.0,2984049.0,2984064.0,3000673.0,-16624.0,-0.5540090506363072,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+tasklet_sweep,1,2,3008698.0,3010263.0,3011828.0,3051115.0,-40852.0,-1.3389203619004855,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+tasklet_sweep,1,4,3035498.0,3040417.0,3045336.0,3082044.0,-41627.0,-1.3506296470783674,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+tasklet_sweep,1,8,3039946.0,3046581.0,3053216.0,3093110.0,-46529.0,-1.5042788649611556,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+tasklet_sweep,1,16,3042698.0,3050269.0,3057840.0,3104550.0,-54281.0,-1.74843375046303,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+dpu_sweep,1,16,12166538.0,12196189.0,12225840.0,12386982.0,-190793.0,-1.540270261149972,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+dpu_sweep,4,16,3042698.0,3050269.0,3057840.0,3104550.0,-54281.0,-1.74843375046303,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+dpu_sweep,16,16,761738.0,763789.0,765840.0,783942.0,-20153.0,-2.57072589553819,False,__atomic_acquire_retry;barrier_wait,aggregated_summary
+dpu_sweep,64,16,191498.0,192169.0,192840.0,203790.0,-11621.0,-5.702438785023799,False,__atomic_acquire_retry;barrier_wait,aggregated_summary

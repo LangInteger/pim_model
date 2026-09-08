@@ -865,6 +865,181 @@ def parse_annotated_assembly(
     return out
 
 
+def compare_machine_cfgs(
+    mir: dict[str, list[MachineBlock]],
+    assembly: dict[str, list[MachineBlock]],
+) -> dict:
+    """Describe and validate MIR-to-final-assembly machine-block mapping.
+
+    MIR supplies LLVM's explicit MachineBasicBlock successor relation.  The
+    annotated assembly supplies the post-macro-expansion MCInst count.  Block
+    numbers are the join key.  Missing blocks and different successor sets are
+    errors; differing IR provenance annotations are retained as warnings
+    because backend transformations may legitimately drop or duplicate them.
+    """
+    functions = []
+    error_count = 0
+    warning_count = 0
+
+    for function in sorted(set(mir) | set(assembly)):
+        mir_blocks = {block.number: block for block in mir.get(function, [])}
+        assembly_blocks = {
+            block.number: block for block in assembly.get(function, [])
+        }
+        block_rows = []
+        function_errors = 0
+        function_warnings = 0
+
+        for number in sorted(set(mir_blocks) | set(assembly_blocks)):
+            mir_block = mir_blocks.get(number)
+            assembly_block = assembly_blocks.get(number)
+            errors: list[dict[str, object]] = []
+            warnings: list[dict[str, object]] = []
+
+            if mir_block is None:
+                errors.append(
+                    {
+                        "code": "block_missing_in_mir",
+                        "message": f"bb.{number} exists only in annotated assembly",
+                    }
+                )
+            elif assembly_block is None:
+                errors.append(
+                    {
+                        "code": "block_missing_in_assembly",
+                        "message": f"bb.{number} exists only in late MIR",
+                    }
+                )
+            else:
+                mir_successors = sorted(set(mir_block.successors))
+                assembly_successors = sorted(set(assembly_block.successors))
+                if mir_successors != assembly_successors:
+                    errors.append(
+                        {
+                            "code": "successors_mismatch",
+                            "message": (
+                                f"bb.{number} successors differ: "
+                                f"MIR={mir_successors}, assembly={assembly_successors}"
+                            ),
+                        }
+                    )
+                if mir_block.ir_block != assembly_block.ir_block:
+                    warnings.append(
+                        {
+                            "code": "ir_block_annotation_mismatch",
+                            "message": (
+                                f"bb.{number} IR annotations differ: "
+                                f"MIR={mir_block.ir_block!r}, "
+                                f"assembly={assembly_block.ir_block!r}"
+                            ),
+                        }
+                    )
+
+            function_errors += len(errors)
+            function_warnings += len(warnings)
+            block_rows.append(
+                {
+                    "machine_block_number": number,
+                    "mapping_status": (
+                        "missing_in_mir"
+                        if mir_block is None
+                        else "missing_in_assembly"
+                        if assembly_block is None
+                        else "mapped"
+                    ),
+                    "mir": (
+                        {
+                            "label": mir_block.label,
+                            "ir_block": mir_block.ir_block,
+                            "successors": sorted(set(mir_block.successors)),
+                            "pre_expansion_instruction_count": mir_block.instructions,
+                        }
+                        if mir_block is not None
+                        else None
+                    ),
+                    "annotated_assembly": (
+                        {
+                            "label": assembly_block.label,
+                            "ir_block": assembly_block.ir_block,
+                            "successors": sorted(set(assembly_block.successors)),
+                            "emitted_mcinst_count": assembly_block.instructions,
+                        }
+                        if assembly_block is not None
+                        else None
+                    ),
+                    "errors": errors,
+                    "warnings": warnings,
+                }
+            )
+
+        error_count += function_errors
+        warning_count += function_warnings
+        functions.append(
+            {
+                "function": function,
+                "status": (
+                    "error"
+                    if function_errors
+                    else "match_with_warnings"
+                    if function_warnings
+                    else "match"
+                ),
+                "errors": function_errors,
+                "warnings": function_warnings,
+                "blocks": block_rows,
+            }
+        )
+
+    return {
+        "status": (
+            "error"
+            if error_count
+            else "match_with_warnings"
+            if warning_count
+            else "match"
+        ),
+        "join_key": "function name + machine block number (bb.N)",
+        "cfg_authority": "late MIR successors",
+        "instruction_count_source": "final annotated assembly MCInst stream",
+        "errors": error_count,
+        "warnings": warning_count,
+        "functions": functions,
+    }
+
+
+def merge_machine_cfgs(
+    mir: dict[str, list[MachineBlock]],
+    assembly: dict[str, list[MachineBlock]],
+    validation: dict,
+) -> dict[str, list[MachineBlock]]:
+    """Combine authoritative MIR edges with final emitted instruction data."""
+    if validation.get("status") == "error":
+        raise ValueError("cannot merge inconsistent MIR and assembly machine CFGs")
+
+    merged: dict[str, list[MachineBlock]] = {}
+    for function, assembly_blocks in assembly.items():
+        mir_blocks = {block.number: block for block in mir[function]}
+        merged[function] = [
+            MachineBlock(
+                function=block.function,
+                key=block.key,
+                number=block.number,
+                label=block.label,
+                ir_block=block.ir_block or mir_blocks[block.number].ir_block,
+                successors=sorted(set(mir_blocks[block.number].successors)),
+                instructions=block.instructions,
+                calls=list(block.calls),
+                edge_instruction_costs={
+                    successor: cost
+                    for successor, cost in block.edge_instruction_costs.items()
+                    if successor in mir_blocks[block.number].successors
+                },
+            )
+            for block in assembly_blocks
+        ]
+    return merged
+
+
 def solve_machine_total(
     blocks: list[MachineBlock],
     ir_bounds: dict[str, Bound],

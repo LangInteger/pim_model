@@ -33,10 +33,17 @@ def load_estimate_cost_module():
 
 class BenchmarkSettingTests(unittest.TestCase):
     def test_cache_requires_exact_summary_build_options(self):
-        cached = {"provenance": {"make_args": ["BL=10", "TYPE=INT32"]}}
+        cached = {
+            "provenance": {"make_args": ["BL=10", "TYPE=INT32"]},
+            "machine_cfg_validation_status": "match",
+        }
         self.assertTrue(cached_build_matches(cached, ["BL=10", "TYPE=INT32"]))
         self.assertFalse(cached_build_matches(cached, ["BL=8", "TYPE=INT32"]))
         self.assertFalse(cached_build_matches({}, ["BL=10"]))
+
+    def test_cache_without_machine_cfg_validation_is_stale(self):
+        cached = {"provenance": {"make_args": ["BL=10"]}}
+        self.assertFalse(cached_build_matches(cached, ["BL=10"]))
 
     def test_summary_bl_is_forced_into_compile_command(self):
         original = ["dpu-clang", "-O2", "-DBL=10", "dpu/task.c"]

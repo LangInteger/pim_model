@@ -7,6 +7,8 @@ from pathlib import Path
 from .generic_cfg import (
     IRBlock,
     MachineBlock,
+    compare_machine_cfgs,
+    merge_machine_cfgs,
     parse_annotated_assembly,
     parse_ir_cfg,
     parse_mir,
@@ -30,6 +32,7 @@ class AnalysisModule:
     annotated_assembly: Path
     cfg: dict[str, dict[str, IRBlock]]
     machine: dict[str, list[MachineBlock]]
+    machine_cfg_validation: dict
     emit_info: dict
 
     def artifact_dict(self) -> dict:
@@ -42,6 +45,7 @@ class AnalysisModule:
             "late_mir": str(self.late_mir),
             "annotated_assembly": str(self.annotated_assembly),
             "functions": sorted(set(self.cfg) & set(self.machine)),
+            "machine_cfg_validation_status": self.machine_cfg_validation["status"],
             "emit_info": self.emit_info,
         }
 
@@ -162,13 +166,26 @@ def _prepare_runtime_module(
     ir_names = {function: set(blocks) for function, blocks in cfg.items()}
     annotated_assembly = module_dir / "module.annotated.s"
     run_annotated_assembly(llc, named_ir, annotated_assembly)
+    mir_machine = parse_mir(late_mir.read_text(), ir_names)
+    assembly_machine = parse_annotated_assembly(
+        annotated_assembly.read_text(), ir_names
+    )
+    machine_cfg_validation = compare_machine_cfgs(
+        mir_machine, assembly_machine
+    )
     if translation_unit.name == "syslib_mul32":
         # __mulsi3 is handwritten cyclic-looking inline assembly contained in
         # one LLVM MBB.  Its source-level path expansion below needs the single
         # late-MIR INLINEASM placeholder rather than the flattened MCInst list.
-        machine = parse_mir(late_mir.read_text(), ir_names)
+        machine = mir_machine
     else:
-        machine = parse_annotated_assembly(annotated_assembly.read_text(), ir_names)
+        machine = (
+            assembly_machine
+            if machine_cfg_validation["status"] == "error"
+            else merge_machine_cfgs(
+                mir_machine, assembly_machine, machine_cfg_validation
+            )
+        )
 
     missing = translation_unit.requested_functions - (set(cfg) & set(machine))
     if missing:
@@ -188,6 +205,7 @@ def _prepare_runtime_module(
         annotated_assembly=annotated_assembly,
         cfg=cfg,
         machine=machine,
+        machine_cfg_validation=machine_cfg_validation,
         emit_info=emit_info,
     )
 

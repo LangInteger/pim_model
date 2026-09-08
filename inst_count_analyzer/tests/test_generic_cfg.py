@@ -12,6 +12,8 @@ from upmem_icount.generic_cfg import (  # noqa: E402
     Bound,
     LoopInfo,
     MachineBlock,
+    compare_machine_cfgs,
+    merge_machine_cfgs,
     parse_annotated_assembly,
     parse_lowered_callsites,
     solve_machine_total,
@@ -49,6 +51,83 @@ class MachineIrAnchoringTests(unittest.TestCase):
         )
         self.assertEqual(b_anchor["anchor_kind"], "machine_flow_only")
         self.assertIsNone(b_anchor["representative_machine_block"])
+
+
+class MachineCfgValidationTests(unittest.TestCase):
+    def test_records_block_mapping_and_matching_successors(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 3, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 2, []),
+            ]
+        }
+
+        report = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(report["status"], "match")
+        block = report["functions"][0]["blocks"][0]
+        self.assertEqual(block["mapping_status"], "mapped")
+        self.assertEqual(block["mir"]["successors"], [1])
+        self.assertEqual(block["annotated_assembly"]["emitted_mcinst_count"], 3)
+
+    def test_reports_missing_blocks_and_successor_mismatches(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [], 3, []),
+                MachineBlock("f", "bb.2", 2, "bb.2", None, [], 4, []),
+            ]
+        }
+
+        report = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(report["status"], "error")
+        codes = {
+            issue["code"]
+            for block in report["functions"][0]["blocks"]
+            for issue in block["errors"]
+        }
+        self.assertEqual(
+            codes,
+            {
+                "successors_mismatch",
+                "block_missing_in_assembly",
+                "block_missing_in_mir",
+            },
+        )
+
+    def test_merge_uses_mir_edges_and_assembly_instruction_counts(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0", 0, "bb.0", None, [1], 4, ["g"]),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 3, []),
+            ]
+        }
+        validation = compare_machine_cfgs(mir, assembly)
+
+        merged = merge_machine_cfgs(mir, assembly, validation)
+
+        self.assertEqual(merged["f"][0].successors, [1])
+        self.assertEqual(merged["f"][0].instructions, 4)
+        self.assertEqual(merged["f"][0].ir_block, "a")
+        self.assertEqual(merged["f"][0].calls, ["g"])
 
     def test_self_loop_uses_ir_execution_count_not_external_entry_count(self) -> None:
         blocks = [

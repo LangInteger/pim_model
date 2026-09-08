@@ -124,7 +124,11 @@ def phase_cache_key(
 
 
 def cached_build_matches(cached: dict[str, Any], make_args: list[str]) -> bool:
-    return cached.get("provenance", {}).get("make_args") == make_args
+    return (
+        cached.get("provenance", {}).get("make_args") == make_args
+        and cached.get("machine_cfg_validation_status")
+        in {"match", "match_with_warnings"}
+    )
 
 
 def add_bounds(bounds: list[dict[str, Any]]) -> dict[str, Any]:
@@ -244,9 +248,15 @@ def analyze_setting(
                 completed.stdout, encoding="utf-8"
             )
             if completed.returncode != 0:
+                validation_path = phase_output_dir / "machine_cfg_validation.json"
+                validation_note = (
+                    f"; Machine CFG diagnostics: {validation_path}"
+                    if validation_path.is_file()
+                    else ""
+                )
                 raise RuntimeError(
                     f"instruction analysis failed for {sid}, {phase.function}; "
-                    f"see {phase_work_dir / 'console.log'}"
+                    f"see {phase_work_dir / 'console.log'}{validation_note}"
                 )
             result_cache[cache_key] = json.loads(
                 phase_result_path.read_text(encoding="utf-8")
@@ -263,6 +273,9 @@ def analyze_setting(
                 ),
                 "bound": phase_result["dynamic_instruction_bound"],
                 "unexpanded_callees": phase_result.get("unexpanded_callees", []),
+                "machine_cfg_validation_status": phase_result.get(
+                    "machine_cfg_validation_status", "not_checked"
+                ),
                 "arguments_source": phase.arguments_source,
                 "result_path": str(phase_result_path.relative_to(output_dir)),
             }
@@ -283,6 +296,16 @@ def analyze_setting(
 
     lower = max(float(row["bound"]["lower"]) for row in per_dpu)
     upper = max(float(row["bound"]["upper"]) for row in per_dpu)
+    cfg_statuses = {
+        phase["machine_cfg_validation_status"]
+        for row in per_dpu
+        for phase in row["phases"]
+    }
+    cfg_status = (
+        "match_with_warnings"
+        if "match_with_warnings" in cfg_statuses
+        else "match"
+    )
     result = {
         "benchmark": benchmark,
         "tasklets": setting["num_tasklets"],
@@ -296,6 +319,7 @@ def analyze_setting(
             "setting_id": sid,
         },
         "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+        "machine_cfg_validation_status": cfg_status,
         "provenance": {
             "argument_source": "summary_csv_semantic_execution_inputs",
             "benchmark_source_dir": str((args.benchmark_root / benchmark).resolve()),
@@ -350,6 +374,9 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
                 "instruction_scope": result["instruction_scope"],
                 "unexpanded_callees": ";".join(result["unexpanded_callees"]),
                 "result_path": f"{match['setting_id']}/result.json",
+                "machine_cfg_validation_status": result[
+                    "machine_cfg_validation_status"
+                ],
             }
         )
     rows.sort(
@@ -366,6 +393,7 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
         "setting_id", "instructions_lower",
         "instructions_upper", "instructions_midpoint", "exact",
         "instruction_scope", "unexpanded_callees", "result_path",
+        "machine_cfg_validation_status",
     ]
     with path.open("w", newline="", encoding="utf-8") as output:
         writer = csv.DictWriter(output, fieldnames=fields, lineterminator="\n")

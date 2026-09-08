@@ -76,13 +76,24 @@ comparison with `cycles_max`:
 ```text
 inst_count_analyzer/results/<BENCHMARK>/instruction_counts.csv
 inst_count_analyzer/results/<BENCHMARK>/<setting-id>/result.json
+inst_count_analyzer/results/<BENCHMARK>/<setting-id>/phases/<key>/machine_cfg_validation.json
 ```
+
+Each phase also stores a Git-trackable Machine-CFG validation report. It maps
+every `function + bb.N` between late MIR and final annotated assembly, records
+both successor sets and the emitted MCInst count, and preserves missing-block,
+successor-mismatch, and IR-annotation diagnostics. Missing blocks or different
+successor sets fail the phase after writing the report. IR provenance-label
+differences are warnings because backend transformations may legitimately drop
+or duplicate those annotations. A result generated before this validation was
+added is treated as stale and is regenerated rather than silently skipped.
 
 Loops resolved by LLVM SCEV use their exact backedge counts. Source-derived
 finite caps are supplied only for SCEV-unknown, early-exit/data-dependent loops
 in BS, GEMV/MLP, and TRNS. These caps constrain CFG path optimization while
-instruction costs still come from the original late MIR machine blocks. TRNS's
-shared work queue is intentionally conservative until a collective work-
+machine-CFG edges come from late MIR and post-expansion instruction counts come
+from the final annotated assembly. TRNS's shared work queue is intentionally
+conservative until a collective work-
 distribution constraint is added.
 
 After generating the instruction summaries, regenerate every cost model with:

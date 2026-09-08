@@ -70,6 +70,9 @@ def compact_result(result: dict) -> dict:
             result.get("dynamic_instruction_bound", {})
         ),
         "unexpanded_callees": collect_unexpanded_callees(result),
+        "machine_cfg_validation_status": result.get("artifacts", {})
+        .get("machine_cfg_validation", {})
+        .get("status", "not_checked"),
     }
     if result.get("experiment_setting"):
         compact["experiment_setting"] = result["experiment_setting"]
@@ -185,6 +188,23 @@ def main(argv: list[str] | None = None) -> int:
             unknown_loop_backedge_uppers=unknown_loop_bounds,
         )
     except Exception as e:
+        cfg_validation = getattr(e, "machine_cfg_validation", None)
+        if cfg_validation is not None:
+            (result_dir / "machine_cfg_validation.json").write_text(
+                json.dumps(cfg_validation, indent=2) + "\n"
+            )
+            if a.debug:
+                (result_dir / "debug.json").write_text(
+                    json.dumps(
+                        {
+                            "status": "error",
+                            "error": str(e),
+                            "machine_cfg_validation": cfg_validation,
+                        },
+                        indent=2,
+                    )
+                    + "\n"
+                )
         print(f"error: {e}", file=sys.stderr)
         return 2
 
@@ -201,6 +221,11 @@ def main(argv: list[str] | None = None) -> int:
     result_path = Path(a.output).resolve() if a.output else result_dir / "result.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.write_text(json.dumps(compact_result(result), indent=2) + "\n")
+    cfg_validation = result.get("artifacts", {}).get("machine_cfg_validation")
+    if cfg_validation is not None:
+        (result_dir / "machine_cfg_validation.json").write_text(
+            json.dumps(cfg_validation, indent=2) + "\n"
+        )
     if a.debug:
         (result_dir / "debug.json").write_text(json.dumps(result, indent=2) + "\n")
 

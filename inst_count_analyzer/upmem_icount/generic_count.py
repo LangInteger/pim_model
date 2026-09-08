@@ -8,9 +8,12 @@ from pathlib import Path
 from .generic_cfg import (
     Bound,
     add_bounds,
+    compare_machine_cfgs,
+    merge_machine_cfgs,
     parse_annotated_assembly,
     parse_ir_cfg,
     parse_lowered_callsites,
+    parse_mir,
     resolve_callsite_integer_args,
     run_annotated_assembly,
     run_late_mir,
@@ -95,7 +98,20 @@ def _prepare_benchmark_module(
     ir_names = {function: set(blocks) for function, blocks in cfg.items()}
     annotated_assembly = work_dir / "kernel.annotated.s"
     run_annotated_assembly(llc, named_ir, annotated_assembly)
-    machine = parse_annotated_assembly(annotated_assembly.read_text(), ir_names)
+    mir_machine = parse_mir(late_mir.read_text(), ir_names)
+    assembly_machine = parse_annotated_assembly(
+        annotated_assembly.read_text(), ir_names
+    )
+    machine_cfg_validation = compare_machine_cfgs(
+        mir_machine, assembly_machine
+    )
+    machine = (
+        assembly_machine
+        if machine_cfg_validation["status"] == "error"
+        else merge_machine_cfgs(
+            mir_machine, assembly_machine, machine_cfg_validation
+        )
+    )
 
     return AnalysisModule(
         name="benchmark",
@@ -108,6 +124,7 @@ def _prepare_benchmark_module(
         annotated_assembly=annotated_assembly,
         cfg=cfg,
         machine=machine,
+        machine_cfg_validation=machine_cfg_validation,
         emit_info=emit_info,
     )
 
@@ -173,6 +190,37 @@ def generic_dynamic_instruction_count(
             )
         )
     function_index = build_function_index(modules)
+    machine_cfg_validation = {
+        "status": (
+            "error"
+            if any(
+                module.machine_cfg_validation["status"] == "error"
+                for module in modules
+            )
+            else "match_with_warnings"
+            if any(
+                module.machine_cfg_validation["status"] == "match_with_warnings"
+                for module in modules
+            )
+            else "match"
+        ),
+        "modules": [
+            {
+                "name": module.name,
+                "kind": module.kind,
+                "late_mir": str(module.late_mir),
+                "annotated_assembly": str(module.annotated_assembly),
+                **module.machine_cfg_validation,
+            }
+            for module in modules
+        ],
+    }
+    if machine_cfg_validation["status"] == "error":
+        error = RuntimeError(
+            "MIR and annotated-assembly Machine CFGs are inconsistent"
+        )
+        error.machine_cfg_validation = machine_cfg_validation
+        raise error
     if function not in function_index:
         raise RuntimeError(
             f"function {function!r} not found; available: {sorted(function_index)}"
@@ -472,6 +520,7 @@ def generic_dynamic_instruction_count(
         "per_tasklet": per_tid,
         "artifacts": {
             "modules": [module.artifact_dict() for module in modules],
+            "machine_cfg_validation": machine_cfg_validation,
             "function_index": {
                 name: owner.name for name, owner in sorted(function_index.items())
             },

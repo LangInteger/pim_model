@@ -4,7 +4,7 @@ import ast
 import re
 from pathlib import Path
 
-from .generic_cfg import Bound, add_bounds
+from .generic_cfg import Bound, MachineBlock, add_bounds, solve_machine_total
 
 
 COLLECTIVE_RUNTIME_PRIMITIVES = frozenset({"barrier_wait"})
@@ -158,3 +158,135 @@ def barrier_generation_bound(
     if participants < 1:
         raise ValueError("a barrier generation needs at least one participant")
     return add_bounds(scale_bound(nonlast_path, participants - 1), last_path)
+
+
+def _has_opcode(block: MachineBlock, opcode: str) -> bool:
+    return any(
+        instruction.split(None, 1)[0] == opcode
+        for instruction in block.assembly_instructions
+        if instruction
+    )
+
+
+def _cyclic_machine_blocks(blocks: list[MachineBlock]) -> set[int]:
+    by_number = {block.number: block for block in blocks}
+
+    def reaches_self(start: int) -> bool:
+        pending = list(by_number[start].successors)
+        seen: set[int] = set()
+        while pending:
+            number = pending.pop()
+            if number == start:
+                return True
+            if number in seen or number not in by_number:
+                continue
+            seen.add(number)
+            pending.extend(by_number[number].successors)
+        return False
+
+    return {block.number for block in blocks if reaches_self(block.number)}
+
+
+def barrier_runtime_path_bounds(
+    blocks: list[MachineBlock], participants: int
+) -> tuple[Bound, Bound, dict]:
+    """Extract non-last and last ``barrier_wait`` paths from its Machine CFG.
+
+    The SDK implementation has one stop path for each non-last participant.
+    The last participant resumes the circular wait queue: one final resume and
+    ``participants - 2`` executions of the cyclic resume block.  We constrain
+    those architectural operations in the ordinary machine-flow LP, so all
+    instruction costs still come from final emitted MCInsts.
+    """
+    if participants < 1:
+        raise ValueError("a barrier generation needs at least one participant")
+    stop_blocks = [block for block in blocks if _has_opcode(block, "stop")]
+    resume_blocks = [block for block in blocks if _has_opcode(block, "resume")]
+    if len(stop_blocks) != 1:
+        raise ValueError(
+            "barrier_wait Machine CFG must contain exactly one stop block"
+        )
+
+    cyclic = _cyclic_machine_blocks(blocks)
+    cyclic_resume = [block for block in resume_blocks if block.number in cyclic]
+    final_resume = [block for block in resume_blocks if block.number not in cyclic]
+    if participants > 1 and (len(cyclic_resume) != 1 or len(final_resume) != 1):
+        raise ValueError(
+            "barrier_wait Machine CFG must contain one cyclic and one final "
+            "resume block"
+        )
+
+    nonlast_constraints = {
+        stop_blocks[0].number: Bound(1, 1),
+        **{block.number: Bound(0, 0) for block in resume_blocks},
+    }
+    nonlast, _, nonlast_meta = solve_machine_total(
+        blocks,
+        {},
+        bound_block_numbers=set(),
+        machine_block_bounds=nonlast_constraints,
+    )
+
+    last_constraints = {stop_blocks[0].number: Bound(0, 0)}
+    for block in resume_blocks:
+        executions = (
+            participants - 2
+            if block.number in cyclic
+            else 1
+        ) if participants > 1 else 0
+        last_constraints[block.number] = Bound(executions, executions)
+    last, _, last_meta = solve_machine_total(
+        blocks,
+        {},
+        bound_block_numbers=set(),
+        machine_block_bounds=last_constraints,
+    )
+    if nonlast.lower is None or nonlast.upper is None:
+        raise ValueError("non-last barrier path is infeasible or unbounded")
+    if last.lower is None or last.upper is None:
+        raise ValueError("last barrier path is infeasible or unbounded")
+
+    return nonlast, last, {
+        "kind": "barrier_generation_machine_cfg",
+        "participants": participants,
+        "stop_blocks": [block.key for block in stop_blocks],
+        "cyclic_resume_blocks": [block.key for block in cyclic_resume],
+        "final_resume_blocks": [block.key for block in final_resume],
+        "nonlast_machine_flow": nonlast_meta,
+        "last_machine_flow": last_meta,
+    }
+
+
+def fair_round_robin_retry_bound(
+    successful_acquires: Bound,
+    holder_instruction_bound: Bound,
+    participants: int,
+) -> tuple[Bound, dict]:
+    """Bound failed acquire attempts under the DPU revolver scheduler.
+
+    Between two instructions issued by a lock holder, every other runnable
+    tasklet can issue at most one attempt.  Charging every instruction in the
+    enclosing lock-holding routine (including instructions outside the actual
+    critical section) therefore gives a conservative upper bound.  The lower
+    bound is zero because an acquire may succeed without contention.
+    """
+    if participants < 1:
+        raise ValueError("participants must be positive")
+    upper = None
+    if successful_acquires.upper is not None and holder_instruction_bound.upper is not None:
+        upper = (
+            successful_acquires.upper
+            * max(participants - 1, 0)
+            * holder_instruction_bound.upper
+        )
+    bound = Bound(0.0, upper)
+    return bound, {
+        "kind": "fair_round_robin_atomic_retry",
+        "assumption": (
+            "fair DPU revolver scheduling; a runnable contender issues at most "
+            "one failed acquire per instruction issued by the lock holder"
+        ),
+        "participants": participants,
+        "successful_acquires": successful_acquires.to_dict(),
+        "holder_instruction_bound": holder_instruction_bound.to_dict(),
+    }

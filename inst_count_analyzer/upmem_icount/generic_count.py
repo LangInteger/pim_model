@@ -29,8 +29,12 @@ from .runtime import (
     prepare_runtime_modules,
 )
 from .runtime_semantics import (
+    barrier_generation_bound,
+    barrier_runtime_path_bounds,
+    fair_round_robin_retry_bound,
     is_collective_runtime_primitive,
     runtime_function_instruction_bound,
+    scale_bound,
 )
 from .source_loop_semantics import (
     source_loop_backedge_bounds,
@@ -230,6 +234,7 @@ def generic_dynamic_instruction_count(
     total_direct = Bound(0.0, 0.0)
     total_expanded = Bound(0.0, 0.0)
     per_tid = []
+    collective_calls_by_tid: list[tuple[int, list[dict]]] = []
 
     for tid in range(tasklets):
         tid_dir = work_dir / "analysis" / f"tid{tid}"
@@ -249,6 +254,7 @@ def generic_dynamic_instruction_count(
                     "direct": Bound(None, None),
                     "expanded": Bound(None, None),
                     "expanded_calls": [],
+                    "collective_calls": [],
                     "unexpanded_calls": [
                         {"callee": fn, "reason": "recursive call cycle"}
                     ],
@@ -261,6 +267,7 @@ def generic_dynamic_instruction_count(
                     "direct": Bound(None, None),
                     "expanded": Bound(None, None),
                     "expanded_calls": [],
+                    "collective_calls": [],
                     "unexpanded_calls": [
                         {"callee": fn, "reason": "no indexed translation unit"}
                     ],
@@ -318,26 +325,8 @@ def generic_dynamic_instruction_count(
             )
             expanded = direct
             expanded_calls = []
+            collective_calls = []
             unexpanded_calls = []
-
-            for block in owner.machine[fn]:
-                if "__atomic_acquire_retry" not in block.calls:
-                    continue
-                block_bound = machine_bounds.get(block.key, Bound(None, None))
-                if block_bound.upper is not None and block_bound.upper <= 0:
-                    continue
-                unexpanded_calls.append(
-                    {
-                        "callee": "__atomic_acquire_retry",
-                        "block": block.key,
-                        "call_bound": block_bound.to_dict(),
-                        "reason": (
-                            "atomic acquire retry count depends on contention and "
-                            "cross-tasklet scheduling; the successful acquire is "
-                            "counted once but failed retries are excluded"
-                        ),
-                    }
-                )
 
             for call_index, call in enumerate(ana["callsites"].get(fn, [])):
                 if call.callee.startswith("llvm."):
@@ -346,15 +335,13 @@ def generic_dynamic_instruction_count(
                 if call_bound.upper is not None and call_bound.upper <= 0:
                     continue
                 if is_collective_runtime_primitive(call.callee):
-                    unexpanded_calls.append(
+                    collective_calls.append(
                         {
                             "callee": call.callee,
                             "block": call.block,
-                            "call_bound": call_bound.to_dict(),
-                            "reason": (
-                                "collective runtime primitive requires generation-level "
-                                "semantics; ordinary per-tasklet expansion is disabled"
-                            ),
+                            "call_index": call_index,
+                            "call_bound": call_bound,
+                            "call_path": [(fn, call_index, call.block, call.callee)],
                         }
                     )
                     continue
@@ -390,6 +377,18 @@ def generic_dynamic_instruction_count(
                         "callee_unexpanded_calls": _descendant_unexpanded_calls(child),
                     }
                 )
+                for nested in child.get("collective_calls", []):
+                    collective_calls.append(
+                        {
+                            **nested,
+                            "call_bound": _scale_bounds(
+                                call_bound, nested["call_bound"]
+                            ),
+                            "call_path": [
+                                (fn, call_index, call.block, call.callee)
+                            ] + nested["call_path"],
+                        }
+                    )
 
             # Some target helper calls are introduced only during instruction
             # selection and therefore have no LLVM ``call`` instruction.  Use
@@ -436,6 +435,59 @@ def generic_dynamic_instruction_count(
                         "callee_unexpanded_calls": _descendant_unexpanded_calls(child),
                     }
                 )
+                for nested in child.get("collective_calls", []):
+                    collective_calls.append(
+                        {
+                            **nested,
+                            "call_bound": _scale_bounds(
+                                call_bound, nested["call_bound"]
+                            ),
+                            "call_path": [
+                                (fn, call_index, call.block, call.callee)
+                            ] + nested["call_path"],
+                        }
+                    )
+
+            # ``acquire`` already contributes its successful execution to the
+            # machine count.  Its local-label failure edge is invisible to the
+            # Machine CFG, so expand that edge separately for the bounded SDK
+            # allocator routines.  The whole callee summary is a conservative
+            # over-approximation of the shorter lock-holding region.
+            for block in owner.machine[fn]:
+                if "__atomic_acquire_retry" not in block.calls:
+                    continue
+                block_bound = machine_bounds.get(block.key, Bound(None, None))
+                if block_bound.upper is not None and block_bound.upper <= 0:
+                    continue
+                if owner.kind == "runtime" and fn in {"mem_alloc", "mem_reset"}:
+                    retry, retry_semantics = fair_round_robin_retry_bound(
+                        block_bound, expanded, tasklets
+                    )
+                    expanded = add_bounds(expanded, retry)
+                    expanded_calls.append(
+                        {
+                            "callee": "__atomic_acquire_retry",
+                            "block": block.key,
+                            "call_bound": block_bound.to_dict(),
+                            "callee_direct_bound_per_call": {"lower": 0, "upper": 1},
+                            "callee_expanded_bound_per_call": retry.to_dict(),
+                            "contribution": retry.to_dict(),
+                            "runtime_cost_semantics": retry_semantics,
+                            "callee_unexpanded_calls": [],
+                        }
+                    )
+                else:
+                    unexpanded_calls.append(
+                        {
+                            "callee": "__atomic_acquire_retry",
+                            "block": block.key,
+                            "call_bound": block_bound.to_dict(),
+                            "reason": (
+                                "atomic acquire is outside a registered non-blocking "
+                                "SDK lock-holding routine"
+                            ),
+                        }
+                    )
 
             result = {
                 "function": fn,
@@ -449,6 +501,7 @@ def generic_dynamic_instruction_count(
                 "runtime_cost_semantics": runtime_cost_semantics,
                 "analysis": ana,
                 "expanded_calls": expanded_calls,
+                "collective_calls": collective_calls,
                 "unexpanded_calls": unexpanded_calls,
             }
             cache[key] = result
@@ -458,6 +511,7 @@ def generic_dynamic_instruction_count(
         root = summarize(function, {})
         total_direct = add_bounds(total_direct, root["direct"])
         total_expanded = add_bounds(total_expanded, root["expanded"])
+        collective_calls_by_tid.append((tid, root["collective_calls"]))
 
         per_tid.append(
             {
@@ -487,9 +541,99 @@ def generic_dynamic_instruction_count(
                     "replacements": root["analysis"].get("replacements", {}),
                 },
                 "expanded_calls": root["expanded_calls"],
+                "collective_calls_deferred_to_generation_scope": [
+                    {
+                        **call,
+                        "call_bound": call["call_bound"].to_dict(),
+                        "call_path": [list(step) for step in call["call_path"]],
+                    }
+                    for call in root["collective_calls"]
+                ],
                 "unexpanded_calls": root["unexpanded_calls"],
                 "machine": root["machine_meta"],
                 "runtime_cost_semantics": root["runtime_cost_semantics"],
+            }
+        )
+
+    # Aggregate collective calls only after every tasklet has been analyzed.
+    # A per-tasklet summary cannot express the invariant that exactly one
+    # participant takes the last-arrival barrier path.
+    collective_expansions = []
+    grouped_collectives: dict[str, list[tuple[int, dict]]] = {}
+    for tid, calls in collective_calls_by_tid:
+        for call in calls:
+            key = json.dumps(call["call_path"], separators=(",", ":"))
+            grouped_collectives.setdefault(key, []).append((tid, call))
+
+    for entries in grouped_collectives.values():
+        sample = entries[0][1]
+        bounds = [entry[1]["call_bound"] for entry in entries]
+        complete = {entry[0] for entry in entries} == set(range(tasklets))
+        exact_counts = [
+            round(bound.lower)
+            for bound in bounds
+            if bound.exact and bound.lower is not None
+        ]
+        matched = (
+            complete
+            and len(exact_counts) == tasklets
+            and len(set(exact_counts)) == 1
+            and exact_counts[0] >= 0
+        )
+        if sample["callee"] != "barrier_wait" or not matched:
+            reason = (
+                "collective call counts are not equal exact integers across all tasklets"
+            )
+            for tid, _ in entries:
+                per_tid[tid]["unexpanded_calls"].append(
+                    {
+                        "callee": sample["callee"],
+                        "call_bound": bounds[0].to_dict(),
+                        "reason": reason,
+                    }
+                )
+            continue
+
+        generations = exact_counts[0]
+        owner = function_index.get("barrier_wait")
+        if owner is None:
+            for tid, _ in entries:
+                per_tid[tid]["unexpanded_calls"].append(
+                    {
+                        "callee": "barrier_wait",
+                        "reason": "no indexed translation unit",
+                    }
+                )
+            continue
+        nonlast, last, path_semantics = barrier_runtime_path_bounds(
+            owner.machine["barrier_wait"], tasklets
+        )
+        one_generation = barrier_generation_bound(tasklets, nonlast, last)
+        static_contribution = scale_bound(one_generation, generations)
+
+        # All T successful acquires are charged in the path costs above.  Add
+        # only the failed local-label retries.  Using the non-last path as the
+        # holder bound is conservative; the last tasklet has no contenders.
+        retry_per_generation, retry_semantics = fair_round_robin_retry_bound(
+            Bound(tasklets, tasklets), nonlast, tasklets
+        )
+        retry_contribution = scale_bound(retry_per_generation, generations)
+        contribution = add_bounds(static_contribution, retry_contribution)
+        total_expanded = add_bounds(total_expanded, contribution)
+        collective_expansions.append(
+            {
+                "callee": "barrier_wait",
+                "call_path": [list(step) for step in sample["call_path"]],
+                "participants": tasklets,
+                "generations": generations,
+                "nonlast_path_per_call": nonlast.to_dict(),
+                "last_path_per_call": last.to_dict(),
+                "static_generation_bound": one_generation.to_dict(),
+                "static_contribution": static_contribution.to_dict(),
+                "atomic_retry_contribution": retry_contribution.to_dict(),
+                "contribution": contribution.to_dict(),
+                "path_semantics": path_semantics,
+                "atomic_retry_semantics": retry_semantics,
             }
         )
 
@@ -516,12 +660,15 @@ def generic_dynamic_instruction_count(
             "and exit flows only for verified single-entry natural loops. "
             "TRNS phase 2 uses an amortized per-tasklet partition of its finite, "
             "atomically distributed tile domain to bound total DPU work without "
-            "multiplying nested data-dependent loops. Collective runtime primitives "
-            "and failed atomic-acquire retries remain explicitly unexpanded."
+            "multiplying nested data-dependent loops. Complete barrier generations "
+            "are composed from T-1 non-last paths and one last/resume path. Failed "
+            "SDK allocator and barrier acquire attempts are bounded under the explicit "
+            "fair DPU revolver-scheduling assumption."
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),
         "dynamic_instruction_bound": total_expanded.to_dict(),
         "analysis_schema_version": ANALYSIS_SCHEMA_VERSION,
+        "collective_expansions": collective_expansions,
         "per_tasklet": per_tid,
         "artifacts": {
             "modules": [module.artifact_dict() for module in modules],

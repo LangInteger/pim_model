@@ -1,3 +1,3 @@
 """Version identifiers for persisted analyzer results."""
 
-ANALYSIS_SCHEMA_VERSION = "machine-loop-flow-v1"
+ANALYSIS_SCHEMA_VERSION = "runtime-sync-expansion-v1"

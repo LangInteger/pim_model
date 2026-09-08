@@ -84,6 +84,7 @@ DEFAULT_RUNTIME_FUNCTIONS = frozenset(
     {
         "mem_alloc",
         "mem_reset",
+        "barrier_wait",
         "handshake_notify",
         "handshake_wait_for",
         "__mulsi3",

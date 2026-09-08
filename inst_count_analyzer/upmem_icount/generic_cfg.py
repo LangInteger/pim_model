@@ -644,6 +644,11 @@ class MachineBlock:
     instructions: int
     calls: list[str]
     edge_instruction_costs: dict[int, int] = field(default_factory=dict)
+    # Final post-macro-expansion assembly instructions.  MIR-only callers may
+    # leave this empty.  Runtime semantics use it to identify architectural
+    # synchronization operations such as stop/resume without guessing from
+    # source basic-block names.
+    assembly_instructions: list[str] = field(default_factory=list)
 
 
 def run_late_mir(llc: str, named_ir: Path, out_path: Path) -> None:
@@ -847,6 +852,7 @@ def parse_annotated_assembly(
             instruction = raw.split("//", 1)[0].strip()
             if instruction:
                 instructions_by_block[current.number].append(instruction)
+                current.assembly_instructions.append(instruction)
                 current.instructions += 1
                 if instruction.startswith("acquire ") and re.search(
                     r",\s*(?:nz|z)\s*,\s*\.Ltmp\d+\s*$", instruction
@@ -1034,6 +1040,7 @@ def merge_machine_cfgs(
                     for successor, cost in block.edge_instruction_costs.items()
                     if successor in mir_blocks[block.number].successors
                 },
+                assembly_instructions=list(block.assembly_instructions),
             )
             for block in assembly_blocks
         ]
@@ -1045,6 +1052,7 @@ def solve_machine_total(
     ir_bounds: dict[str, Bound],
     bound_block_numbers: set[int] | None = None,
     ir_loops: list[LoopInfo] | None = None,
+    machine_block_bounds: dict[int, Bound] | None = None,
 ) -> tuple[Bound,dict[str,Bound],dict]:
     if not blocks: return Bound(None,None),{}, {'reason':'no machine blocks'}
     nums=[b.number for b in blocks]; bynum={b.number:b for b in blocks}; entry=blocks[0].number
@@ -1347,6 +1355,27 @@ def solve_machine_total(
         })
         loop_flow_facts.append(fact)
 
+    # Runtime collective semantics occasionally know the execution count of a
+    # target machine block more precisely than source/IR analysis does.  For
+    # example, a complete barrier generation executes the stop path T-1 times
+    # and the final resume-loop T-2 times.  Keep these constraints explicit in
+    # the same flow LP instead of replacing CFG-derived instruction costs with
+    # handwritten constants.
+    applied_machine_block_bounds = []
+    for number, bound in (machine_block_bounds or {}).items():
+        if number not in xi:
+            raise ValueError(f"unknown machine block bb.{number}")
+        if bound.lower is not None:
+            row=np.zeros(nvar); row[xi[number]]=-1
+            ub(row,-bound.lower)
+        if bound.upper is not None:
+            row=np.zeros(nvar); row[xi[number]]=1
+            ub(row,bound.upper)
+        applied_machine_block_bounds.append({
+            'machine_block': bynum[number].label,
+            'bound': bound.to_dict(),
+        })
+
     bounds=[(0,None)]*nvar
     AeqN=np.array(Aeq) if Aeq else None;beqN=np.array(beq) if beq else None
     AubN=np.array(Aub) if Aub else None;bubN=np.array(bub) if bub else None
@@ -1378,6 +1407,7 @@ def solve_machine_total(
     return total,block_bounds,{
         'anchors':anchors,
         'loop_flow_facts':loop_flow_facts,
+        'runtime_machine_block_bounds':applied_machine_block_bounds,
         'machine_blocks':[
             {
                 **asdict(b),

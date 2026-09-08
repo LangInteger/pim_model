@@ -147,13 +147,23 @@ benchmark or SDK runtime translation unit retains its own optimized LLVM IR and
 late MIR; only the analysis summaries cross module boundaries. Constant integer
 arguments proven by the static analysis are propagated into callee summaries.
 
-`barrier_wait` is not treated as an ordinary per-tasklet call. Its eventual
-generation-level rule is `(T - 1) * C_nonlast + C_last`, where both path costs
-must first be derived from the independently compiled barrier CFG/MIR. Until
-that path extraction is implemented, it remains explicitly unresolved. Other
-runtime/SDK callees without a registered translation unit are also unresolved.
-LLVM intrinsics already lowered into caller machine blocks are not counted as
-missing callees.
+`barrier_wait` is not treated as an ordinary per-tasklet call. The analyzer
+extracts its stop path and bounded resume-loop path from the independently
+compiled runtime Machine CFG, then composes each complete generation as
+`(T - 1) * C_nonlast + C_last`. This preserves the invariant that exactly one
+participant takes the last-arrival path.
+
+The successful execution of each SDK allocator/barrier `acquire` instruction
+is already present in the emitted MCInst count. Failed local-label retries are
+added as a `0..U` interval under an explicit fair DPU revolver-scheduling
+assumption: between two instructions issued by the lock holder, each other
+runnable contender can issue at most one failed acquire. The whole statically
+bounded holder routine/path is used in place of its shorter critical section,
+so `U` is conservative. Atomic sections outside the registered non-blocking
+SDK routines remain unresolved rather than silently receiving this assumption.
+Other runtime/SDK callees without a registered translation unit are likewise
+unresolved. LLVM intrinsics already lowered into caller machine blocks are not
+counted as missing callees.
 
 ## Tests
 

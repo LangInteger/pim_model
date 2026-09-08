@@ -20,6 +20,9 @@ from upmem_icount.generic_cfg import (  # noqa: E402
 )
 from upmem_icount.runtime_semantics import (  # noqa: E402
     _inline_asm_path_bound,
+    barrier_generation_bound,
+    barrier_runtime_path_bounds,
+    fair_round_robin_retry_bound,
     runtime_function_instruction_bound,
 )
 from upmem_icount.generic_count import _descendant_unexpanded_calls  # noqa: E402
@@ -374,6 +377,63 @@ bb:
             ],
         }
         self.assertEqual(_descendant_unexpanded_calls(summary), [retry])
+
+
+class RuntimeSynchronizationSemanticsTests(unittest.TestCase):
+    @staticmethod
+    def barrier_blocks() -> list[MachineBlock]:
+        return [
+            MachineBlock(
+                "barrier_wait", "bb.0", 0, "bb.0", None, [1, 2], 2, [],
+                assembly_instructions=["acquire r1, 0, nz, .Ltmp1", "jeq r3, 1, .LBB0_2"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.1", 1, "bb.1", None, [], 3, [],
+                assembly_instructions=["release r1, 0", "stop false, 0", "jump r23"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.2", 2, "bb.2", None, [5, 6], 1, [],
+                assembly_instructions=["jeq r2, 255, .LBB0_5"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.3", 3, "bb.3", None, [3, 4], 4, [],
+                assembly_instructions=["resume r3, 0", "and r3, r3, 255", "lbu r3, r3, table", "jneq r3, r2, .LBB0_3"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.4", 4, "bb.4", None, [5], 1, [],
+                assembly_instructions=["resume r2, 0"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.5", 5, "bb.5", None, [], 2, [],
+                assembly_instructions=["release r1, 0", "jump r23"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.6", 6, "bb.6", None, [3, 4], 2, [],
+                assembly_instructions=["lbu r3, r2, table", "jeq r3, r2, .LBB0_4"],
+            ),
+        ]
+
+    def test_barrier_paths_are_constrained_at_generation_scope(self) -> None:
+        nonlast, last, metadata = barrier_runtime_path_bounds(
+            self.barrier_blocks(), 4
+        )
+        self.assertEqual(nonlast, Bound(5, 5))
+        self.assertEqual(last, Bound(16, 16))
+        self.assertEqual(barrier_generation_bound(4, nonlast, last), Bound(31, 31))
+        self.assertEqual(metadata["participants"], 4)
+
+    def test_single_participant_barrier_uses_empty_queue_path(self) -> None:
+        nonlast, last, _ = barrier_runtime_path_bounds(self.barrier_blocks(), 1)
+        self.assertEqual(nonlast, Bound(5, 5))
+        self.assertEqual(last, Bound(5, 5))
+        self.assertEqual(barrier_generation_bound(1, nonlast, last), Bound(5, 5))
+
+    def test_atomic_retry_bound_preserves_zero_contention_lower(self) -> None:
+        retry, metadata = fair_round_robin_retry_bound(
+            Bound(2, 2), Bound(11, 17), 4
+        )
+        self.assertEqual(retry, Bound(0, 102))
+        self.assertEqual(metadata["participants"], 4)
 
 
 if __name__ == "__main__":

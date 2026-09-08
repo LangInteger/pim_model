@@ -339,7 +339,7 @@ def analyze_setting(
     }
     output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"DONE {sid}: {clean_number(lower)}..{clean_number(upper)}")
-    unexpected = all_unexpanded - {"barrier_wait"}
+    unexpected = all_unexpanded
     if unexpected:
         print(
             f"WARNING {sid}: unresolved non-collective callees: "

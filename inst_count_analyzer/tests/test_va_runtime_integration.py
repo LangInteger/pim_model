@@ -25,7 +25,7 @@ class VaRuntimeExpansionTests(unittest.TestCase):
         os.environ.get("UPMEM_ICOUNT_RUN_INTEGRATION") == "1",
         "set UPMEM_ICOUNT_RUN_INTEGRATION=1 on Linux to run the UPMEM toolchain",
     )
-    def test_alloc_expansion_moves_current_analysis_toward_simulator(self) -> None:
+    def test_runtime_sync_expansion_bounds_simulator(self) -> None:
         # Delay the numerical-analysis import so baseline-only tests remain
         # runnable without numpy/scipy or the Linux UPMEM SDK.
         import sys
@@ -77,7 +77,13 @@ class VaRuntimeExpansionTests(unittest.TestCase):
             abs(SIMULATOR_INSTRUCTIONS - new_midpoint),
             abs(SIMULATOR_INSTRUCTIONS - old_midpoint),
         )
-        self.assertEqual(collect_unexpanded_callees(after), ["barrier_wait"])
+        self.assertLessEqual(after_bound["lower"], SIMULATOR_INSTRUCTIONS)
+        self.assertGreaterEqual(after_bound["upper"], SIMULATOR_INSTRUCTIONS)
+        self.assertEqual(collect_unexpanded_callees(after), [])
+        self.assertEqual(
+            [entry["callee"] for entry in after["collective_expansions"]],
+            ["barrier_wait"],
+        )
 
 
 if __name__ == "__main__":

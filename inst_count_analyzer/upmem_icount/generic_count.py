@@ -30,6 +30,7 @@ from .runtime import (
 )
 from .runtime_semantics import (
     barrier_generation_bound,
+    barrier_generation_retry_bound,
     barrier_runtime_path_bounds,
     fair_round_robin_retry_bound,
     is_collective_runtime_primitive,
@@ -468,9 +469,20 @@ def generic_dynamic_instruction_count(
                         {
                             "callee": "__atomic_acquire_retry",
                             "block": block.key,
-                            "call_bound": block_bound.to_dict(),
-                            "callee_direct_bound_per_call": {"lower": 0, "upper": 1},
-                            "callee_expanded_bound_per_call": retry.to_dict(),
+                            "successful_acquire_bound": block_bound.to_dict(),
+                            "call_bound": retry.to_dict(),
+                            "callee_direct_bound_per_call": {
+                                "lower": 1,
+                                "upper": 1,
+                                "exact": True,
+                                "value": 1,
+                            },
+                            "callee_expanded_bound_per_call": {
+                                "lower": 1,
+                                "upper": 1,
+                                "exact": True,
+                                "value": 1,
+                            },
                             "contribution": retry.to_dict(),
                             "runtime_cost_semantics": retry_semantics,
                             "callee_unexpanded_calls": [],
@@ -614,8 +626,8 @@ def generic_dynamic_instruction_count(
         # All T successful acquires are charged in the path costs above.  Add
         # only the failed local-label retries.  Using the non-last path as the
         # holder bound is conservative; the last tasklet has no contenders.
-        retry_per_generation, retry_semantics = fair_round_robin_retry_bound(
-            Bound(tasklets, tasklets), nonlast, tasklets
+        retry_per_generation, retry_semantics = barrier_generation_retry_bound(
+            nonlast, tasklets
         )
         retry_contribution = scale_bound(retry_per_generation, generations)
         contribution = add_bounds(static_contribution, retry_contribution)

@@ -21,6 +21,7 @@ from upmem_icount.generic_cfg import (  # noqa: E402
 from upmem_icount.runtime_semantics import (  # noqa: E402
     _inline_asm_path_bound,
     barrier_generation_bound,
+    barrier_generation_retry_bound,
     barrier_runtime_path_bounds,
     fair_round_robin_retry_bound,
     runtime_function_instruction_bound,
@@ -289,11 +290,11 @@ f:                                      // @f
 
     def test_exposes_atomic_acquire_retry_as_collective_cost(self) -> None:
         assembly = r"""
-        .type lock,@function
+.type lock,@function
 lock:                                   // @lock
 // %bb.0: // %entry
 .Ltmp1:
-        acquire zero, lock_bit, nz, .Ltmp1 // <MCInst #1 ACQUIRErici>
+        acquire zero, lock_bit, nz, .Ltmp1+0 // <MCInst #1 ACQUIRErici>
         jump r23 // <MCInst #2 JUMPr>
         .size lock, .-lock
 """
@@ -359,6 +360,14 @@ bb:
             ANALYZER_ROOT.parent
             / "sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c"
         )
+        if not source.is_file():
+            # The LoCaLUT SDK is an optional (and platform-specific) submodule.
+            # The checked-in uPIMulator SDK mirror contains the same runtime
+            # source and keeps this source-parser unit test runnable on macOS.
+            source = (
+                ANALYZER_ROOT.parent
+                / "uPIMulator/golang/uPIMulator/sdk/syslib/mul32.c"
+            )
         bound = _inline_asm_path_bound(source, "__mulsi3")
         self.assertEqual(bound, Bound(6, 37))
         adjusted, provenance = runtime_function_instruction_bound(
@@ -434,6 +443,11 @@ class RuntimeSynchronizationSemanticsTests(unittest.TestCase):
         )
         self.assertEqual(retry, Bound(0, 102))
         self.assertEqual(metadata["participants"], 4)
+
+    def test_barrier_retry_bound_removes_stopped_contenders(self) -> None:
+        retry, metadata = barrier_generation_retry_bound(Bound(15, 16), 4)
+        self.assertEqual(retry, Bound(0, 96))
+        self.assertEqual(metadata["contender_holder_pairs"], 6)
 
 
 if __name__ == "__main__":

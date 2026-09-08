@@ -159,7 +159,9 @@ added as a `0..U` interval under an explicit fair DPU revolver-scheduling
 assumption: between two instructions issued by the lock holder, each other
 runnable contender can issue at most one failed acquire. The whole statically
 bounded holder routine/path is used in place of its shorter critical section,
-so `U` is conservative. Atomic sections outside the registered non-blocking
+so `U` is conservative. For a barrier generation, stopped participants are
+removed successively, giving `T(T-1)/2` contender--holder pairs rather than the
+looser `T(T-1)` product. Atomic sections outside the registered non-blocking
 SDK routines remain unresolved rather than silently receiving this assumption.
 Other runtime/SDK callees without a registered translation unit are likewise
 unresolved. LLVM intrinsics already lowered into caller machine blocks are not

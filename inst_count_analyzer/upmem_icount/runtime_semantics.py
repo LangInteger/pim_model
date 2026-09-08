@@ -290,3 +290,31 @@ def fair_round_robin_retry_bound(
         "successful_acquires": successful_acquires.to_dict(),
         "holder_instruction_bound": holder_instruction_bound.to_dict(),
     }
+
+
+def barrier_generation_retry_bound(
+    nonlast_holder_bound: Bound, participants: int
+) -> tuple[Bound, dict]:
+    """Bound failed acquires while one barrier generation drains contenders."""
+    if participants < 1:
+        raise ValueError("participants must be positive")
+    # Before each non-last participant stops, the maximum numbers of other
+    # runnable contenders are T-1, T-2, ..., 1.  The last participant has no
+    # remaining contender while it walks the wait queue.
+    contender_holder_pairs = participants * (participants - 1) // 2
+    upper = (
+        None
+        if nonlast_holder_bound.upper is None
+        else contender_holder_pairs * nonlast_holder_bound.upper
+    )
+    return Bound(0.0, upper), {
+        "kind": "fair_round_robin_barrier_atomic_retry",
+        "assumption": (
+            "fair DPU revolver scheduling; stopped non-last participants no "
+            "longer contend, and each remaining contender issues at most one "
+            "failed acquire per instruction issued by the lock holder"
+        ),
+        "participants": participants,
+        "contender_holder_pairs": contender_holder_pairs,
+        "nonlast_holder_bound": nonlast_holder_bound.to_dict(),
+    }

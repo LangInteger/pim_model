@@ -855,7 +855,7 @@ def parse_annotated_assembly(
                 current.assembly_instructions.append(instruction)
                 current.instructions += 1
                 if instruction.startswith("acquire ") and re.search(
-                    r",\s*(?:nz|z)\s*,\s*\.Ltmp\d+\s*$", instruction
+                    r",\s*(?:nz|z)\s*,\s*\.Ltmp\d+(?:\+0)?\s*$", instruction
                 ):
                     # Atomic acquire retries through a temporary local label,
                     # not a MachineBasicBlock label.  Its dynamic count

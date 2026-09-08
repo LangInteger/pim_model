@@ -238,6 +238,7 @@ def write_plot(
     import matplotlib.pyplot as plt
     from matplotlib.colors import TwoSlopeNorm
     from matplotlib.cm import ScalarMappable
+    from matplotlib.patches import Rectangle
 
     plt.rcParams.update(
         {
@@ -255,7 +256,7 @@ def write_plot(
     figure.subplots_adjust(
         left=0.095,
         right=0.995,
-        bottom=0.285,
+        bottom=0.305,
         top=0.905,
         wspace=0.075,
     )
@@ -281,7 +282,7 @@ def write_plot(
         show_ylabels=False,
     )
 
-    color_axis = figure.add_axes((0.285, 0.125, 0.43, 0.028))
+    color_axis = figure.add_axes((0.285, 0.155, 0.43, 0.028))
     colorbar = figure.colorbar(
         ScalarMappable(norm=norm, cmap=cmap),
         cax=color_axis,
@@ -293,16 +294,100 @@ def write_plot(
     )
     colorbar.ax.tick_params(length=2, pad=1, labelsize=6.0)
     colorbar.outline.set_linewidth(0.6)
-
-    figure.text(
-        0.5,
-        0.025,
-        "Color: endpoint / uPIMulator;  cell halves: lower | upper;  "
-        "x: measurement outside interval;  hatched: missing data",
-        ha="center",
-        va="bottom",
+    color_axis.set_title(
+        "PIMSA bound / uPIMulator",
         fontsize=6.2,
+        pad=2.0,
     )
+
+    legend_axis = figure.add_axes((0.16, 0.012, 0.68, 0.075))
+    legend_axis.set_xlim(0, 1)
+    legend_axis.set_ylim(0, 1)
+    legend_axis.axis("off")
+
+    cell_y = 0.27
+    cell_width = 0.072
+    cell_height = 0.48
+
+    def draw_legend_cell(
+        x: float,
+        label: str,
+        endpoint_values: tuple[float, float] | None,
+        *,
+        letters: bool = False,
+        outside: bool = False,
+        missing: bool = False,
+    ) -> None:
+        if missing:
+            legend_axis.add_patch(
+                Rectangle(
+                    (x, cell_y),
+                    cell_width,
+                    cell_height,
+                    facecolor="#E5E7EB",
+                    edgecolor="#FFFFFF",
+                    linewidth=0.7,
+                    hatch="////",
+                )
+            )
+        elif endpoint_values is not None:
+            for half, value in enumerate(endpoint_values):
+                legend_axis.add_patch(
+                    Rectangle(
+                        (x + half * cell_width / 2, cell_y),
+                        cell_width / 2,
+                        cell_height,
+                        facecolor=cmap(norm(value)),
+                        edgecolor="none",
+                    )
+                )
+        legend_axis.add_patch(
+            Rectangle(
+                (x, cell_y),
+                cell_width,
+                cell_height,
+                facecolor="none",
+                edgecolor="#6b7280",
+                linewidth=0.6,
+            )
+        )
+        if letters:
+            for center, letter in ((0.25, "L"), (0.75, "U")):
+                legend_axis.text(
+                    x + center * cell_width,
+                    cell_y + cell_height / 2,
+                    letter,
+                    ha="center",
+                    va="center",
+                    fontsize=5.4,
+                )
+        if outside:
+            legend_axis.plot(
+                x + cell_width / 2,
+                cell_y + cell_height / 2,
+                marker="x",
+                markersize=4.0,
+                markeredgewidth=0.8,
+                color="#202124",
+            )
+        legend_axis.text(
+            x + cell_width + 0.014,
+            0.5,
+            label,
+            ha="left",
+            va="center",
+            fontsize=6.2,
+        )
+
+    # The split example makes the lower/upper ordering visible directly.
+    draw_legend_cell(0.0, "cell: lower | upper", (-1.0, 1.0), letters=True)
+    draw_legend_cell(
+        0.38,
+        "measurement outside interval",
+        (-1.5, -0.5),
+        outside=True,
+    )
+    draw_legend_cell(0.79, "missing data", None, missing=True)
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output)
     plt.close(figure)

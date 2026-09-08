@@ -342,7 +342,7 @@ def analyze_setting(
     unexpected = all_unexpanded
     if unexpected:
         print(
-            f"WARNING {sid}: unresolved non-collective callees: "
+            f"WARNING {sid}: unresolved callees: "
             + ", ".join(sorted(unexpected)),
             file=sys.stderr,
         )

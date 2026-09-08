@@ -329,9 +329,17 @@ def generic_dynamic_instruction_count(
             collective_calls = []
             unexpanded_calls = []
 
+            # ``call_index`` is diagnostic only: SCCP can delete an earlier
+            # tid-specific call (VA's tid-0 mem_reset is the canonical case),
+            # shifting every later index.  Collective grouping therefore uses
+            # an identity stable under deletion of unrelated callsites.
+            direct_call_occurrences: dict[tuple[str, str], int] = {}
             for call_index, call in enumerate(ana["callsites"].get(fn, [])):
                 if call.callee.startswith("llvm."):
                     continue
+                call_signature = (call.block, call.callee)
+                call_occurrence = direct_call_occurrences.get(call_signature, 0)
+                direct_call_occurrences[call_signature] = call_occurrence + 1
                 call_bound = ir_bounds.get(call.block, Bound(None, None))
                 if call_bound.upper is not None and call_bound.upper <= 0:
                     continue
@@ -341,8 +349,11 @@ def generic_dynamic_instruction_count(
                             "callee": call.callee,
                             "block": call.block,
                             "call_index": call_index,
+                            "stable_call_occurrence": call_occurrence,
                             "call_bound": call_bound,
-                            "call_path": [(fn, call_index, call.block, call.callee)],
+                            "call_path": [
+                                (fn, call.block, call.callee, call_occurrence)
+                            ],
                         }
                     )
                     continue
@@ -386,7 +397,7 @@ def generic_dynamic_instruction_count(
                                 call_bound, nested["call_bound"]
                             ),
                             "call_path": [
-                                (fn, call_index, call.block, call.callee)
+                                (fn, call.block, call.callee, call_occurrence)
                             ] + nested["call_path"],
                         }
                     )
@@ -398,7 +409,11 @@ def generic_dynamic_instruction_count(
             lowered_calls = parse_lowered_callsites(owner.named_ir.read_text()).get(
                 fn, []
             )
+            lowered_call_occurrences: dict[tuple[str, str, str], int] = {}
             for call_index, call in enumerate(lowered_calls):
+                call_signature = (call.block, call.callee, call.operation)
+                call_occurrence = lowered_call_occurrences.get(call_signature, 0)
+                lowered_call_occurrences[call_signature] = call_occurrence + 1
                 call_bound = ir_bounds.get(call.block, Bound(None, None))
                 if call_bound.upper is not None and call_bound.upper <= 0:
                     continue
@@ -444,7 +459,13 @@ def generic_dynamic_instruction_count(
                                 call_bound, nested["call_bound"]
                             ),
                             "call_path": [
-                                (fn, call_index, call.block, call.callee)
+                                (
+                                    fn,
+                                    call.block,
+                                    call.callee,
+                                    call.operation,
+                                    call_occurrence,
+                                )
                             ] + nested["call_path"],
                         }
                     )

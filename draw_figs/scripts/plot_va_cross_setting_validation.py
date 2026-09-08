@@ -85,14 +85,14 @@ def normalized_cycle_data(
 ) -> dict[str, Any]:
     selected = selected_rows(rows, experiment, x_field)
     measured = [float(row["actual_cycles"]) for row in selected]
-    # These are the two structural overlap endpoints implemented by
-    # estimate_cost.py: fully hidden memory and fully serialized memory.
+    # estimate_cost.py propagates the static instruction and memory intervals
+    # into these validation endpoints.
     lower = [
-        float(row["ideal_compute_hidden_memory_cycles"]) / observed
+        float(row["composed_cycles_lower"]) / observed
         for row, observed in zip(selected, measured)
     ]
     upper = [
-        float(row["ideal_compute_no_hidden_memory_cycles"]) / observed
+        float(row["composed_cycles_upper"]) / observed
         for row, observed in zip(selected, measured)
     ]
     return {

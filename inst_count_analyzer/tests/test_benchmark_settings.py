@@ -180,6 +180,41 @@ class EstimateInstructionLoaderTests(unittest.TestCase):
         self.assertEqual(row["compute_instructions_per_dpu"], 100)
         self.assertEqual(row["measured_instructions_per_dpu"], "")
 
+    def test_cycle_composition_propagates_instruction_bounds(self):
+        estimate_cost = load_estimate_cost_module()
+
+        single_tasklet = estimate_cost.compose_cycle_bounds(
+            instruction_lower=90,
+            instruction_upper=110,
+            memory_lower=20,
+            memory_upper=30,
+            tasklets=1,
+            stall_rate=0.10,
+        )
+        self.assertEqual(single_tasklet["compute_lower"], 990)
+        self.assertEqual(single_tasklet["compute_upper"], 1210)
+        self.assertEqual(single_tasklet["composed_lower"], 1010)
+        self.assertAlmostEqual(single_tasklet["composed_upper"], 1210 / 0.9 + 30)
+        self.assertEqual(
+            single_tasklet["lower_assumption"], "single_tasklet_no_overlap"
+        )
+
+        saturated = estimate_cost.compose_cycle_bounds(
+            instruction_lower=90,
+            instruction_upper=110,
+            memory_lower=20,
+            memory_upper=30,
+            tasklets=16,
+            stall_rate=0.10,
+        )
+        self.assertEqual(saturated["compute_lower"], 90)
+        self.assertEqual(saturated["compute_upper"], 110)
+        self.assertEqual(saturated["composed_lower"], 90)
+        self.assertAlmostEqual(saturated["composed_upper"], 110 / 0.9 + 30)
+        self.assertEqual(
+            saturated["lower_assumption"], "maximal_compute_memory_overlap"
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

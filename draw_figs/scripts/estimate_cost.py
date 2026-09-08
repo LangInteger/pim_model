@@ -16,7 +16,7 @@ from typing import Any
 
 BLOCK_SIZE_BYTES = 1 << 10
 ELEMENT_SIZE_BYTES = 4
-PIPELINE_DEPTH = 11
+REVOLVER_SCHEDULING_CYCLES = 11
 LOOP_TERM_PATTERN = re.compile(
     r"\(\s*input_size_dpu_bytes\s*/\s*"
     r"\(\s*\(\s*1\s*<<\s*\d+\s*\)\s*\*\s*\d+\s*\)\s*\)"
@@ -157,6 +157,53 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     return parser.parse_args()
+
+
+def compose_cycle_bounds(
+    instruction_lower: float,
+    instruction_upper: float,
+    memory_lower: float,
+    memory_upper: float,
+    tasklets: int,
+    stall_rate: float,
+) -> dict[str, float | str]:
+    """Propagate instruction and memory intervals into cycle bounds."""
+    if tasklets <= 0:
+        raise ValueError("tasklets must be positive")
+    if not 0 <= stall_rate < 1:
+        raise ValueError("stall_rate must be in [0, 1)")
+    if not instruction_lower <= instruction_upper:
+        raise ValueError("instruction lower bound exceeds upper bound")
+    if not memory_lower <= memory_upper:
+        raise ValueError("memory lower bound exceeds upper bound")
+
+    issue_factor = REVOLVER_SCHEDULING_CYCLES * max(
+        1 / tasklets, 1 / REVOLVER_SCHEDULING_CYCLES
+    )
+    compute_lower = instruction_lower * issue_factor
+    compute_upper = instruction_upper * issue_factor
+    compute_conservative_upper = compute_upper / (1 - stall_rate)
+
+    # A single tasklet blocks on every DMA and therefore cannot overlap useful
+    # computation with memory service. With multiple tasklets, maximal overlap
+    # is a valid structural lower endpoint.
+    if tasklets == 1:
+        composed_lower = compute_lower + memory_lower
+        lower_assumption = "single_tasklet_no_overlap"
+    else:
+        composed_lower = max(compute_lower, memory_lower)
+        lower_assumption = "maximal_compute_memory_overlap"
+    composed_upper = compute_conservative_upper + memory_upper
+
+    return {
+        "issue_factor": issue_factor,
+        "compute_lower": compute_lower,
+        "compute_upper": compute_upper,
+        "compute_conservative_upper": compute_conservative_upper,
+        "composed_lower": composed_lower,
+        "composed_upper": composed_upper,
+        "lower_assumption": lower_assumption,
+    }
 
 
 def load_static_instruction_counts(
@@ -914,18 +961,18 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             ),
         }
 
-        compute_ideal = (
-            compute_instructions
-            * PIPELINE_DEPTH
-            * max(1 / tasklets, 1 / PIPELINE_DEPTH)
+        cycle_bounds = compose_cycle_bounds(
+            instruction_lower=float(instruction_bound["lower"]),
+            instruction_upper=float(instruction_bound["upper"]),
+            memory_lower=memory_cycles_lower,
+            memory_upper=memory_cycles_upper,
+            tasklets=tasklets,
+            stall_rate=args.compute_stall_rate,
         )
-        compute_conservative = compute_ideal / (1 - args.compute_stall_rate)
-        ideal_hidden = max(compute_ideal, memory_cycles_lower)
-        conservative_hidden = max(compute_conservative, memory_cycles_lower)
-        ideal_serial = compute_ideal + memory_cycles_upper
-        conservative_serial = compute_conservative + memory_cycles_upper
+        composed_lower = float(cycle_bounds["composed_lower"])
+        composed_upper = float(cycle_bounds["composed_upper"])
         actual_cycles = float(measured["cycles_max"])
-        interval_width = ideal_serial - ideal_hidden
+        composed_interval_width = composed_upper - composed_lower
         if num_dpus <= 0:
             raise ValueError(f"invalid num_dpus: {num_dpus}")
 
@@ -965,7 +1012,14 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             "actual_cycles": actual_cycles,
             "memory_model_lower_cycles": memory_cycles_lower,
             "memory_model_upper_cycles": memory_cycles_upper,
-            "ideal_compute_cycles": compute_ideal,
+            "compute_issue_cycles_per_instruction": float(
+                cycle_bounds["issue_factor"]
+            ),
+            "compute_cycles_lower": float(cycle_bounds["compute_lower"]),
+            "compute_cycles_upper": float(cycle_bounds["compute_upper"]),
+            "compute_cycles_conservative_upper": float(
+                cycle_bounds["compute_conservative_upper"]
+            ),
             "observed_compute_component_cycles": (
                 float(measured["breakdown_run_sum"])
                 + float(measured["breakdown_etc_sum"])
@@ -974,19 +1028,17 @@ def estimate_rows(args: argparse.Namespace) -> list[dict[str, Any]]:
             "observed_dma_component_cycles": (
                 float(measured["breakdown_dma_sum"]) / num_dpus
             ),
-            "actual_within_overlap_bounds": (
-                ideal_hidden <= actual_cycles <= ideal_serial
+            "composed_cycles_lower": composed_lower,
+            "composed_cycles_upper": composed_upper,
+            "composed_lower_assumption": str(cycle_bounds["lower_assumption"]),
+            "actual_within_composed_bounds": (
+                composed_lower <= actual_cycles <= composed_upper
             ),
-            "actual_interval_position": (
-                (actual_cycles - ideal_hidden) / interval_width
-                if interval_width else ""
+            "actual_composed_interval_position": (
+                (actual_cycles - composed_lower) / composed_interval_width
+                if composed_interval_width else ""
             ),
             "compute_stall_rate": args.compute_stall_rate,
-            "compute_conservative_cycles": compute_conservative,
-            "ideal_compute_hidden_memory_cycles": ideal_hidden,
-            "conservative_compute_hidden_memory_cycles": conservative_hidden,
-            "ideal_compute_no_hidden_memory_cycles": ideal_serial,
-            "conservative_compute_no_hidden_memory_cycles": conservative_serial,
         }
         estimates.append(row)
 
@@ -1022,24 +1074,16 @@ def write_sensitivity_plot(
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
-    figure, axes = plt.subplots(1, 2, figsize=(14, 5.4))
-    bounded_memory = any(
-        not math.isclose(
-            float(row["memory_model_lower_cycles"]),
-            float(row["memory_model_upper_cycles"]),
-        )
-        for row in rows
+    plt.rcParams.update(
+        {
+            "font.family": "serif",
+            "font.size": 9,
+            "axes.titlesize": 10,
+            "axes.labelsize": 9,
+            "legend.fontsize": 8.5,
+        }
     )
-    hidden_memory_label = (
-        "Hidden memory lower bound"
-        if bounded_memory
-        else "hidden memory"
-    )
-    no_hidden_memory_label = (
-        "No-hidden memory upper bound"
-        if bounded_memory
-        else "no-hidden memory"
-    )
+    figure, axes = plt.subplots(1, 2, figsize=(10, 3.15))
     panels = [
         ("tasklet_sweep", "num_tasklets", "Number of tasklets", "Tasklet sweep"),
         (
@@ -1049,56 +1093,64 @@ def write_sensitivity_plot(
             "DPU sweep (16 tasklets)",
         ),
     ]
-    series = [
-        ("actual_cycles", "Measured", "#111827", "o", "-", 2.7),
-        (
-            "ideal_compute_hidden_memory_cycles",
-            f"Ideal compute + {hidden_memory_label}",
-            "#2563eb", "^", "--", 1.8,
-        ),
-        (
-            "conservative_compute_hidden_memory_cycles",
-            f"Conservative compute + {hidden_memory_label}",
-            "#16a34a", "s", "--", 1.8,
-        ),
-        (
-            "ideal_compute_no_hidden_memory_cycles",
-            f"Ideal compute + {no_hidden_memory_label}",
-            "#ea580c", "D", ":", 1.8,
-        ),
-        (
-            "conservative_compute_no_hidden_memory_cycles",
-            f"Conservative compute + {no_hidden_memory_label}",
-            "#7c3aed", "v", "-.", 2.0,
-        ),
-    ]
     for axis, (experiment, x_field, x_label, title) in zip(axes, panels):
         selected = sorted(
             (row for row in rows if row["experiment"] == experiment),
             key=lambda row: int(row[x_field]),
         )
         x_values = [int(row[x_field]) for row in selected]
-        for series_index, (
-            field,
-            label,
-            color,
-            marker,
-            linestyle,
-            linewidth,
-        ) in enumerate(series):
-            axis.plot(
-                x_values,
-                [float(row[field]) for row in selected],
-                label=label,
-                color=color,
-                marker=marker,
-                linestyle=linestyle,
-                linewidth=linewidth,
-                markersize=7.5,
-                markeredgecolor="white",
-                markeredgewidth=0.8,
-                zorder=10 - series_index,
-            )
+        lower = [float(row["composed_cycles_lower"]) for row in selected]
+        upper = [float(row["composed_cycles_upper"]) for row in selected]
+        measured = [float(row["actual_cycles"]) for row in selected]
+        axis.fill_between(
+            x_values,
+            lower,
+            upper,
+            color="#9ecae1",
+            alpha=0.28,
+            linewidth=0,
+            label="_nolegend_",
+            zorder=1,
+        )
+        axis.plot(
+            x_values,
+            lower,
+            label="PIMSA lower bound",
+            color="#2563eb",
+            marker="^",
+            linestyle="--",
+            linewidth=1.7,
+            markersize=5.5,
+            markeredgecolor="white",
+            markeredgewidth=0.6,
+            zorder=3,
+        )
+        axis.plot(
+            x_values,
+            upper,
+            label="PIMSA upper bound",
+            color="#ea580c",
+            marker="v",
+            linestyle="--",
+            linewidth=1.7,
+            markersize=5.5,
+            markeredgecolor="white",
+            markeredgewidth=0.6,
+            zorder=3,
+        )
+        axis.plot(
+            x_values,
+            measured,
+            label="uPIMulator",
+            color="#111827",
+            marker="o",
+            linestyle="-",
+            linewidth=2.0,
+            markersize=5.5,
+            markeredgecolor="white",
+            markeredgewidth=0.6,
+            zorder=4,
+        )
         axis.set_xticks(x_values)
         axis.set_xlabel(x_label)
         axis.set_ylabel("Execution cycles")
@@ -1108,17 +1160,26 @@ def write_sensitivity_plot(
 
     handles, labels = axes[0].get_legend_handles_labels()
     figure.legend(
-        handles, labels, loc="lower center", bbox_to_anchor=(0.5, -0.08),
-        ncol=3, frameon=False, fontsize=9,
+        handles,
+        labels,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 0.91),
+        ncol=3,
+        frameon=False,
     )
-    stall_rate = float(rows[0]["compute_stall_rate"])
     figure.suptitle(
-        f"{benchmark_label} compute-stall and memory-hiding sensitivity "
-        "(linear axes)\n"
-        f"conservative non-memory compute stall rate: {stall_rate:.0%}",
-        fontsize=14,
+        f"{benchmark_label} composed-cycle bounds",
+        fontsize=12,
+        fontweight="bold",
+        y=0.99,
     )
-    figure.tight_layout(rect=(0, 0.10, 1, 0.92))
+    figure.subplots_adjust(
+        left=0.075,
+        right=0.995,
+        bottom=0.19,
+        top=0.73,
+        wspace=0.14,
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(path, dpi=200, bbox_inches="tight")
     plt.close(figure)

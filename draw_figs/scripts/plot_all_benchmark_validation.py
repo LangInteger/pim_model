@@ -278,7 +278,7 @@ def write_plot(
         benchmarks,
         cmap,
         norm,
-        "(b) Composed-cycle envelope",
+        "(b) Composed-cycle interval",
         show_ylabels=False,
     )
 

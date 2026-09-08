@@ -381,7 +381,7 @@ def write_plot(
         columnspacing=1.8,
     )
     figure.suptitle(
-        f"PIMSA composed-cycle bounds across benchmarks  ·  "
+        f"PIMSA composed-cycle intervals across benchmarks  ·  "
         f"{total_covered}/{total_present} covered",
         fontsize=14,
         fontweight="bold",

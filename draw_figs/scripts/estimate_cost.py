@@ -1168,7 +1168,7 @@ def write_sensitivity_plot(
         frameon=False,
     )
     figure.suptitle(
-        f"{benchmark_label} composed-cycle bounds",
+        f"{benchmark_label} composed-cycle interval",
         fontsize=12,
         fontweight="bold",
         y=0.99,

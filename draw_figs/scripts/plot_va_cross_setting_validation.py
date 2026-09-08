@@ -268,7 +268,7 @@ def write_plot(
             [0],
             color=cycle_color,
             linewidth=2.0,
-            label="PIMSA composed-cycle envelope",
+            label="PIMSA composed-cycle interval",
         ),
         Line2D(
             [0],

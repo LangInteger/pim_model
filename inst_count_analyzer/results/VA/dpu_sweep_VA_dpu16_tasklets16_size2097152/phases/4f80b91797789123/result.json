@@ -1,5 +1,6 @@
 {
   "benchmark": "VA",
+  "analysis_schema_version": "machine-loop-flow-v1",
   "tasklets": 16,
   "params": {
     "kernel": 0,
@@ -7,7 +8,7 @@
     "transfer_size": 524288
   },
   "dynamic_instruction_bound": {
-    "lower": 930597,
+    "lower": 930693,
     "upper": 931398,
     "exact": false
   },

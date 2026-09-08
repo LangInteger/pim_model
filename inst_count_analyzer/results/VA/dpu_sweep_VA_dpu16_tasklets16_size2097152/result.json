@@ -1,5 +1,6 @@
 {
   "benchmark": "VA",
+  "analysis_schema_version": "machine-loop-flow-v1",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -24,7 +25,7 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 930597,
+    "lower": 930693,
     "upper": 931398,
     "exact": false
   },
@@ -36,7 +37,7 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -51,7 +52,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -68,7 +69,7 @@
     {
       "dpu": 1,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -83,7 +84,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -100,7 +101,7 @@
     {
       "dpu": 2,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -115,7 +116,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -132,7 +133,7 @@
     {
       "dpu": 3,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -147,7 +148,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -164,7 +165,7 @@
     {
       "dpu": 4,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -179,7 +180,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -196,7 +197,7 @@
     {
       "dpu": 5,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -211,7 +212,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -228,7 +229,7 @@
     {
       "dpu": 6,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -243,7 +244,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -260,7 +261,7 @@
     {
       "dpu": 7,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -275,7 +276,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -292,7 +293,7 @@
     {
       "dpu": 8,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -307,7 +308,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -324,7 +325,7 @@
     {
       "dpu": 9,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -339,7 +340,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -356,7 +357,7 @@
     {
       "dpu": 10,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -371,7 +372,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -388,7 +389,7 @@
     {
       "dpu": 11,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -403,7 +404,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -420,7 +421,7 @@
     {
       "dpu": 12,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -435,7 +436,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -452,7 +453,7 @@
     {
       "dpu": 13,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -467,7 +468,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -484,7 +485,7 @@
     {
       "dpu": 14,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -499,7 +500,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },
@@ -516,7 +517,7 @@
     {
       "dpu": 15,
       "bound": {
-        "lower": 930597.0,
+        "lower": 930693.0,
         "upper": 931398.0,
         "exact": false
       },
@@ -531,7 +532,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 930597,
+            "lower": 930693,
             "upper": 931398,
             "exact": false
           },

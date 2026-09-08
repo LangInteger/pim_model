@@ -1,5 +1,6 @@
 {
   "benchmark": "VA",
+  "analysis_schema_version": "machine-loop-flow-v1",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -24,7 +25,7 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 14877477,
+    "lower": 14877573,
     "upper": 14885958,
     "exact": false
   },
@@ -36,7 +37,7 @@
     {
       "dpu": 0,
       "bound": {
-        "lower": 14877477.0,
+        "lower": 14877573.0,
         "upper": 14885958.0,
         "exact": false
       },
@@ -51,7 +52,7 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 14877477,
+            "lower": 14877573,
             "upper": 14885958,
             "exact": false
           },

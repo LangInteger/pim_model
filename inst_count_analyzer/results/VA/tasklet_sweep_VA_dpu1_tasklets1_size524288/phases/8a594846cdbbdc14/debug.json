@@ -8,28 +8,29 @@
     "transfer_size": 2097152
   },
   "unknown_loop_backedge_uppers": {},
-  "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive post-macro-expansion MCInst machine blocks + target-lowered runtime helper expansion",
-  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Final annotated assembly is used for ordinary functions so DPU backend macros that emit multiple instructions are charged at their emitted size. TRNS phase 2 uses an amortized per-tasklet partition of its finite, atomically distributed tile domain to bound total DPU work without multiplying nested data-dependent loops. Collective runtime primitives and failed atomic-acquire retries remain explicitly unexpanded.",
+  "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive post-macro-expansion MCInst machine blocks + target-lowered runtime helper expansion + proven natural-loop machine-flow facts",
+  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Final annotated assembly is used for ordinary functions so DPU backend macros that emit multiple instructions are charged at their emitted size. Exact SCEV loop counts are transferred to Machine-CFG entry, backedge, and exit flows only for verified single-entry natural loops. TRNS phase 2 uses an amortized per-tasklet partition of its finite, atomically distributed tile domain to bound total DPU work without multiplying nested data-dependent loops. Collective runtime primitives and failed atomic-acquire retries remain explicitly unexpanded.",
   "dynamic_instruction_bound_direct": {
-    "lower": 47132.0,
+    "lower": 47138.0,
     "upper": 49187.0,
     "exact": false
   },
   "dynamic_instruction_bound": {
-    "lower": 3721271.0,
+    "lower": 3721277.0,
     "upper": 3723338.0,
     "exact": false
   },
+  "analysis_schema_version": "machine-loop-flow-v1",
   "per_tasklet": [
     {
       "tid": 0,
       "instruction_bound_direct_function": {
-        "lower": 47132.0,
+        "lower": 47138.0,
         "upper": 49187.0,
         "exact": false
       },
       "instruction_bound_with_internal_callees": {
-        "lower": 3721271.0,
+        "lower": 3721277.0,
         "upper": 3723338.0,
         "exact": false
       },
@@ -361,6 +362,42 @@
               "exact": true,
               "value": 1
             }
+          }
+        ],
+        "loop_flow_facts": [
+          {
+            "ir_loop_header": "bb16",
+            "scev_backedge_count_per_entry": 2047,
+            "applied": true,
+            "reason": "exact SCEV count and verified single-entry natural machine loop",
+            "machine_header": "bb.4.bb16",
+            "machine_loop_blocks": [
+              "bb.4.bb16",
+              "bb.5",
+              "bb.6"
+            ],
+            "header_execution_count": 2048,
+            "entry_count": 1,
+            "total_backedge_count": 2047,
+            "exit_count": 1,
+            "entry_edges": [
+              [
+                3,
+                4
+              ]
+            ],
+            "backedges": [
+              [
+                6,
+                4
+              ]
+            ],
+            "exit_edges": [
+              [
+                6,
+                7
+              ]
+            ]
           }
         ],
         "machine_blocks": [

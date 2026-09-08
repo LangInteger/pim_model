@@ -96,6 +96,14 @@ from the final annotated assembly. TRNS's shared work queue is intentionally
 conservative until a collective work-
 distribution constraint is added.
 
+For an exact SCEV loop count, the machine-flow solver also transfers entry,
+backedge, and exit counts when the IR header maps to one cyclic machine block
+and the MIR CFG proves a single-entry natural loop. This prevents an otherwise
+legal LP circulation from satisfying the loop count without any path from the
+function entry. Unproven or structurally complex loops retain the previous
+conservative flow model, and every applied or skipped loop fact is recorded in
+the phase `debug.json` under `machine.loop_flow_facts`.
+
 After generating the instruction summaries, regenerate every cost model with:
 
 ```bash

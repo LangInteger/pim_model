@@ -37,6 +37,7 @@ from .source_loop_semantics import (
     source_loop_total_backedge_bounds,
 )
 from .toolchain import discover_toolchain
+from .version import ANALYSIS_SCHEMA_VERSION
 
 
 def _run(cmd, cwd=None):
@@ -310,6 +311,7 @@ def generic_dynamic_instruction_count(
                 owner.machine[fn],
                 ir_bounds,
                 bound_block_numbers=synchronization_blocks,
+                ir_loops=loops,
             )
             direct, runtime_cost_semantics = runtime_function_instruction_bound(
                 fn, owner.source_path, direct
@@ -500,7 +502,7 @@ def generic_dynamic_instruction_count(
         "method": (
             "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive "
             "post-macro-expansion MCInst machine blocks + target-lowered runtime "
-            "helper expansion"
+            "helper expansion + proven natural-loop machine-flow facts"
         ),
         "scope_note": (
             "Benchmark and selected SDK runtime translation units are compiled and "
@@ -510,6 +512,8 @@ def generic_dynamic_instruction_count(
             "from their independently compiled SDK translation units. "
             "Final annotated assembly is used for ordinary functions so DPU backend "
             "macros that emit multiple instructions are charged at their emitted size. "
+            "Exact SCEV loop counts are transferred to Machine-CFG entry, backedge, "
+            "and exit flows only for verified single-entry natural loops. "
             "TRNS phase 2 uses an amortized per-tasklet partition of its finite, "
             "atomically distributed tile domain to bound total DPU work without "
             "multiplying nested data-dependent loops. Collective runtime primitives "
@@ -517,6 +521,7 @@ def generic_dynamic_instruction_count(
         ),
         "dynamic_instruction_bound_direct": total_direct.to_dict(),
         "dynamic_instruction_bound": total_expanded.to_dict(),
+        "analysis_schema_version": ANALYSIS_SCHEMA_VERSION,
         "per_tasklet": per_tid,
         "artifacts": {
             "modules": [module.artifact_dict() for module in modules],

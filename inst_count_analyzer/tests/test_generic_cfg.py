@@ -184,6 +184,52 @@ class MachineCfgValidationTests(unittest.TestCase):
         cont = next(a for a in metadata["anchors"] if a["ir_block"] == "cont")
         self.assertEqual(cont["anchor_kind"], "machine_flow_only")
 
+    def test_exact_loop_flow_fact_eliminates_disconnected_circulation(self) -> None:
+        blocks = [
+            MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 4], 1, []),
+            MachineBlock("f", "bb.1", 1, "bb.1", None, [2], 6, []),
+            MachineBlock("f", "bb.2.loop", 2, "bb.2.loop", "loop", [3], 2, []),
+            MachineBlock("f", "bb.3", 3, "bb.3", None, [2, 4], 3, []),
+            MachineBlock("f", "bb.4.exit", 4, "bb.4.exit", "exit", [], 1, []),
+        ]
+        ir_bounds = {
+            "entry": Bound(1, 1),
+            "loop": Bound(3, 3),
+            "exit": Bound(1, 1),
+        }
+        loop = LoopInfo("f", "loop", 1, ["loop"], ["loop"], ["loop"], 2)
+
+        loose, _, _ = solve_machine_total(blocks, ir_bounds)
+        tight, block_bounds, metadata = solve_machine_total(
+            blocks, ir_bounds, ir_loops=[loop]
+        )
+
+        self.assertEqual(loose, Bound(17, 23))
+        self.assertEqual(tight, Bound(23, 23))
+        self.assertEqual(block_bounds["bb.1"], Bound(1, 1))
+        self.assertEqual(
+            metadata["loop_flow_facts"],
+            [
+                {
+                    "ir_loop_header": "loop",
+                    "scev_backedge_count_per_entry": 2,
+                    "applied": True,
+                    "reason": (
+                        "exact SCEV count and verified single-entry natural machine loop"
+                    ),
+                    "machine_header": "bb.2.loop",
+                    "machine_loop_blocks": ["bb.2.loop", "bb.3"],
+                    "header_execution_count": 3,
+                    "entry_count": 1,
+                    "total_backedge_count": 2,
+                    "exit_count": 1,
+                    "entry_edges": [[1, 2]],
+                    "backedges": [[3, 2]],
+                    "exit_edges": [[3, 4]],
+                }
+            ],
+        )
+
 
 class FinalAssemblyParsingTests(unittest.TestCase):
     def test_counts_expanded_mcinsts_and_machine_edges(self) -> None:

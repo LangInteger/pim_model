@@ -64,6 +64,7 @@ def _compact_bound(bound: dict) -> dict:
 def compact_result(result: dict) -> dict:
     compact = {
         "benchmark": result["benchmark"],
+        "analysis_schema_version": result["analysis_schema_version"],
         "tasklets": result["tasklets"],
         "params": result.get("params", {}),
         "dynamic_instruction_bound": _compact_bound(

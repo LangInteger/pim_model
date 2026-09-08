@@ -1044,6 +1044,7 @@ def solve_machine_total(
     blocks: list[MachineBlock],
     ir_bounds: dict[str, Bound],
     bound_block_numbers: set[int] | None = None,
+    ir_loops: list[LoopInfo] | None = None,
 ) -> tuple[Bound,dict[str,Bound],dict]:
     if not blocks: return Bound(None,None),{}, {'reason':'no machine blocks'}
     nums=[b.number for b in blocks]; bynum={b.number:b for b in blocks}; entry=blocks[0].number
@@ -1180,6 +1181,172 @@ def solve_machine_total(
             'representative_machine_block':bynum[representative].label if representative is not None else None,
             'bound':bd.to_dict(),
         })
+
+    # Transfer exact loop-entry/backedge facts into the Machine CFG only when
+    # the correspondence is mechanically provable.  Merely pinning a machine
+    # header to its exact IR execution count permits a disconnected circulation
+    # around the machine loop.  The entry/backedge equations below ensure that
+    # those executions form real loop invocations connected to function flow.
+    predecessors: dict[int, set[int]] = {number: set() for number in nums}
+    for source, target in edges:
+        predecessors[target].add(source)
+
+    reachable = {entry}
+    pending = [entry]
+    while pending:
+        current = pending.pop()
+        for successor in bynum[current].successors:
+            if successor in bynum and successor not in reachable:
+                reachable.add(successor)
+                pending.append(successor)
+
+    dominators: dict[int, set[int]] = {
+        number: ({entry} if number == entry else set(reachable))
+        for number in reachable
+    }
+    changed = True
+    while changed:
+        changed = False
+        for number in reachable - {entry}:
+            reachable_predecessors = predecessors[number] & reachable
+            if not reachable_predecessors:
+                new = {number}
+            else:
+                common = set.intersection(
+                    *(dominators[pred] for pred in reachable_predecessors)
+                )
+                new = {number} | common
+            if new != dominators[number]:
+                dominators[number] = new
+                changed = True
+
+    loop_flow_facts = []
+    for loop in ir_loops or []:
+        fact = {
+            'ir_loop_header': loop.header,
+            'scev_backedge_count_per_entry': loop.backedge_count,
+            'applied': False,
+        }
+
+        header_bound = ir_bounds.get(loop.header)
+        if loop.backedge_count is None:
+            fact['reason'] = 'SCEV backedge count is not exact'
+            loop_flow_facts.append(fact)
+            continue
+        if header_bound is None or not header_bound.exact:
+            fact['reason'] = 'IR loop-header execution count is not exact'
+            loop_flow_facts.append(fact)
+            continue
+
+        machine_headers = groups.get(loop.header, set()) & cyclic_blocks
+        if len(machine_headers) != 1:
+            fact['reason'] = (
+                'IR loop header does not map to exactly one cyclic machine block'
+            )
+            fact['candidate_machine_headers'] = [
+                bynum[number].label for number in sorted(machine_headers)
+            ]
+            loop_flow_facts.append(fact)
+            continue
+        machine_header = next(iter(machine_headers))
+
+        machine_backedges = [
+            edge
+            for edge in edges
+            if edge[1] == machine_header
+            and machine_header in dominators.get(edge[0], set())
+        ]
+        if not machine_backedges:
+            fact['reason'] = 'no natural Machine-CFG backedge reaches the header'
+            loop_flow_facts.append(fact)
+            continue
+
+        machine_loop = {machine_header}
+        reverse_pending = [source for source, _ in machine_backedges]
+        while reverse_pending:
+            current = reverse_pending.pop()
+            if current in machine_loop:
+                continue
+            machine_loop.add(current)
+            reverse_pending.extend(predecessors[current] - machine_loop)
+
+        entry_edges = [
+            edge
+            for edge in edges
+            if edge[0] not in machine_loop and edge[1] in machine_loop
+        ]
+        if any(target != machine_header for _, target in entry_edges):
+            fact['reason'] = 'machine loop has an entry that bypasses its header'
+            loop_flow_facts.append(fact)
+            continue
+        implicit_function_entry = 1 if machine_header == entry else 0
+        if len(entry_edges) + implicit_function_entry != 1:
+            fact['reason'] = 'machine loop is not single-entry'
+            fact['entry_edges'] = [list(edge) for edge in entry_edges]
+            loop_flow_facts.append(fact)
+            continue
+
+        header_executions = round(header_bound.lower)
+        trip_count = loop.backedge_count + 1
+        if (
+            abs(header_bound.lower - header_executions) > 1e-7
+            or header_executions % trip_count != 0
+        ):
+            fact['reason'] = (
+                'exact header count is not an integral multiple of trip count'
+            )
+            loop_flow_facts.append(fact)
+            continue
+        entry_count = header_executions // trip_count
+        if implicit_function_entry and entry_count != 1:
+            fact['reason'] = (
+                'function-entry loop count is inconsistent with one invocation'
+            )
+            loop_flow_facts.append(fact)
+            continue
+
+        exit_edges = [
+            edge
+            for edge in edges
+            if edge[0] in machine_loop and edge[1] not in machine_loop
+        ]
+        if entry_count > 0 and not exit_edges:
+            fact['reason'] = 'finite machine loop has no exit edge'
+            loop_flow_facts.append(fact)
+            continue
+
+        row=np.zeros(nvar)
+        for edge in entry_edges:
+            row[ei[edge]] += 1
+        eq(row, float(entry_count - implicit_function_entry))
+
+        row=np.zeros(nvar)
+        for edge in machine_backedges:
+            row[ei[edge]] += 1
+        eq(row, float(header_executions - entry_count))
+
+        row=np.zeros(nvar)
+        for edge in exit_edges:
+            row[ei[edge]] += 1
+        eq(row, float(entry_count))
+
+        fact.update({
+            'applied': True,
+            'reason': 'exact SCEV count and verified single-entry natural machine loop',
+            'machine_header': bynum[machine_header].label,
+            'machine_loop_blocks': [
+                bynum[number].label for number in sorted(machine_loop)
+            ],
+            'header_execution_count': header_executions,
+            'entry_count': entry_count,
+            'total_backedge_count': header_executions - entry_count,
+            'exit_count': entry_count,
+            'entry_edges': [list(edge) for edge in entry_edges],
+            'backedges': [list(edge) for edge in machine_backedges],
+            'exit_edges': [list(edge) for edge in exit_edges],
+        })
+        loop_flow_facts.append(fact)
+
     bounds=[(0,None)]*nvar
     AeqN=np.array(Aeq) if Aeq else None;beqN=np.array(beq) if beq else None
     AubN=np.array(Aub) if Aub else None;bubN=np.array(bub) if bub else None
@@ -1210,6 +1377,7 @@ def solve_machine_total(
     total=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
     return total,block_bounds,{
         'anchors':anchors,
+        'loop_flow_facts':loop_flow_facts,
         'machine_blocks':[
             {
                 **asdict(b),

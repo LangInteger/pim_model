@@ -19,6 +19,7 @@ from upmem_icount.benchmark_settings import (  # noqa: E402
     setting_id,
 )
 from upmem_icount.makecmd import apply_required_compile_defines  # noqa: E402
+from upmem_icount.version import ANALYSIS_SCHEMA_VERSION  # noqa: E402
 from run_benchmark_sweeps import cached_build_matches  # noqa: E402
 
 
@@ -35,6 +36,7 @@ class BenchmarkSettingTests(unittest.TestCase):
     def test_cache_requires_exact_summary_build_options(self):
         cached = {
             "provenance": {"make_args": ["BL=10", "TYPE=INT32"]},
+            "analysis_schema_version": ANALYSIS_SCHEMA_VERSION,
             "machine_cfg_validation_status": "match",
         }
         self.assertTrue(cached_build_matches(cached, ["BL=10", "TYPE=INT32"]))
@@ -42,7 +44,10 @@ class BenchmarkSettingTests(unittest.TestCase):
         self.assertFalse(cached_build_matches({}, ["BL=10"]))
 
     def test_cache_without_machine_cfg_validation_is_stale(self):
-        cached = {"provenance": {"make_args": ["BL=10"]}}
+        cached = {
+            "provenance": {"make_args": ["BL=10"]},
+            "machine_cfg_validation_status": "match",
+        }
         self.assertFalse(cached_build_matches(cached, ["BL=10"]))
 
     def test_summary_bl_is_forced_into_compile_command(self):

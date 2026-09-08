@@ -20,6 +20,7 @@ from upmem_icount.benchmark_settings import (
     normalize_benchmark,
     setting_id,
 )
+from upmem_icount.version import ANALYSIS_SCHEMA_VERSION
 
 
 ANALYZER_ROOT = Path(__file__).resolve().parent
@@ -126,6 +127,7 @@ def phase_cache_key(
 def cached_build_matches(cached: dict[str, Any], make_args: list[str]) -> bool:
     return (
         cached.get("provenance", {}).get("make_args") == make_args
+        and cached.get("analysis_schema_version") == ANALYSIS_SCHEMA_VERSION
         and cached.get("machine_cfg_validation_status")
         in {"match", "match_with_warnings"}
     )
@@ -308,6 +310,7 @@ def analyze_setting(
     )
     result = {
         "benchmark": benchmark,
+        "analysis_schema_version": ANALYSIS_SCHEMA_VERSION,
         "tasklets": setting["num_tasklets"],
         "experiment_setting": {
             "experiment": setting["experiment"],

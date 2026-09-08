@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "machine-loop-flow-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v1",
   "tasklets": 1,
   "params": {
     "kernel": 0,
@@ -8,14 +8,11 @@
     "transfer_size": 2097152
   },
   "dynamic_instruction_bound": {
-    "lower": 3721277,
-    "upper": 3723338,
+    "lower": 3721285,
+    "upper": 3723346,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",

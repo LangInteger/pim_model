@@ -9,7 +9,7 @@
   },
   "unknown_loop_backedge_uppers": {},
   "method": "cross-translation-unit CFG+SCEV flow constraints + edge-sensitive post-macro-expansion MCInst machine blocks + target-lowered runtime helper expansion + proven natural-loop machine-flow facts",
-  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Final annotated assembly is used for ordinary functions so DPU backend macros that emit multiple instructions are charged at their emitted size. Exact SCEV loop counts are transferred to Machine-CFG entry, backedge, and exit flows only for verified single-entry natural loops. TRNS phase 2 uses an amortized per-tasklet partition of its finite, atomically distributed tile domain to bound total DPU work without multiplying nested data-dependent loops. Collective runtime primitives and failed atomic-acquire retries remain explicitly unexpanded.",
+  "scope_note": "Benchmark and selected SDK runtime translation units are compiled and lowered independently, then indexed for recursive analysis. Scalar integer call arguments proven constant by SCEV are propagated into callees. Target-introduced libcalls and acyclic runtime inline assembly are bounded from their independently compiled SDK translation units. Final annotated assembly is used for ordinary functions so DPU backend macros that emit multiple instructions are charged at their emitted size. Exact SCEV loop counts are transferred to Machine-CFG entry, backedge, and exit flows only for verified single-entry natural loops. TRNS phase 2 uses an amortized per-tasklet partition of its finite, atomically distributed tile domain to bound total DPU work without multiplying nested data-dependent loops. Complete barrier generations are composed from T-1 non-last paths and one last/resume path. Failed SDK allocator and barrier acquire attempts are bounded under the explicit fair DPU revolver-scheduling assumption.",
   "dynamic_instruction_bound_direct": {
     "lower": 45328.0,
     "upper": 47377.0,
@@ -17,10 +17,11 @@
   },
   "dynamic_instruction_bound": {
     "lower": 3719621.0,
-    "upper": 3721766.0,
+    "upper": 3723705.0,
     "exact": false
   },
-  "analysis_schema_version": "machine-loop-flow-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v1",
+  "collective_expansions": [],
   "per_tasklet": [
     {
       "tid": 0,
@@ -31,7 +32,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464957.0,
-        "upper": 465226.0,
+        "upper": 465499.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -124,29 +125,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 5.0,
-            "upper": 5.0,
-            "exact": true,
-            "value": 5
+            "upper": 40.0,
+            "exact": false
           },
           "contribution": {
             "lower": 5.0,
-            "upper": 5.0,
-            "exact": true,
-            "value": 5
+            "upper": 40.0,
+            "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -170,27 +157,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -214,27 +189,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 4,
@@ -271,17 +234,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 1,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              1,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -400,6 +383,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -416,6 +400,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -432,6 +425,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -453,6 +449,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -469,6 +481,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -488,6 +508,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -505,6 +547,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -521,6 +567,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -533,6 +582,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -548,7 +606,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -643,27 +701,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -687,27 +733,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -744,17 +778,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -875,6 +929,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -891,6 +946,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -907,6 +971,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -928,6 +995,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -944,6 +1027,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -963,6 +1054,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -980,6 +1093,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -996,6 +1113,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -1008,6 +1128,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -1023,7 +1152,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -1118,27 +1247,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -1162,27 +1279,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -1219,17 +1324,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -1350,6 +1475,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -1366,6 +1492,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -1382,6 +1517,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -1403,6 +1541,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -1419,6 +1573,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -1438,6 +1600,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -1455,6 +1639,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -1471,6 +1659,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -1483,6 +1674,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -1498,7 +1698,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -1593,27 +1793,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -1637,27 +1825,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -1694,17 +1870,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -1825,6 +2021,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -1841,6 +2038,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -1857,6 +2063,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -1878,6 +2087,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -1894,6 +2119,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -1913,6 +2146,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -1930,6 +2185,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -1946,6 +2205,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -1958,6 +2220,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -1973,7 +2244,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -2068,27 +2339,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -2112,27 +2371,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -2169,17 +2416,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -2300,6 +2567,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -2316,6 +2584,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -2332,6 +2609,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -2353,6 +2633,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -2369,6 +2665,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -2388,6 +2692,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -2405,6 +2731,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -2421,6 +2751,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -2433,6 +2766,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -2448,7 +2790,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -2543,27 +2885,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -2587,27 +2917,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -2644,17 +2962,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -2775,6 +3113,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -2791,6 +3130,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -2807,6 +3155,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -2828,6 +3179,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -2844,6 +3211,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -2863,6 +3238,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -2880,6 +3277,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -2896,6 +3297,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -2908,6 +3312,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -2923,7 +3336,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -3018,27 +3431,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -3062,27 +3463,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -3119,17 +3508,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -3250,6 +3659,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -3266,6 +3676,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -3282,6 +3701,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -3303,6 +3725,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -3319,6 +3757,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -3338,6 +3784,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -3355,6 +3823,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -3371,6 +3843,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -3383,6 +3858,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -3398,7 +3882,7 @@
       },
       "instruction_bound_with_internal_callees": {
         "lower": 464952.0,
-        "upper": 465220.0,
+        "upper": 465458.0,
         "exact": false
       },
       "ir_block_bounds": {
@@ -3493,27 +3977,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 2,
@@ -3537,27 +4009,15 @@
           },
           "callee_expanded_bound_per_call": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
           "contribution": {
             "lower": 11.0,
-            "upper": 17.0,
+            "upper": 136.0,
             "exact": false
           },
-          "callee_unexpanded_calls": [
-            {
-              "callee": "__atomic_acquire_retry",
-              "block": "bb.0.bb",
-              "call_bound": {
-                "lower": 1.0,
-                "upper": 1.0,
-                "exact": true,
-                "value": 1
-              },
-              "reason": "atomic acquire retry count depends on contention and cross-tasklet scheduling; the successful acquire is counted once but failed retries are excluded"
-            }
-          ]
+          "callee_unexpanded_calls": []
         },
         {
           "call_index": 3,
@@ -3594,17 +4054,37 @@
           "callee_unexpanded_calls": []
         }
       ],
-      "unexpanded_calls": [
+      "collective_calls_deferred_to_generation_scope": [
         {
           "callee": "barrier_wait",
           "block": "bb4",
+          "call_index": 0,
           "call_bound": {
             "lower": 1.0,
             "upper": 1.0,
             "exact": true,
             "value": 1
           },
-          "reason": "collective runtime primitive requires generation-level semantics; ordinary per-tasklet expansion is disabled"
+          "call_path": [
+            [
+              "main_kernel1",
+              0,
+              "bb4",
+              "barrier_wait"
+            ]
+          ]
+        }
+      ],
+      "unexpanded_calls": [
+        {
+          "callee": "barrier_wait",
+          "call_bound": {
+            "lower": 1.0,
+            "upper": 1.0,
+            "exact": true,
+            "value": 1
+          },
+          "reason": "collective call counts are not equal exact integers across all tasklets"
         }
       ],
       "machine": {
@@ -3725,6 +4205,7 @@
             ]
           }
         ],
+        "runtime_machine_block_bounds": [],
         "machine_blocks": [
           {
             "function": "main_kernel1",
@@ -3741,6 +4222,15 @@
             "edge_instruction_costs": {
               "2": 7
             },
+            "assembly_instructions": [
+              "sd r22, 40, d22",
+              "add r22, r22, 48",
+              "sd r22, -24, d14",
+              "sd r22, -32, d16",
+              "sd r22, -40, d18",
+              "sd r22, -48, d20",
+              "move r20, id, nz, .LBB1_2"
+            ],
             "execution_bound": null
           },
           {
@@ -3757,6 +4247,9 @@
               "mem_reset"
             ],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "call r23, mem_reset"
+            ],
             "execution_bound": null
           },
           {
@@ -3778,6 +4271,22 @@
             "edge_instruction_costs": {
               "7": 14
             },
+            "assembly_instructions": [
+              "move r0, my_barrier",
+              "call r23, barrier_wait",
+              "lw r16, zero, DPU_INPUT_ARGUMENTS",
+              "move r0, DPU_INPUT_ARGUMENTS",
+              "lw r18, r0, 4",
+              "lsl r17, r20, 10",
+              "move r15, 1024",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r14, r0",
+              "move r0, r15",
+              "call r23, mem_alloc",
+              "move r15, r0",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -3794,6 +4303,14 @@
             "edge_instruction_costs": {
               "4": 6
             },
+            "assembly_instructions": [
+              "move r0, __sys_used_mram_end",
+              "add r0, r0, r18",
+              "sw r22, -16, r0",
+              "add r19, r17, 1024",
+              "move r0, 0",
+              "lsl_sub r20, r0, r20, 10, true, .LBB1_4"
+            ],
             "execution_bound": null
           },
           {
@@ -3813,6 +4330,28 @@
             "edge_instruction_costs": {
               "7": 20
             },
+            "assembly_instructions": [
+              "add r0, r0, r20",
+              "move r1, __sys_used_mram_end",
+              "add r1, r17, r1",
+              "move r2, -1",
+              "lsr_add r2, r2, r0, 3",
+              "lsl_add r3, r14, r2, 24",
+              "ldma r3, r1, 0",
+              "lw r1, r22, -16",
+              "add r21, r1, r17",
+              "lsl_add r18, r15, r2, 24",
+              "ldma r18, r21, 0",
+              "lsr r2, r0, 2",
+              "move r0, r15",
+              "move r1, r14",
+              "call r23, vector_addition",
+              "sdma r18, r21, 0",
+              "add r17, r17, 8192",
+              "add r19, r19, 8192",
+              "add r20, r20, -8192",
+              "jleu r16, r17, .LBB1_7"
+            ],
             "execution_bound": null
           },
           {
@@ -3830,6 +4369,10 @@
             "edge_instruction_costs": {
               "6": 2
             },
+            "assembly_instructions": [
+              "move r0, r16",
+              "jltu r16, r19, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -3846,6 +4389,9 @@
             "edge_instruction_costs": {
               "6": 1
             },
+            "assembly_instructions": [
+              "move r0, r19, true, .LBB1_6"
+            ],
             "execution_bound": null
           },
           {
@@ -3858,6 +4404,15 @@
             "instructions": 7,
             "calls": [],
             "edge_instruction_costs": {},
+            "assembly_instructions": [
+              "move r0, 0",
+              "ld d20, r22, -48",
+              "ld d18, r22, -40",
+              "ld d16, r22, -32",
+              "ld d14, r22, -24",
+              "ld d22, r22, -8",
+              "jump r23"
+            ],
             "execution_bound": null
           }
         ]
@@ -3957,6 +4512,45 @@
             "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/alloc.c",
             "-o",
             "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_alloc/module.ll"
+          ]
+        }
+      },
+      {
+        "name": "syslib_barrier",
+        "kind": "runtime",
+        "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/barrier.c",
+        "llvm_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.ll",
+        "named_ir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.named.ll",
+        "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.late.mir",
+        "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.annotated.s",
+        "functions": [
+          "barrier_wait"
+        ],
+        "machine_cfg_validation_status": "match",
+        "emit_info": {
+          "source": "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/barrier.c",
+          "emit_llvm_argv": [
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/bin/dpu-upmem-dpurte-clang",
+            "-std=c11",
+            "-O2",
+            "-g",
+            "-DNDEBUG",
+            "-DCOMPILER_TIMESTAMP=0",
+            "-nostdlib",
+            "-nostdinc",
+            "-Wno-incompatible-library-redeclaration",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/stdlib",
+            "-I",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib",
+            "-S",
+            "-emit-llvm",
+            "/home/pim/lang_evaluation/pim_model/sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/barrier.c",
+            "-o",
+            "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.ll"
           ]
         }
       }
@@ -4403,10 +4997,255 @@
               ]
             }
           ]
+        },
+        {
+          "name": "syslib_barrier",
+          "kind": "runtime",
+          "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.late.mir",
+          "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets8_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.annotated.s",
+          "status": "match",
+          "join_key": "function name + machine block number (bb.N)",
+          "cfg_authority": "late MIR successors",
+          "instruction_count_source": "final annotated assembly MCInst stream",
+          "errors": 0,
+          "warnings": 0,
+          "functions": [
+            {
+              "function": "barrier_wait",
+              "status": "match",
+              "errors": 0,
+              "warnings": 0,
+              "blocks": [
+                {
+                  "machine_block_number": 0,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.0.bb",
+                    "ir_block": "bb",
+                    "successors": [
+                      1,
+                      6
+                    ],
+                    "pre_expansion_instruction_count": 5
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.0.bb",
+                    "ir_block": "bb",
+                    "successors": [
+                      1,
+                      6
+                    ],
+                    "emitted_mcinst_count": 5
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 1,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.1.bb9",
+                    "ir_block": "bb9",
+                    "successors": [
+                      2,
+                      5
+                    ],
+                    "pre_expansion_instruction_count": 1
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.1.bb9",
+                    "ir_block": "bb9",
+                    "successors": [
+                      2,
+                      5
+                    ],
+                    "emitted_mcinst_count": 1
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 2,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.2.bb10",
+                    "ir_block": "bb10",
+                    "successors": [
+                      3,
+                      4
+                    ],
+                    "pre_expansion_instruction_count": 2
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.2.bb10",
+                    "ir_block": "bb10",
+                    "successors": [
+                      3,
+                      4
+                    ],
+                    "emitted_mcinst_count": 2
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 3,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.3.bb15",
+                    "ir_block": "bb15",
+                    "successors": [
+                      3,
+                      4
+                    ],
+                    "pre_expansion_instruction_count": 4
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.3.bb15",
+                    "ir_block": "bb15",
+                    "successors": [
+                      3,
+                      4
+                    ],
+                    "emitted_mcinst_count": 4
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 4,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.4.bb21",
+                    "ir_block": "bb21",
+                    "successors": [
+                      5
+                    ],
+                    "pre_expansion_instruction_count": 4
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.4.bb21",
+                    "ir_block": "bb21",
+                    "successors": [
+                      5
+                    ],
+                    "emitted_mcinst_count": 4
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 5,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.5.bb24",
+                    "ir_block": "bb24",
+                    "successors": [],
+                    "pre_expansion_instruction_count": 2
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.5.bb24",
+                    "ir_block": "bb24",
+                    "successors": [],
+                    "emitted_mcinst_count": 2
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 6,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.6.bb25",
+                    "ir_block": "bb25",
+                    "successors": [
+                      7,
+                      8
+                    ],
+                    "pre_expansion_instruction_count": 2
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.6.bb25",
+                    "ir_block": "bb25",
+                    "successors": [
+                      7,
+                      8
+                    ],
+                    "emitted_mcinst_count": 2
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 7,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.7.bb26",
+                    "ir_block": "bb26",
+                    "successors": [
+                      9
+                    ],
+                    "pre_expansion_instruction_count": 2
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.7.bb26",
+                    "ir_block": "bb26",
+                    "successors": [
+                      9
+                    ],
+                    "emitted_mcinst_count": 2
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 8,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.8.bb29",
+                    "ir_block": "bb29",
+                    "successors": [
+                      9
+                    ],
+                    "pre_expansion_instruction_count": 3
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.8.bb29",
+                    "ir_block": "bb29",
+                    "successors": [
+                      9
+                    ],
+                    "emitted_mcinst_count": 3
+                  },
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "machine_block_number": 9,
+                  "mapping_status": "mapped",
+                  "mir": {
+                    "label": "bb.9.bb35",
+                    "ir_block": "bb35",
+                    "successors": [],
+                    "pre_expansion_instruction_count": 6
+                  },
+                  "annotated_assembly": {
+                    "label": "bb.9.bb35",
+                    "ir_block": "bb35",
+                    "successors": [],
+                    "emitted_mcinst_count": 6
+                  },
+                  "errors": [],
+                  "warnings": []
+                }
+              ]
+            }
+          ]
         }
       ]
     },
     "function_index": {
+      "barrier_wait": "syslib_barrier",
       "main": "benchmark",
       "main_kernel1": "benchmark",
       "mem_alloc": "syslib_alloc",

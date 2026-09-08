@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "machine-loop-flow-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v1",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -26,11 +26,10 @@
   },
   "dynamic_instruction_bound": {
     "lower": 14877573,
-    "upper": 14885958,
+    "upper": 14894193,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "per_dpu": [
@@ -38,7 +37,7 @@
       "dpu": 0,
       "bound": {
         "lower": 14877573.0,
-        "upper": 14885958.0,
+        "upper": 14894193.0,
         "exact": false
       },
       "phases": [
@@ -53,11 +52,10 @@
           "unknown_loop_backedge_uppers": {},
           "bound": {
             "lower": 14877573,
-            "upper": 14885958,
+            "upper": 14894193,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
             "barrier_wait"
           ],
           "machine_cfg_validation_status": "match",

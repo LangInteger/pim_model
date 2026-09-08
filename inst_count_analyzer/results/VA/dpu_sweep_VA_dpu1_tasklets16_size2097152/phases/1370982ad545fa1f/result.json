@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "machine-loop-flow-v1",
+  "analysis_schema_version": "runtime-sync-expansion-v1",
   "tasklets": 16,
   "params": {
     "kernel": 0,
@@ -9,11 +9,10 @@
   },
   "dynamic_instruction_bound": {
     "lower": 14877573,
-    "upper": 14885958,
+    "upper": 14894193,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
     "barrier_wait"
   ],
   "machine_cfg_validation_status": "match",

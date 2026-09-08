@@ -1,5 +1,6 @@
 {
   "benchmark": "BS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 8,
   "params": {
     "input_size": 32768,
@@ -7,14 +8,12 @@
     "slice_per_dpu": 4096
   },
   "dynamic_instruction_bound": {
-    "lower": 168525,
-    "upper": 17200206,
+    "lower": 168788,
+    "upper": 17203695,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

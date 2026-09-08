@@ -1,5 +1,6 @@
 {
   "benchmark": "MLP",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -13,6 +14,7 @@
     "setting_id": "dpu_sweep_MLP_dpu1_tasklets16_size1024"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/MLP",
@@ -21,20 +23,17 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 38132079,
-    "upper": 166391250,
+    "lower": 38133492,
+    "upper": 166447125,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 38132079.0,
-        "upper": 166391250.0,
+        "lower": 38133492.0,
+        "upper": 166447125.0,
         "exact": false
       },
       "phases": [
@@ -49,14 +48,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 12710693,
-            "upper": 55463750,
+            "lower": 12711164,
+            "upper": 55482375,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/1f825920b0bd1474/result.json"
         },
@@ -71,14 +68,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 12710693,
-            "upper": 55463750,
+            "lower": 12711164,
+            "upper": 55482375,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/1f825920b0bd1474/result.json"
         },
@@ -93,14 +88,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 12710693,
-            "upper": 55463750,
+            "lower": 12711164,
+            "upper": 55482375,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/1f825920b0bd1474/result.json"
         }

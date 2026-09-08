@@ -1,19 +1,20 @@
 {
   "benchmark": "UNI",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 8,
   "params": {
     "kernel": 0,
     "size": 4194304
   },
   "dynamic_instruction_bound": {
-    "lower": 1852829,
-    "upper": 4085274,
+    "lower": 1926355,
+    "upper": 4394585,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
+    "__atomic_acquire_retry"
   ],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

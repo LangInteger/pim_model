@@ -1,5 +1,6 @@
 {
   "benchmark": "GEMV",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "params": {
     "max_rows": 64,
@@ -8,14 +9,12 @@
     "nr_rows": 64
   },
   "dynamic_instruction_bound": {
-    "lower": 82213,
-    "upper": 211750,
+    "lower": 82684,
+    "upper": 230375,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 64,

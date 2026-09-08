@@ -1,5 +1,6 @@
 {
   "benchmark": "HST-S",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 8,
   "params": {
     "bins": 256,
@@ -8,14 +9,12 @@
     "transfer_size": 524288
   },
   "dynamic_instruction_bound": {
-    "lower": 2382341,
-    "upper": 6446320,
+    "lower": 2382866,
+    "upper": 6450053,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

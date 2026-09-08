@@ -1,5 +1,6 @@
 {
   "benchmark": "RED",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -17,6 +18,7 @@
     "setting_id": "dpu_sweep_RED_dpu16_tasklets16_size2097152"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/RED",
@@ -29,20 +31,17 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 679541,
-    "upper": 680793,
+    "lower": 680211,
+    "upper": 689408,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -56,14 +55,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -72,8 +69,8 @@
     {
       "dpu": 1,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -87,14 +84,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -103,8 +98,8 @@
     {
       "dpu": 2,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -118,14 +113,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -134,8 +127,8 @@
     {
       "dpu": 3,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -149,14 +142,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -165,8 +156,8 @@
     {
       "dpu": 4,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -180,14 +171,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -196,8 +185,8 @@
     {
       "dpu": 5,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -211,14 +200,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -227,8 +214,8 @@
     {
       "dpu": 6,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -242,14 +229,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -258,8 +243,8 @@
     {
       "dpu": 7,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -273,14 +258,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -289,8 +272,8 @@
     {
       "dpu": 8,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -304,14 +287,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -320,8 +301,8 @@
     {
       "dpu": 9,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -335,14 +316,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -351,8 +330,8 @@
     {
       "dpu": 10,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -366,14 +345,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -382,8 +359,8 @@
     {
       "dpu": 11,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -397,14 +374,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -413,8 +388,8 @@
     {
       "dpu": 12,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -428,14 +403,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -444,8 +417,8 @@
     {
       "dpu": 13,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -459,14 +432,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -475,8 +446,8 @@
     {
       "dpu": 14,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -490,14 +461,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }
@@ -506,8 +475,8 @@
     {
       "dpu": 15,
       "bound": {
-        "lower": 679541.0,
-        "upper": 680793.0,
+        "lower": 680211.0,
+        "upper": 689408.0,
         "exact": false
       },
       "phases": [
@@ -521,14 +490,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 679541,
-            "upper": 680793,
+            "lower": 680211,
+            "upper": 689408,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/2717ff2efdffb77d/result.json"
         }

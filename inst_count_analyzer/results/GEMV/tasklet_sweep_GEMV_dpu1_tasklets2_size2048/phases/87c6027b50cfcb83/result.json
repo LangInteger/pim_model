@@ -1,5 +1,6 @@
 {
   "benchmark": "GEMV",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 2,
   "params": {
     "max_rows": 2048,
@@ -8,14 +9,12 @@
     "nr_rows": 2048
   },
   "dynamic_instruction_bound": {
-    "lower": 2572521,
-    "upper": 6667694,
+    "lower": 2572572,
+    "upper": 6667881,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

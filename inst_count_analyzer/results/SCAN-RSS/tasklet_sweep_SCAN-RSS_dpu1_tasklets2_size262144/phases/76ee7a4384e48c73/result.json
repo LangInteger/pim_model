@@ -1,19 +1,18 @@
 {
   "benchmark": "SCAN-RSS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 2,
   "params": {
     "kernel": 0,
     "size": 2097152
   },
   "dynamic_instruction_bound": {
-    "lower": 802895,
-    "upper": 802917,
+    "lower": 802955,
+    "upper": 803048,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

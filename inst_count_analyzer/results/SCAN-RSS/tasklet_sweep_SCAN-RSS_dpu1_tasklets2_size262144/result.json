@@ -1,5 +1,6 @@
 {
   "benchmark": "SCAN-RSS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 2,
   "experiment_setting": {
     "experiment": "tasklet_sweep",
@@ -14,6 +15,7 @@
     "setting_id": "tasklet_sweep_SCAN-RSS_dpu1_tasklets2_size262144"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-RSS",
@@ -23,20 +25,19 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 3008698,
-    "upper": 3011828,
+    "lower": 3038520,
+    "upper": 3059228,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
+    "__atomic_acquire_retry"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 3008698.0,
-        "upper": 3011828.0,
+        "lower": 3038520.0,
+        "upper": 3059228.0,
         "exact": false
       },
       "phases": [
@@ -50,14 +51,12 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 802895,
-            "upper": 802917,
+            "lower": 802955,
+            "upper": 803048,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/76ee7a4384e48c73/result.json"
         },
@@ -71,14 +70,14 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 2205803,
-            "upper": 2208911,
+            "lower": 2235565,
+            "upper": 2256180,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/e1c11daebf675b47/result.json"
         }

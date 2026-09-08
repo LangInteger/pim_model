@@ -1,5 +1,6 @@
 {
   "benchmark": "TS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "params": {
     "exclusion_zone": 0,
@@ -11,14 +12,12 @@
     "ts_length": 65536
   },
   "dynamic_instruction_bound": {
-    "lower": 95269104,
-    "upper": 233547985,
+    "lower": 95269831,
+    "upper": 233574770,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 1,

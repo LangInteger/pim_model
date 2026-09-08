@@ -1,19 +1,18 @@
 {
   "benchmark": "SCAN-SSA",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "params": {
     "kernel": 1,
     "size": 524288
   },
   "dynamic_instruction_bound": {
-    "lower": 267285,
-    "upper": 267446,
+    "lower": 267644,
+    "upper": 273831,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 16,

@@ -1,5 +1,6 @@
 {
   "benchmark": "SEL",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 2,
   "experiment_setting": {
     "experiment": "tasklet_sweep",
@@ -13,6 +14,7 @@
     "setting_id": "tasklet_sweep_SEL_dpu1_tasklets2_size524288"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SEL",
@@ -21,20 +23,19 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 3100779,
-    "upper": 4675722,
+    "lower": 3160233,
+    "upper": 4770095,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
+    "__atomic_acquire_retry"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 3100779.0,
-        "upper": 4675722.0,
+        "lower": 3160233.0,
+        "upper": 4770095.0,
         "exact": false
       },
       "phases": [
@@ -47,14 +48,14 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 3100779,
-            "upper": 4675722,
+            "lower": 3160233,
+            "upper": 4770095,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/6c3ec017b09b476d/result.json"
         }

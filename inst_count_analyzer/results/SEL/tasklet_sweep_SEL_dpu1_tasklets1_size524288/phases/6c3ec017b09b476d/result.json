@@ -1,19 +1,18 @@
 {
   "benchmark": "SEL",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 1,
   "params": {
     "kernel": 0,
     "size": 4194304
   },
   "dynamic_instruction_bound": {
-    "lower": 3047480,
-    "upper": 4616265,
+    "lower": 3080266,
+    "upper": 4649049,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

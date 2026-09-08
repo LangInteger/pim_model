@@ -1,0 +1,1466 @@
+{
+  "status": "match",
+  "modules": [
+    {
+      "name": "benchmark",
+      "kind": "benchmark",
+      "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/kernel.late.mir",
+      "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/kernel.annotated.s",
+      "status": "match",
+      "join_key": "function name + machine block number (bb.N)",
+      "cfg_authority": "final annotated-assembly successors",
+      "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
+      "instruction_count_source": "final annotated assembly MCInst stream",
+      "errors": 0,
+      "warnings": 0,
+      "functions": [
+        {
+          "function": "add_",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 385
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 513
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "handshake_sync",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 5,
+          "final_assembly_blocks": 5,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 8
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 8
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1",
+                "ir_block": null,
+                "successors": [
+                  3
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.1",
+                "ir_block": null,
+                "successors": [
+                  3
+                ],
+                "contracted_successors": [
+                  3
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  3,
+                  4
+                ],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  3,
+                  4
+                ],
+                "contracted_successors": [
+                  3,
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 3,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.3.bb8",
+                "ir_block": "bb8",
+                "successors": [
+                  4
+                ],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.3.bb8",
+                "ir_block": "bb8",
+                "successors": [
+                  4
+                ],
+                "contracted_successors": [
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 4,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.4.bb13",
+                "ir_block": "bb13",
+                "successors": [],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.4.bb13",
+                "ir_block": "bb13",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "main",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 9
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 9
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "main_kernel1",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 8,
+          "final_assembly_blocks": 8,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "contracted_successors": [
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb4",
+                "ir_block": "bb4",
+                "successors": [
+                  3,
+                  5
+                ],
+                "pre_expansion_instruction_count": 9
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb4",
+                "ir_block": "bb4",
+                "successors": [
+                  3,
+                  5
+                ],
+                "contracted_successors": [
+                  3,
+                  5
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 9
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 3,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.3.bb45.preheader",
+                "ir_block": null,
+                "successors": [
+                  4
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.3",
+                "ir_block": null,
+                "successors": [
+                  4
+                ],
+                "contracted_successors": [
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 4,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.4.bb45",
+                "ir_block": "bb45",
+                "successors": [
+                  4,
+                  5
+                ],
+                "pre_expansion_instruction_count": 8
+              },
+              "annotated_assembly": {
+                "label": "bb.4.bb45",
+                "ir_block": "bb45",
+                "successors": [
+                  4,
+                  5
+                ],
+                "contracted_successors": [
+                  4,
+                  5
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 9
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 5,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.5.bb10",
+                "ir_block": "bb10",
+                "successors": [
+                  6,
+                  7
+                ],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.5.bb10",
+                "ir_block": "bb10",
+                "successors": [
+                  6,
+                  7
+                ],
+                "contracted_successors": [
+                  6,
+                  7
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 6,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.6.bb13",
+                "ir_block": "bb13",
+                "successors": [
+                  7
+                ],
+                "pre_expansion_instruction_count": 34
+              },
+              "annotated_assembly": {
+                "label": "bb.6.bb13",
+                "ir_block": "bb13",
+                "successors": [
+                  7
+                ],
+                "contracted_successors": [
+                  7
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 49
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 7,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.7.bb54",
+                "ir_block": "bb54",
+                "successors": [],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.7.bb54",
+                "ir_block": "bb54",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "main_kernel2",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 10,
+          "final_assembly_blocks": 10,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 7
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 7
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "contracted_successors": [
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb4",
+                "ir_block": "bb4",
+                "successors": [
+                  3,
+                  4
+                ],
+                "pre_expansion_instruction_count": 12
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb4",
+                "ir_block": "bb4",
+                "successors": [
+                  3,
+                  4
+                ],
+                "contracted_successors": [
+                  3,
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 12
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 3,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.3.bb14",
+                "ir_block": "bb14",
+                "successors": [
+                  4
+                ],
+                "pre_expansion_instruction_count": 3
+              },
+              "annotated_assembly": {
+                "label": "bb.3.bb14",
+                "ir_block": "bb14",
+                "successors": [
+                  4
+                ],
+                "contracted_successors": [
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 3
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 4,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.4.bb16",
+                "ir_block": "bb16",
+                "successors": [
+                  5,
+                  9
+                ],
+                "pre_expansion_instruction_count": 3
+              },
+              "annotated_assembly": {
+                "label": "bb.4.bb16",
+                "ir_block": "bb16",
+                "successors": [
+                  5,
+                  9
+                ],
+                "contracted_successors": [
+                  5,
+                  9
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 3
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 5,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.5",
+                "ir_block": null,
+                "successors": [
+                  6
+                ],
+                "pre_expansion_instruction_count": 4
+              },
+              "annotated_assembly": {
+                "label": "bb.5",
+                "ir_block": null,
+                "successors": [
+                  6
+                ],
+                "contracted_successors": [
+                  6
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 4
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 6,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.6.bb21",
+                "ir_block": "bb21",
+                "successors": [
+                  7,
+                  8
+                ],
+                "pre_expansion_instruction_count": 20
+              },
+              "annotated_assembly": {
+                "label": "bb.6.bb21",
+                "ir_block": "bb21",
+                "successors": [
+                  7,
+                  8
+                ],
+                "contracted_successors": [
+                  7,
+                  8
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 21
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 7,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.7.bb31",
+                "ir_block": "bb31",
+                "successors": [
+                  8
+                ],
+                "pre_expansion_instruction_count": 7
+              },
+              "annotated_assembly": {
+                "label": "bb.7.bb31",
+                "ir_block": "bb31",
+                "successors": [
+                  8
+                ],
+                "contracted_successors": [
+                  8
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 9
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 8,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.8.bb35",
+                "ir_block": "bb35",
+                "successors": [
+                  6,
+                  9
+                ],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.8.bb35",
+                "ir_block": "bb35",
+                "successors": [
+                  6,
+                  9
+                ],
+                "contracted_successors": [
+                  6,
+                  9
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 9,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.9.bb20",
+                "ir_block": "bb20",
+                "successors": [],
+                "pre_expansion_instruction_count": 7
+              },
+              "annotated_assembly": {
+                "label": "bb.9.bb20",
+                "ir_block": "bb20",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 7
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "reduction",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 256
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 383
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "scan",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 385
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 512
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "syslib_alloc",
+      "kind": "runtime",
+      "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_alloc/module.late.mir",
+      "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_alloc/module.annotated.s",
+      "status": "match",
+      "join_key": "function name + machine block number (bb.N)",
+      "cfg_authority": "final annotated-assembly successors",
+      "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
+      "instruction_count_source": "final annotated assembly MCInst stream",
+      "errors": 0,
+      "warnings": 0,
+      "functions": [
+        {
+          "function": "mem_alloc",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 7
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 7
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "mem_alloc_nolock",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 3,
+          "final_assembly_blocks": 3,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "pre_expansion_instruction_count": 4
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb2",
+                "ir_block": "bb2",
+                "successors": [
+                  2
+                ],
+                "contracted_successors": [
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb7",
+                "ir_block": "bb7",
+                "successors": [],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb7",
+                "ir_block": "bb7",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "mem_reset",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 1,
+          "final_assembly_blocks": 1,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "syslib_barrier",
+      "kind": "runtime",
+      "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_barrier/module.late.mir",
+      "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_barrier/module.annotated.s",
+      "status": "match",
+      "join_key": "function name + machine block number (bb.N)",
+      "cfg_authority": "final annotated-assembly successors",
+      "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
+      "instruction_count_source": "final annotated assembly MCInst stream",
+      "errors": 0,
+      "warnings": 0,
+      "functions": [
+        {
+          "function": "barrier_wait",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 10,
+          "final_assembly_blocks": 10,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  6
+                ],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  6
+                ],
+                "contracted_successors": [
+                  1,
+                  6
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb9",
+                "ir_block": "bb9",
+                "successors": [
+                  2,
+                  5
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb9",
+                "ir_block": "bb9",
+                "successors": [
+                  2,
+                  5
+                ],
+                "contracted_successors": [
+                  2,
+                  5
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb10",
+                "ir_block": "bb10",
+                "successors": [
+                  3,
+                  4
+                ],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb10",
+                "ir_block": "bb10",
+                "successors": [
+                  3,
+                  4
+                ],
+                "contracted_successors": [
+                  3,
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 3,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.3.bb15",
+                "ir_block": "bb15",
+                "successors": [
+                  3,
+                  4
+                ],
+                "pre_expansion_instruction_count": 4
+              },
+              "annotated_assembly": {
+                "label": "bb.3.bb15",
+                "ir_block": "bb15",
+                "successors": [
+                  3,
+                  4
+                ],
+                "contracted_successors": [
+                  3,
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 4
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 4,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.4.bb21",
+                "ir_block": "bb21",
+                "successors": [
+                  5
+                ],
+                "pre_expansion_instruction_count": 4
+              },
+              "annotated_assembly": {
+                "label": "bb.4.bb21",
+                "ir_block": "bb21",
+                "successors": [
+                  5
+                ],
+                "contracted_successors": [
+                  5
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 4
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 5,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.5.bb24",
+                "ir_block": "bb24",
+                "successors": [],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.5.bb24",
+                "ir_block": "bb24",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 6,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.6.bb25",
+                "ir_block": "bb25",
+                "successors": [
+                  7,
+                  8
+                ],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.6.bb25",
+                "ir_block": "bb25",
+                "successors": [
+                  7,
+                  8
+                ],
+                "contracted_successors": [
+                  7,
+                  8
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 7,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.7.bb26",
+                "ir_block": "bb26",
+                "successors": [
+                  9
+                ],
+                "pre_expansion_instruction_count": 2
+              },
+              "annotated_assembly": {
+                "label": "bb.7.bb26",
+                "ir_block": "bb26",
+                "successors": [
+                  9
+                ],
+                "contracted_successors": [
+                  9
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 2
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 8,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.8.bb29",
+                "ir_block": "bb29",
+                "successors": [
+                  9
+                ],
+                "pre_expansion_instruction_count": 3
+              },
+              "annotated_assembly": {
+                "label": "bb.8.bb29",
+                "ir_block": "bb29",
+                "successors": [
+                  9
+                ],
+                "contracted_successors": [
+                  9
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 3
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 9,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.9.bb35",
+                "ir_block": "bb35",
+                "successors": [],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.9.bb35",
+                "ir_block": "bb35",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "syslib_handshake",
+      "kind": "runtime",
+      "late_mir": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_handshake/module.late.mir",
+      "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/SCAN-RSS/dpu_sweep_SCAN-RSS_dpu1_tasklets16_size1048576/phases/5cec0cd98d598cff/runtime/syslib_handshake/module.annotated.s",
+      "status": "match",
+      "join_key": "function name + machine block number (bb.N)",
+      "cfg_authority": "final annotated-assembly successors",
+      "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
+      "instruction_count_source": "final annotated assembly MCInst stream",
+      "errors": 0,
+      "warnings": 0,
+      "functions": [
+        {
+          "function": "handshake_notify",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 3,
+          "final_assembly_blocks": 3,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 8
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 8
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb5",
+                "ir_block": "bb5",
+                "successors": [],
+                "pre_expansion_instruction_count": 4
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb5",
+                "ir_block": "bb5",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 4
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb7",
+                "ir_block": "bb7",
+                "successors": [],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb7",
+                "ir_block": "bb7",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        },
+        {
+          "function": "handshake_wait_for",
+          "status": "match",
+          "errors": 0,
+          "warnings": 0,
+          "late_mir_blocks": 5,
+          "final_assembly_blocks": 5,
+          "backend_lowering_blocks": 0,
+          "blocks": [
+            {
+              "machine_block_number": 0,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "pre_expansion_instruction_count": 9
+              },
+              "annotated_assembly": {
+                "label": "bb.0.bb",
+                "ir_block": "bb",
+                "successors": [
+                  1,
+                  2
+                ],
+                "contracted_successors": [
+                  1,
+                  2
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 9
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 1,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.1.bb6",
+                "ir_block": "bb6",
+                "successors": [],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.1.bb6",
+                "ir_block": "bb6",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 2,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.2.bb8",
+                "ir_block": "bb8",
+                "successors": [
+                  3,
+                  4
+                ],
+                "pre_expansion_instruction_count": 1
+              },
+              "annotated_assembly": {
+                "label": "bb.2.bb8",
+                "ir_block": "bb8",
+                "successors": [
+                  3,
+                  4
+                ],
+                "contracted_successors": [
+                  3,
+                  4
+                ],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 1
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 3,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.3.bb11",
+                "ir_block": "bb11",
+                "successors": [],
+                "pre_expansion_instruction_count": 5
+              },
+              "annotated_assembly": {
+                "label": "bb.3.bb11",
+                "ir_block": "bb11",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 5
+              },
+              "errors": [],
+              "warnings": []
+            },
+            {
+              "machine_block_number": 4,
+              "mapping_status": "mapped",
+              "mir": {
+                "label": "bb.4.bb13",
+                "ir_block": "bb13",
+                "successors": [],
+                "pre_expansion_instruction_count": 6
+              },
+              "annotated_assembly": {
+                "label": "bb.4.bb13",
+                "ir_block": "bb13",
+                "successors": [],
+                "contracted_successors": [],
+                "reachable_from_original_blocks": null,
+                "emitted_mcinst_count": 6
+              },
+              "errors": [],
+              "warnings": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

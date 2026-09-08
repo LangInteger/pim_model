@@ -1,5 +1,6 @@
 {
   "benchmark": "TRNS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "params": {
     "M_": 128,
@@ -8,14 +9,14 @@
     "n": 8
   },
   "dynamic_instruction_bound": {
-    "lower": 1525,
-    "upper": 600694,
+    "lower": 1820,
+    "upper": 615239,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
+    "__atomic_acquire_retry"
   ],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 64,

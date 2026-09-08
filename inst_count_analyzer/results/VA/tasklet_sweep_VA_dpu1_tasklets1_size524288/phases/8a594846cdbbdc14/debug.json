@@ -1291,7 +1291,8 @@
           "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets1_size524288/phases/8a594846cdbbdc14/kernel.annotated.s",
           "status": "match",
           "join_key": "function name + machine block number (bb.N)",
-          "cfg_authority": "late MIR successors",
+          "cfg_authority": "final annotated-assembly successors",
+          "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
           "instruction_count_source": "final annotated assembly MCInst stream",
           "errors": 0,
           "warnings": 0,
@@ -1301,6 +1302,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 1,
+              "final_assembly_blocks": 1,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1315,6 +1319,8 @@
                     "label": "bb.0.bb",
                     "ir_block": "bb",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 9
                   },
                   "errors": [],
@@ -1327,6 +1333,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 8,
+              "final_assembly_blocks": 8,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1347,6 +1356,11 @@
                       1,
                       2
                     ],
+                    "contracted_successors": [
+                      1,
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 7
                   },
                   "errors": [],
@@ -1369,6 +1383,10 @@
                     "successors": [
                       2
                     ],
+                    "contracted_successors": [
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 1
                   },
                   "errors": [],
@@ -1393,6 +1411,11 @@
                       3,
                       7
                     ],
+                    "contracted_successors": [
+                      3,
+                      7
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 14
                   },
                   "errors": [],
@@ -1415,6 +1438,10 @@
                     "successors": [
                       4
                     ],
+                    "contracted_successors": [
+                      4
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 6
                   },
                   "errors": [],
@@ -1439,6 +1466,11 @@
                       5,
                       6
                     ],
+                    "contracted_successors": [
+                      5,
+                      6
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1461,6 +1493,10 @@
                     "successors": [
                       6
                     ],
+                    "contracted_successors": [
+                      6
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 1
                   },
                   "errors": [],
@@ -1485,6 +1521,11 @@
                       4,
                       7
                     ],
+                    "contracted_successors": [
+                      4,
+                      7
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 21
                   },
                   "errors": [],
@@ -1503,6 +1544,8 @@
                     "label": "bb.7.bb15",
                     "ir_block": "bb15",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 7
                   },
                   "errors": [],
@@ -1515,6 +1558,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 3,
+              "final_assembly_blocks": 3,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1535,6 +1581,11 @@
                       1,
                       2
                     ],
+                    "contracted_successors": [
+                      1,
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 1
                   },
                   "errors": [],
@@ -1559,6 +1610,11 @@
                       1,
                       2
                     ],
+                    "contracted_successors": [
+                      1,
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 7
                   },
                   "errors": [],
@@ -1577,6 +1633,8 @@
                     "label": "bb.2.bb3",
                     "ir_block": "bb3",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 1
                   },
                   "errors": [],
@@ -1593,7 +1651,8 @@
           "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets1_size524288/phases/8a594846cdbbdc14/runtime/syslib_alloc/module.annotated.s",
           "status": "match",
           "join_key": "function name + machine block number (bb.N)",
-          "cfg_authority": "late MIR successors",
+          "cfg_authority": "final annotated-assembly successors",
+          "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
           "instruction_count_source": "final annotated assembly MCInst stream",
           "errors": 0,
           "warnings": 0,
@@ -1603,6 +1662,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 1,
+              "final_assembly_blocks": 1,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1617,6 +1679,8 @@
                     "label": "bb.0.bb",
                     "ir_block": "bb",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 7
                   },
                   "errors": [],
@@ -1629,6 +1693,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 3,
+              "final_assembly_blocks": 3,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1649,6 +1716,11 @@
                       1,
                       2
                     ],
+                    "contracted_successors": [
+                      1,
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1671,6 +1743,10 @@
                     "successors": [
                       2
                     ],
+                    "contracted_successors": [
+                      2
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 6
                   },
                   "errors": [],
@@ -1689,6 +1765,8 @@
                     "label": "bb.2.bb7",
                     "ir_block": "bb7",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1701,6 +1779,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 1,
+              "final_assembly_blocks": 1,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1715,6 +1796,8 @@
                     "label": "bb.0.bb",
                     "ir_block": "bb",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 5
                   },
                   "errors": [],
@@ -1731,7 +1814,8 @@
           "annotated_assembly": "/home/pim/lang_evaluation/pim_model/inst_count_analyzer/.work/runs/VA/tasklet_sweep_VA_dpu1_tasklets1_size524288/phases/8a594846cdbbdc14/runtime/syslib_barrier/module.annotated.s",
           "status": "match",
           "join_key": "function name + machine block number (bb.N)",
-          "cfg_authority": "late MIR successors",
+          "cfg_authority": "final annotated-assembly successors",
+          "validation_method": "late-MIR successors compared with final-assembly successors after contracting assembly-only backend-lowering blocks",
           "instruction_count_source": "final annotated assembly MCInst stream",
           "errors": 0,
           "warnings": 0,
@@ -1741,6 +1825,9 @@
               "status": "match",
               "errors": 0,
               "warnings": 0,
+              "late_mir_blocks": 10,
+              "final_assembly_blocks": 10,
+              "backend_lowering_blocks": 0,
               "blocks": [
                 {
                   "machine_block_number": 0,
@@ -1761,6 +1848,11 @@
                       1,
                       6
                     ],
+                    "contracted_successors": [
+                      1,
+                      6
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 5
                   },
                   "errors": [],
@@ -1785,6 +1877,11 @@
                       2,
                       5
                     ],
+                    "contracted_successors": [
+                      2,
+                      5
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 1
                   },
                   "errors": [],
@@ -1809,6 +1906,11 @@
                       3,
                       4
                     ],
+                    "contracted_successors": [
+                      3,
+                      4
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1833,6 +1935,11 @@
                       3,
                       4
                     ],
+                    "contracted_successors": [
+                      3,
+                      4
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 4
                   },
                   "errors": [],
@@ -1855,6 +1962,10 @@
                     "successors": [
                       5
                     ],
+                    "contracted_successors": [
+                      5
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 4
                   },
                   "errors": [],
@@ -1873,6 +1984,8 @@
                     "label": "bb.5.bb24",
                     "ir_block": "bb24",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1897,6 +2010,11 @@
                       7,
                       8
                     ],
+                    "contracted_successors": [
+                      7,
+                      8
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1919,6 +2037,10 @@
                     "successors": [
                       9
                     ],
+                    "contracted_successors": [
+                      9
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 2
                   },
                   "errors": [],
@@ -1941,6 +2063,10 @@
                     "successors": [
                       9
                     ],
+                    "contracted_successors": [
+                      9
+                    ],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 3
                   },
                   "errors": [],
@@ -1959,6 +2085,8 @@
                     "label": "bb.9.bb35",
                     "ir_block": "bb35",
                     "successors": [],
+                    "contracted_successors": [],
+                    "reachable_from_original_blocks": null,
                     "emitted_mcinst_count": 6
                   },
                   "errors": [],

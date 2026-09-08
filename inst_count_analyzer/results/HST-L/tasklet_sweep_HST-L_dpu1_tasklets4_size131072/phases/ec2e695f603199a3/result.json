@@ -1,0 +1,26 @@
+{
+  "benchmark": "HST-L",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 4,
+  "params": {
+    "bins": 256,
+    "kernel": 0,
+    "size": 524288,
+    "transfer_size": 524288
+  },
+  "dynamic_instruction_bound": {
+    "lower": 2903099,
+    "upper": 6967658,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "num_dpus": 1,
+    "data_prep_params": 131072,
+    "setting_id": "tasklet_sweep_HST-L_dpu1_tasklets4_size131072"
+  }
+}

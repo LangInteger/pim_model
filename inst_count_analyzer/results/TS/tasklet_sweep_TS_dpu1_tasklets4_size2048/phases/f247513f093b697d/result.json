@@ -1,5 +1,6 @@
 {
   "benchmark": "TS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 4,
   "params": {
     "exclusion_zone": 0,
@@ -11,14 +12,12 @@
     "ts_length": 2048
   },
   "dynamic_instruction_bound": {
-    "lower": 2887436,
-    "upper": 7078149,
+    "lower": 2887611,
+    "upper": 7079554,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

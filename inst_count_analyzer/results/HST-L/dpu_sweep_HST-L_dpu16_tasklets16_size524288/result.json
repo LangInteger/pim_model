@@ -1,29 +1,23 @@
 {
   "benchmark": "HST-L",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
-  "simulator_match": {
+  "experiment_setting": {
     "experiment": "dpu_sweep",
     "benchmark": "HST-L",
-    "num_dpus_configured": 16,
+    "num_dpus": 16,
     "num_tasklets": 16,
     "data_prep_params": 524288,
+    "dpu_build_options": {
+      "BL": 10,
+      "NR_HISTO": 1
+    },
     "setting_id": "dpu_sweep_HST-L_dpu16_tasklets16_size524288"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
-    "argument_source": "simulator_DPU_INPUT_ARGUMENTS_only",
-    "simulator_metadata": {
-      "experiment": "dpu_sweep",
-      "benchmark": "HST-L",
-      "num_tasklets": "16",
-      "num_dpus": "16",
-      "data_prep_params": "524288",
-      "start_time": "2026-08-28T15:29:07+00:00",
-      "upimulator_commit": "9386782e63e62f265f578a13ccdef870662836fa",
-      "docker_image": "sha256:33bb939965cf3acdf8c9a652ab8559466f7d5f58709332bd6d0aa1a1d01ac8d7",
-      "end_time": "2026-08-28T15:34:44+00:00",
-      "status": "success"
-    },
+    "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/HST-L",
     "make_args": [
       "BL=10",
@@ -31,20 +25,19 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 727104,
-    "upper": 1743354,
+    "lower": 728771,
+    "upper": 1758914,
     "exact": false
   },
   "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
+    "__atomic_acquire_retry"
   ],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -59,24 +52,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_0.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 1,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -91,24 +84,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_1.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 2,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -123,24 +116,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_2.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 3,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -155,24 +148,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_3.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 4,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -187,24 +180,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_4.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 5,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -219,24 +212,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_5.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 6,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -251,24 +244,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_6.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 7,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -283,24 +276,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_7.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 8,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -315,24 +308,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_8.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 9,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -347,24 +340,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_9.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 10,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -379,24 +372,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_10.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 11,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -411,24 +404,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_11.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 12,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -443,24 +436,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_12.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 13,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -475,24 +468,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_13.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 14,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -507,24 +500,24 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_14.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     },
     {
       "dpu": 15,
       "bound": {
-        "lower": 727104.0,
-        "upper": 1743354.0,
+        "lower": 728771.0,
+        "upper": 1758914.0,
         "exact": false
       },
       "phases": [
@@ -539,16 +532,16 @@
           },
           "unknown_loop_backedge_uppers": {},
           "bound": {
-            "lower": 727104,
-            "upper": 1743354,
+            "lower": 728771,
+            "upper": 1758914,
             "exact": false
           },
           "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
+            "__atomic_acquire_retry"
           ],
-          "arguments_file": "input_DPU_INPUT_ARGUMENTS_0_15.bin",
-          "result_path": "phases/239e4e2ea1722cce/result.json"
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/629b7c4612b15502/result.json"
         }
       ]
     }

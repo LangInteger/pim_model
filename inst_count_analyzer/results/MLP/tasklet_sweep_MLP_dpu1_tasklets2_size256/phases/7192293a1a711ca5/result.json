@@ -1,5 +1,6 @@
 {
   "benchmark": "MLP",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 2,
   "params": {
     "max_rows": 256,
@@ -8,14 +9,12 @@
     "nr_rows": 256
   },
   "dynamic_instruction_bound": {
-    "lower": 1255657,
-    "upper": 3291438,
+    "lower": 1255708,
+    "upper": 3291625,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "tasklet_sweep",
     "num_dpus": 1,

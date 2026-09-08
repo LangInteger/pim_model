@@ -1,5 +1,6 @@
 {
   "benchmark": "BS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -13,6 +14,7 @@
     "setting_id": "dpu_sweep_BS_dpu4_tasklets16_size131072"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/BS",
@@ -21,20 +23,17 @@
     ]
   },
   "dynamic_instruction_bound": {
-    "lower": 169109,
-    "upper": 19740870,
+    "lower": 169692,
+    "upper": 19755415,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
   "per_dpu": [
     {
       "dpu": 0,
       "bound": {
-        "lower": 169109.0,
-        "upper": 19740870.0,
+        "lower": 169692.0,
+        "upper": 19755415.0,
         "exact": false
       },
       "phases": [
@@ -51,14 +50,12 @@
             "main_kernel1": 14
           },
           "bound": {
-            "lower": 169109,
-            "upper": 19740870,
+            "lower": 169692,
+            "upper": 19755415,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/cdda0c4c7bd480e0/result.json"
         }
@@ -67,8 +64,8 @@
     {
       "dpu": 1,
       "bound": {
-        "lower": 169109.0,
-        "upper": 19740870.0,
+        "lower": 169692.0,
+        "upper": 19755415.0,
         "exact": false
       },
       "phases": [
@@ -85,14 +82,12 @@
             "main_kernel1": 14
           },
           "bound": {
-            "lower": 169109,
-            "upper": 19740870,
+            "lower": 169692,
+            "upper": 19755415,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/cdda0c4c7bd480e0/result.json"
         }
@@ -101,8 +96,8 @@
     {
       "dpu": 2,
       "bound": {
-        "lower": 169109.0,
-        "upper": 19740870.0,
+        "lower": 169692.0,
+        "upper": 19755415.0,
         "exact": false
       },
       "phases": [
@@ -119,14 +114,12 @@
             "main_kernel1": 14
           },
           "bound": {
-            "lower": 169109,
-            "upper": 19740870,
+            "lower": 169692,
+            "upper": 19755415,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/cdda0c4c7bd480e0/result.json"
         }
@@ -135,8 +128,8 @@
     {
       "dpu": 3,
       "bound": {
-        "lower": 169109.0,
-        "upper": 19740870.0,
+        "lower": 169692.0,
+        "upper": 19755415.0,
         "exact": false
       },
       "phases": [
@@ -153,14 +146,12 @@
             "main_kernel1": 14
           },
           "bound": {
-            "lower": 169109,
-            "upper": 19740870,
+            "lower": 169692,
+            "upper": 19755415,
             "exact": false
           },
-          "unexpanded_callees": [
-            "__atomic_acquire_retry",
-            "barrier_wait"
-          ],
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/cdda0c4c7bd480e0/result.json"
         }

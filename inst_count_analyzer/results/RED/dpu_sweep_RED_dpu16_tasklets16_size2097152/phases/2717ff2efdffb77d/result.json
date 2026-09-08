@@ -1,19 +1,18 @@
 {
   "benchmark": "RED",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
   "tasklets": 16,
   "params": {
     "kernel": 0,
     "size": 1048576
   },
   "dynamic_instruction_bound": {
-    "lower": 679541,
-    "upper": 680793,
+    "lower": 680211,
+    "upper": 689408,
     "exact": false
   },
-  "unexpanded_callees": [
-    "__atomic_acquire_retry",
-    "barrier_wait"
-  ],
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 16,

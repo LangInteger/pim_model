@@ -14,6 +14,7 @@
     "setting_id": "tasklet_sweep_VA_dpu1_tasklets4_size524288"
   },
   "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
   "provenance": {
     "argument_source": "summary_csv_semantic_execution_inputs",
     "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/VA",
@@ -58,6 +59,7 @@
             "__atomic_acquire_retry",
             "barrier_wait"
           ],
+          "machine_cfg_validation_status": "match",
           "arguments_source": "summary.csv:dpu_execution_inputs_json",
           "result_path": "phases/8a594846cdbbdc14/result.json"
         }

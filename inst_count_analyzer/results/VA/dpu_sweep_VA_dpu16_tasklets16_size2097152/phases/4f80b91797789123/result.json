@@ -15,6 +15,7 @@
     "__atomic_acquire_retry",
     "barrier_wait"
   ],
+  "machine_cfg_validation_status": "match",
   "experiment_setting": {
     "experiment": "dpu_sweep",
     "num_dpus": 16,

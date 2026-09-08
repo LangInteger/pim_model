@@ -14,4 +14,5 @@ fi
 && .venv/bin/python3 draw_figs/scripts/estimate_cost.py \
 && .venv/bin/python3 draw_figs/scripts/compare_instruction_counts.py \
 && .venv/bin/python3 draw_figs/scripts/plot_va_cross_setting_validation.py \
-&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_validation.py
+&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_validation.py \
+&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_component_sensitivity.py

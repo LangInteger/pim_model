@@ -15,4 +15,5 @@ fi
 && .venv/bin/python3 draw_figs/scripts/compare_instruction_counts.py \
 && .venv/bin/python3 draw_figs/scripts/plot_va_cross_setting_validation.py \
 && .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_validation.py \
+&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_cycle_midpoint.py \
 && .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_component_sensitivity.py

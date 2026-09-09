@@ -1,6 +1,6 @@
 {
   "benchmark": "TRNS",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 16,
   "params": {
     "M_": 128,

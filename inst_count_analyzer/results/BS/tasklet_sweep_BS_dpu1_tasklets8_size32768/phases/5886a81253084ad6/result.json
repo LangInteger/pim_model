@@ -1,6 +1,6 @@
 {
   "benchmark": "BS",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 8,
   "params": {
     "input_size": 32768,

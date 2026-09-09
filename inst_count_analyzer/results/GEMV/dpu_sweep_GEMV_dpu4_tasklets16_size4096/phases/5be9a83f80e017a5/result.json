@@ -1,6 +1,6 @@
 {
   "benchmark": "GEMV",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 16,
   "params": {
     "max_rows": 1024,

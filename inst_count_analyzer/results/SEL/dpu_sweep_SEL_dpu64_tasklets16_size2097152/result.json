@@ -1,6 +1,6 @@
 {
   "benchmark": "SEL",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 16,
   "experiment_setting": {
     "experiment": "dpu_sweep",
@@ -1951,5 +1951,6 @@
         }
       ]
     }
-  ]
+  ],
+  "analysis_wall_seconds": 46.619189
 }

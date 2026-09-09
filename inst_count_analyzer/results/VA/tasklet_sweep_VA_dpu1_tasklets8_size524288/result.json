@@ -1,6 +1,6 @@
 {
   "benchmark": "VA",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 8,
   "experiment_setting": {
     "experiment": "tasklet_sweep",
@@ -60,5 +60,6 @@
         }
       ]
     }
-  ]
+  ],
+  "analysis_wall_seconds": 2.006302
 }

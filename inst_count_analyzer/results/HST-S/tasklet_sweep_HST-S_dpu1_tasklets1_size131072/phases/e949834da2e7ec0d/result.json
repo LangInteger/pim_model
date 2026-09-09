@@ -1,6 +1,6 @@
 {
   "benchmark": "HST-S",
-  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "analysis_schema_version": "runtime-sync-expansion-v3-config-timing",
   "tasklets": 1,
   "params": {
     "bins": 256,

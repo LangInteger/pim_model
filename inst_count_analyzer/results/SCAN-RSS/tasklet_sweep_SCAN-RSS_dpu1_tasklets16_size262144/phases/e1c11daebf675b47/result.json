@@ -1,0 +1,24 @@
+{
+  "benchmark": "SCAN-RSS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "kernel": 1,
+    "size": 2097152
+  },
+  "dynamic_instruction_bound": {
+    "lower": 2277699,
+    "upper": 2552400,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "num_dpus": 1,
+    "data_prep_params": 262144,
+    "setting_id": "tasklet_sweep_SCAN-RSS_dpu1_tasklets16_size262144"
+  }
+}

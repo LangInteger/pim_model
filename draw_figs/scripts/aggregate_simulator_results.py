@@ -5,16 +5,22 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from simulator_abi import decode_execution_input, dpu_build_options
+
 
 LOG_LINE_RE = re.compile(
     r"^[^[]+\[(?P<channel>\d+)_(?P<rank>\d+)_(?P<dpu>\d+)\]"
     r"_(?P<metric>[^:]+):\s*(?P<value>-?\d+(?:\.\d+)?)\s*$"
+)
+ARGUMENT_FILE_RE = re.compile(
+    r"^input_DPU_INPUT_ARGUMENTS_(?P<execution>\d+)_(?P<dpu>\d+)\.bin$"
 )
 
 EXCLUDED_TASKLET_COUNTS = frozenset({11})
@@ -22,10 +28,11 @@ EXCLUDED_TASKLET_COUNTS = frozenset({11})
 IDENTITY_FIELDS = [
     "experiment",
     "benchmark",
-    "num_dpus_configured",
-    "num_dpus_observed",
+    "num_dpus",
     "num_tasklets",
     "data_prep_params",
+    "dpu_build_options_json",
+    "dpu_execution_inputs_json",
 ]
 
 SUMMED_METRICS = [
@@ -115,25 +122,79 @@ def parse_log(path: Path) -> dict[tuple[int, int, int], dict[str, int | float]]:
     return dpus
 
 
-def numeric(value: str | None) -> int | float | str:
-    if value is None or value == "":
-        return ""
+def required_metadata_int(
+    metadata: dict[str, str], name: str, setting_dir: Path
+) -> int:
     try:
-        return parse_number(value)
-    except ValueError:
-        return value
+        return int(metadata[name])
+    except (KeyError, ValueError) as error:
+        raise ValueError(
+            f"missing or invalid {name!r} in {setting_dir / 'metadata.txt'}"
+        ) from error
+
+
+def encode_dpu_execution_inputs(
+    setting_dir: Path, benchmark: str, num_dpus: int
+) -> str:
+    """Translate binary argument dumps into semantic per-DPU execution inputs."""
+    records: list[dict[str, Any]] = []
+    for path in setting_dir.glob("input_DPU_INPUT_ARGUMENTS_*.bin"):
+        match = ARGUMENT_FILE_RE.match(path.name)
+        if match is None:
+            continue
+        values: list[int] = []
+        for token in path.read_text(encoding="utf-8").split():
+            value = int(token, 0)
+            if not 0 <= value <= 255:
+                raise ValueError(f"invalid byte {value} in {path}")
+            values.append(value)
+        function, params = decode_execution_input(benchmark, bytes(values))
+        records.append(
+            {
+                "execution": int(match.group("execution")),
+                "dpu": int(match.group("dpu")),
+                "function": function,
+                "params": params,
+            }
+        )
+
+    if not records:
+        raise ValueError(f"no DPU_INPUT_ARGUMENTS dumps found in {setting_dir}")
+    records.sort(key=lambda record: (int(record["dpu"]), int(record["execution"])))
+    argument_dpus = {int(record["dpu"]) for record in records}
+    expected_dpus = set(range(num_dpus))
+    if argument_dpus != expected_dpus:
+        raise ValueError(
+            f"DPU argument records do not match configured DPU IDs in {setting_dir}: "
+            f"expected {sorted(expected_dpus)}, observed {sorted(argument_dpus)}"
+        )
+    return json.dumps(records, separators=(",", ":"))
 
 
 def make_identity(
-    metadata: dict[str, str], observed_dpus: int
-) -> dict[str, int | float | str]:
+    metadata: dict[str, str], setting_dir: Path, observed_dpus: int
+) -> dict[str, int | str]:
+    num_dpus = required_metadata_int(metadata, "num_dpus", setting_dir)
+    if observed_dpus != num_dpus:
+        raise ValueError(
+            f"configured {num_dpus} DPUs but log contains {observed_dpus} in "
+            f"{setting_dir}"
+        )
     return {
         "experiment": metadata.get("experiment", ""),
         "benchmark": metadata.get("benchmark", ""),
-        "num_dpus_configured": numeric(metadata.get("num_dpus")),
-        "num_dpus_observed": observed_dpus,
-        "num_tasklets": numeric(metadata.get("num_tasklets")),
-        "data_prep_params": numeric(metadata.get("data_prep_params")),
+        "num_dpus": num_dpus,
+        "num_tasklets": required_metadata_int(metadata, "num_tasklets", setting_dir),
+        "data_prep_params": required_metadata_int(
+            metadata, "data_prep_params", setting_dir
+        ),
+        "dpu_build_options_json": json.dumps(
+            dpu_build_options(metadata.get("benchmark", "")),
+            separators=(",", ":"),
+        ),
+        "dpu_execution_inputs_json": encode_dpu_execution_inputs(
+            setting_dir, metadata.get("benchmark", ""), num_dpus
+        ),
     }
 
 
@@ -151,7 +212,7 @@ def aggregate_setting(setting_dir: Path) -> dict[str, Any] | None:
     cycles = [float(metrics.get("logic_cycle", 0)) for metrics in metrics_by_dpu]
 
     summary: dict[str, Any] = {
-        **make_identity(metadata, len(dpu_metrics)),
+        **make_identity(metadata, setting_dir, len(dpu_metrics)),
         "instructions_mean": sum(instructions) / len(instructions),
         "cycles_max": max(cycles),
         **{
@@ -169,7 +230,7 @@ def sort_key(row: dict[str, Any]) -> tuple[Any, ...]:
     return (
         row.get("benchmark", ""),
         row.get("experiment", ""),
-        row.get("num_dpus_configured", 0),
+        row.get("num_dpus", 0),
         row.get("num_tasklets", 0),
         row.get("data_prep_params", ""),
     )

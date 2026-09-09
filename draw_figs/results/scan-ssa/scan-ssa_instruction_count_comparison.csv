@@ -1,0 +1,10 @@
+experiment,num_dpus,num_tasklets,static_instructions_lower,static_instructions_midpoint,static_instructions_upper,simulator_instructions,static_midpoint_minus_simulator,static_midpoint_error_percent,simulator_within_static_interval,unexpanded_callees,simulator_source
+tasklet_sweep,1,1,3264638.0,3264649.5,3264661.0,3264854.0,-204.5,-0.006263679784762197,False,,aggregated_summary
+tasklet_sweep,1,2,3302681.0,3313023.0,3323365.0,3315269.0,-2246.0,-0.06774714208711269,True,__atomic_acquire_retry,aggregated_summary
+tasklet_sweep,1,4,3334211.0,3364927.0,3395643.0,3346150.0,18777.0,0.5611523691406541,True,__atomic_acquire_retry,aggregated_summary
+tasklet_sweep,1,8,3341207.0,3408195.0,3475183.0,3357120.0,51075.0,1.5213933371461252,True,__atomic_acquire_retry,aggregated_summary
+tasklet_sweep,1,16,3345599.0,3486043.0,3626487.0,3368362.0,117681.0,3.4937159367075155,True,__atomic_acquire_retry,aggregated_summary
+dpu_sweep,1,16,13375295.0,13909339.0,14443383.0,13443370.0,465969.0,3.4661621304777,True,__atomic_acquire_retry,aggregated_summary
+dpu_sweep,4,16,3345599.0,3486043.0,3626487.0,3368362.0,117681.0,3.4937159367075155,True,__atomic_acquire_retry,aggregated_summary
+dpu_sweep,16,16,838175.0,880219.0,922263.0,849610.0,30609.0,3.6027118324878473,True,__atomic_acquire_retry,aggregated_summary
+dpu_sweep,64,16,211319.0,228763.0,246207.0,219922.0,8841.0,4.02006165822428,True,__atomic_acquire_retry,aggregated_summary

@@ -33,6 +33,87 @@ inst_count_analyzer/
 
 Old cost models and VA-specific counters are not included.
 
+## Analyze the experiment matrix
+
+`run_benchmark_sweeps.py` analyzes the exact settings present in
+`draw_figs/results/<benchmark>/summary.csv`. Each row contains the experiment
+configuration and semantic per-DPU/execution inputs (`function` plus named
+`params`). Binary `DPU_INPUT_ARGUMENTS` layout and endianness are decoded by the
+simulator-results aggregator and are not known by this analyzer. The analyzer
+does not access the raw simulator artifact tree, and simulator instruction
+counts are not inputs to the analysis.
+
+The summary records code-generating choices in `dpu_build_options_json`,
+including the effective compile-time `BL` value and options such as `TYPE`,
+`NR_HISTO`, `VERSION`, and `SYNC`. The sweep runner passes them back to the
+benchmark build; it does not infer these settings from the analyzer's current
+source tree.
+
+From the repository root on the Linux server, run all benchmarks:
+
+```bash
+./run_inst_count_sweeps.sh
+```
+
+Or run selected benchmarks:
+
+```bash
+./run_inst_count_sweeps.sh RED HST-S TS
+```
+
+The wrapper creates/reuses the repository `.venv`, installs the analyzer
+requirements, prepares the LoCaLUT compatibility environment without modifying
+the SDK, and invokes `run_benchmark_sweeps.py`. It accepts the runner's options,
+for example `--force`, `--debug`, and `--fail-fast`. Set `UPMEM_SDK_ROOT` when
+the SDK is not at the repository's default `sdk/LoCaLUT/...` path.
+
+The runner discovers only settings that survived aggregation, so removed
+tasklet-11 points and failed simulator settings are not recreated. Sequential
+executions are composed per DPU (for example, three MLP executions and both
+SCAN/TRNS kernels), then the maximum per-DPU instruction bound is emitted for
+comparison with `cycles_max`:
+
+```text
+inst_count_analyzer/results/<BENCHMARK>/instruction_counts.csv
+inst_count_analyzer/results/<BENCHMARK>/<setting-id>/result.json
+inst_count_analyzer/results/<BENCHMARK>/<setting-id>/phases/<key>/machine_cfg_validation.json
+```
+
+Each phase also stores a Git-trackable Machine-CFG validation report. It maps
+every `function + bb.N` between late MIR and final annotated assembly, records
+both successor sets and the emitted MCInst count, and preserves missing-block,
+successor-mismatch, and IR-annotation diagnostics. Missing blocks or different
+successor sets fail the phase after writing the report. IR provenance-label
+differences are warnings because backend transformations may legitimately drop
+or duplicate those annotations. A result generated before this validation was
+added is treated as stale and is regenerated rather than silently skipped.
+
+Loops resolved by LLVM SCEV use their exact backedge counts. Source-derived
+finite caps are supplied only for SCEV-unknown, early-exit/data-dependent loops
+in BS, GEMV/MLP, and TRNS. These caps constrain CFG path optimization while
+machine-CFG edges come from late MIR and post-expansion instruction counts come
+from the final annotated assembly. TRNS's shared work queue is intentionally
+conservative until a collective work-
+distribution constraint is added.
+
+For an exact SCEV loop count, the machine-flow solver also transfers entry,
+backedge, and exit counts when the IR header maps to one cyclic machine block
+and the MIR CFG proves a single-entry natural loop. This prevents an otherwise
+legal LP circulation from satisfying the loop count without any path from the
+function entry. Unproven or structurally complex loops retain the previous
+conservative flow model, and every applied or skipped loop fact is recorded in
+the phase `debug.json` under `machine.loop_flow_facts`.
+
+After generating the instruction summaries, regenerate every cost model with:
+
+```bash
+python3 draw_figs/scripts/estimate_cost.py
+```
+
+`estimate_cost.py` requires exact static instruction settings for every
+benchmark. `instructions_mean` remains in its output CSV only as validation
+data and is never used in the compute-cost equations.
+
 ## Dependencies
 
 ```bash
@@ -59,146 +140,6 @@ The helper treats the SDK as read-only. Compatibility SONAME links, the optional
 `inst_count_analyzer/.work/sdk_compat/`; no `chmod`, symlink, or other write is
 performed inside the SDK tree.
 
-## Reproduce the VA T=16 static result
-
-Important: use the **same VA source revision as the simulator**. For the result below, the VA source is the uPIMulator-style version where `vector_addition` is `__attribute__((noinline))`.
-
-Assume your benchmark root contains:
-
-```text
-/path/to/benchmarks/VA/Makefile
-/path/to/benchmarks/VA/dpu/task.c
-...
-```
-
-Run:
-
-```bash
-python3 count_instructions.py \
-  --root /path/to/benchmarks \
-  --benchmark VA \
-  --tasklets 16 \
-  --sdk-root /path/to/LoCaLUT/upmem-2023.2.0-Linux-x86_64 \
-  --param size=2097152 \
-  --param transfer_size=2097152 \
-  --param kernel=0 \
-  --experiment tasklet_sweep \
-  --num-dpus 1 \
-  --data-prep-param 524288 \
-  --outdir results/VA_T16_runtime_alloc
-```
-
-The two output locations have deliberately different roles:
-
-```text
-results/VA_T16_runtime_alloc/result.json              final compact result
-inst_count_analyzer/.work/runs/VA_T16_runtime_alloc/  disposable artifacts
-```
-
-Use `--workdir /some/ignored/path` to override the intermediate-artifact path.
-Use `--debug` when the full per-tasklet analysis is needed; it adds
-`results/VA_T16/debug.json`. Without `--debug`, `result.json` contains only the
-benchmark, tasklet count, parameters, final dynamic-instruction bound,
-and unexpanded callees. Simulator matching metadata and other detailed fields
-are kept only in `debug.json`.
-
-The pre-runtime-expansion result remains in `results/VA_T16/` and is also
-preserved as the regression fixture `tests/data/VA_T16_pre_runtime.json`:
-
-```json
-"dynamic_instruction_bound": {
-  "lower": 3719617,
-  "upper": 3721761,
-  "exact": false
-}
-```
-
-The full baseline debug output also contains the direct bound `45505–47649`. Its large
-difference from the final bound comes from recursively expanding the internal
-`vector_addition` call.
-
-The analyzer now compiles the SDK `alloc.c` translation unit independently and
-uses the same recursive mechanism to expand `mem_alloc`, `mem_alloc_nolock`, and
-`mem_reset`. It does not llvm-link runtime IR with benchmark IR. The current
-milestone deliberately leaves only this collective primitive unresolved:
-
-```text
-barrier_wait
-```
-
-Its runtime artifacts are kept under
-`.work/runs/VA_T16_runtime_alloc/runtime/syslib_alloc/`. Run the command above
-on Linux and confirm the new interval is closer to the simulator count
-`3,727,420` before enabling barrier accounting.
-
-## Reproduce the simulator comparison
-
-For exact row matching when `summary.csv` contains several runs with the same
-benchmark and tasklet count, add `--debug` to the analyzer command above. The
-comparison reads matching metadata from `debug.json` without adding it to the
-compact `result.json`. The command below shows the preserved pre-runtime
-baseline; replace the directory with `results/VA_T16_runtime_alloc` for the new
-allocation-expanded result.
-
-With the simulator `summary.csv` used in our experiment:
-
-```bash
-python3 compare_simulator.py \
-  --static-dir results/VA_T16 \
-  --simulator /path/to/summary.csv \
-  -o results/VA_T16/q1_comparison.csv
-```
-
-For the matching row:
-
-```text
-benchmark          = VA
-experiment         = tasklet_sweep
-num_dpus_configured= 1
-num_tasklets       = 16
-data_prep_params   = 524288
-instructions_mean  = 3727420
-```
-
-this package reproduces:
-
-```text
-static lower       = 3719617
-static upper       = 3721761
-static midpoint    = 3720689
-midpoint error     = -0.18058%
-nearest-bound gap  = 0.15182%
-interval width     = 0.05752% of simulator instruction count
-```
-
-## VA tasklet sweep
-
-The simulator tasklet sweep used `1, 2, 4, 8, 11, 16`. From the repository
-root, run all six static instruction analyses with:
-
-```bash
-./run_inst_count_tasklet_sweep.sh
-```
-
-Final results are written to:
-
-```text
-inst_count_analyzer/results/VA_tasklet_sweep/
-├── T1/result.json
-├── T2/result.json
-├── T4/result.json
-├── T8/result.json
-├── T11/result.json
-├── T16/result.json
-└── instruction_counts.csv
-```
-
-Compiler output and LLVM/MIR/SCEV artifacts remain under the ignored directory
-`inst_count_analyzer/.work/runs/VA_tasklet_sweep/`. Existing settings are
-skipped, so an interrupted sweep can be resumed. Pass `--force` to rerun all
-settings, or `--debug` to additionally produce a detailed `debug.json` for each
-setting.
-
 ## Current scope boundary
 
 Direct calls are resolved through a function-to-translation-unit index. Every
@@ -206,13 +147,25 @@ benchmark or SDK runtime translation unit retains its own optimized LLVM IR and
 late MIR; only the analysis summaries cross module boundaries. Constant integer
 arguments proven by the static analysis are propagated into callee summaries.
 
-`barrier_wait` is not treated as an ordinary per-tasklet call. Its eventual
-generation-level rule is `(T - 1) * C_nonlast + C_last`, where both path costs
-must first be derived from the independently compiled barrier CFG/MIR. Until
-that path extraction is implemented, it remains explicitly unresolved. Other
-runtime/SDK callees without a registered translation unit are also unresolved.
-LLVM intrinsics already lowered into caller machine blocks are not counted as
-missing callees.
+`barrier_wait` is not treated as an ordinary per-tasklet call. The analyzer
+extracts its stop path and bounded resume-loop path from the independently
+compiled runtime Machine CFG, then composes each complete generation as
+`(T - 1) * C_nonlast + C_last`. This preserves the invariant that exactly one
+participant takes the last-arrival path.
+
+The successful execution of each SDK allocator/barrier `acquire` instruction
+is already present in the emitted MCInst count. Failed local-label retries are
+added as a `0..U` interval under an explicit fair DPU revolver-scheduling
+assumption: between two instructions issued by the lock holder, each other
+runnable contender can issue at most one failed acquire. The whole statically
+bounded holder routine/path is used in place of its shorter critical section,
+so `U` is conservative. For a barrier generation, stopped participants are
+removed successively, giving `T(T-1)/2` contender--holder pairs rather than the
+looser `T(T-1)` product. Atomic sections outside the registered non-blocking
+SDK routines remain unresolved rather than silently receiving this assumption.
+Other runtime/SDK callees without a registered translation unit are likewise
+unresolved. LLVM intrinsics already lowered into caller machine blocks are not
+counted as missing callees.
 
 ## Tests
 

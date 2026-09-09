@@ -1,0 +1,87 @@
+{
+  "benchmark": "SCAN-SSA",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "SCAN-SSA",
+    "num_dpus": 1,
+    "num_tasklets": 16,
+    "data_prep_params": 262144,
+    "dpu_build_options": {
+      "BL": 10,
+      "TYPE": "INT64"
+    },
+    "setting_id": "tasklet_sweep_SCAN-SSA_dpu1_tasklets16_size262144"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/SCAN-SSA",
+    "make_args": [
+      "BL=10",
+      "TYPE=INT64"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 3345599,
+    "upper": 3626487,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 3345599.0,
+        "upper": 3626487.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 2097152,
+            "kernel": 0,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 2277699,
+            "upper": 2552400,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/76ee7a4384e48c73/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "size": 2097152,
+            "kernel": 1,
+            "t_count": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1067900,
+            "upper": 1074087,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/e1c11daebf675b47/result.json"
+        }
+      ]
+    }
+  ]
+}

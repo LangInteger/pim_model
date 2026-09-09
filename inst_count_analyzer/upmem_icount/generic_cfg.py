@@ -4,7 +4,7 @@ import json
 import math
 import re
 import subprocess
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Iterable
 
@@ -257,6 +257,17 @@ class IRCallSite:
     text: str
 
 
+@dataclass
+class LoweredCallSite:
+    """A target helper call introduced while lowering one LLVM IR operation."""
+
+    function: str
+    block: str
+    callee: str
+    operation: str
+    text: str
+
+
 def _split_ir_args(text: str) -> list[str]:
     parts=[]; start=0; depth=0
     opens='([{<'; closes=')]}>'
@@ -311,6 +322,42 @@ def parse_ir_callsites(text: str) -> dict[str, list[IRCallSite]]:
             val=rest.split()[-1]
             args.append((ty,val))
         out[cur_fn].append(IRCallSite(cur_fn,cur_block,callee,args,raw.strip()))
+    return out
+
+
+def parse_lowered_callsites(text: str) -> dict[str, list[LoweredCallSite]]:
+    """Recognize LLVM operations that the UPMEM backend lowers to libcalls.
+
+    These calls do not exist in LLVM IR and are introduced after the late-MIR
+    snapshot used for block costs.  The final UPMEM assembly confirms that a
+    remaining scalar ``mul i32`` is emitted as ``call __mulsi3``.  Constant
+    multiplies already folded to shifts/adds are therefore not matched here.
+    """
+    out: dict[str, list[LoweredCallSite]] = {}
+    cur_fn = None
+    cur_block = "bb"
+    for raw in text.splitlines():
+        fm = re.match(r"^define\b.*@([-A-Za-z$._0-9]+)\(.*\).*\{\s*$", raw)
+        if fm:
+            cur_fn = fm.group(1)
+            cur_block = "bb"
+            out.setdefault(cur_fn, [])
+            continue
+        if cur_fn and raw.strip() == "}":
+            cur_fn = None
+            continue
+        if not cur_fn:
+            continue
+        bm = re.match(r"^([-A-Za-z$._0-9]+):\s*(?:;.*)?$", raw)
+        if bm:
+            cur_block = bm.group(1)
+            continue
+        if re.search(r"(?:^|=)\s*mul\s+(?:nuw\s+|nsw\s+)*i32\s", raw):
+            out[cur_fn].append(
+                LoweredCallSite(
+                    cur_fn, cur_block, "__mulsi3", "mul i32", raw.strip()
+                )
+            )
     return out
 
 
@@ -446,7 +493,14 @@ def _reachable_blocks(blocks: dict[str, IRBlock], entry: str) -> set[str]:
     return seen
 
 
-def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], entry: str='bb') -> tuple[dict[str,Bound], dict]:
+def solve_ir_block_bounds(
+    blocks: dict[str, IRBlock],
+    loops: list[LoopInfo],
+    entry: str = 'bb',
+    unknown_loop_backedge_upper: int | None = None,
+    unknown_loop_backedge_bounds: dict[str, Bound] | None = None,
+    unknown_loop_total_backedge_bounds: dict[str, Bound] | None = None,
+) -> tuple[dict[str,Bound], dict]:
     names=list(blocks)
     if entry not in blocks:
         entry=names[0]
@@ -457,7 +511,7 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
             if s in blocks: edges.append((b,s))
     nx=len(names); ne=len(edges); nvar=nx+ne
     xi={b:i for i,b in enumerate(names)}; ei={e:nx+i for i,e in enumerate(edges)}
-    Aeq=[]; beq=[]
+    Aeq=[]; beq=[]; Aub=[]; bub=[]
     def eq(row, rhs=0.0): Aeq.append(row); beq.append(rhs)
     # Block flow conservation.
     for b in names:
@@ -484,13 +538,72 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
             row=np.zeros(nvar); row[xi[b]]=1; eq(row,0)
     # Loop relation: total backedges = BTC * number of entries into header.
     unknown_loops=[]
+    bounded_unknown_loops=[]
     for li in loops:
         if li.header not in blocks or li.header not in reachable: continue
-        if li.backedge_count is None:
-            unknown_loops.append(li.header); continue
         loopset=set(li.blocks)
         back=[e for e in edges if e[1]==li.header and e[0] in loopset]
         ext=[e for e in edges if e[1]==li.header and e[0] not in loopset]
+        if li.backedge_count is None:
+            source_bound=(unknown_loop_backedge_bounds or {}).get(li.header)
+            total_bound=(unknown_loop_total_backedge_bounds or {}).get(li.header)
+            lower=source_bound.lower if source_bound is not None else None
+            upper=source_bound.upper if source_bound is not None else None
+            if total_bound is not None:
+                # Absolute aggregate-work cap.  Do not also apply the ordinary
+                # per-entry relation: that would multiply a nested loop's
+                # finite global work by the enclosing loop count.
+                if total_bound.upper is None:
+                    unknown_loops.append(li.header); continue
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                Aub.append(row); bub.append(float(total_bound.upper))
+                if total_bound.lower is not None and total_bound.lower>0:
+                    row=np.zeros(nvar)
+                    for e in back: row[ei[e]]-=1
+                    Aub.append(row); bub.append(-float(total_bound.lower))
+                bounded_unknown_loops.append(
+                    {
+                        "header": li.header,
+                        "backedge_lower": total_bound.lower,
+                        "backedge_upper": total_bound.upper,
+                        "source_specific": True,
+                        "bound_kind": "absolute_amortized_total",
+                    }
+                )
+                continue
+            if upper is None:
+                upper=unknown_loop_backedge_upper
+            if upper is None:
+                unknown_loops.append(li.header); continue
+            implicit_entry=1.0 if li.header==entry else 0.0
+            if lower is not None and lower==upper:
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                for e in ext: row[ei[e]]-=upper
+                eq(row,float(upper)*implicit_entry)
+            else:
+                # backedges <= U * loop entries. A function-entry loop
+                # receives one implicit entry from the invocation itself.
+                row=np.zeros(nvar)
+                for e in back: row[ei[e]]+=1
+                for e in ext: row[ei[e]]-=upper
+                Aub.append(row); bub.append(float(upper)*implicit_entry)
+                if lower is not None and lower>0:
+                    row=np.zeros(nvar)
+                    for e in back: row[ei[e]]-=1
+                    for e in ext: row[ei[e]]+=lower
+                    Aub.append(row); bub.append(-float(lower)*implicit_entry)
+            bounded_unknown_loops.append(
+                {
+                    "header": li.header,
+                    "backedge_lower": lower,
+                    "backedge_upper": upper,
+                    "source_specific": source_bound is not None,
+                    "bound_kind": "per_entry",
+                }
+            )
+            continue
         row=np.zeros(nvar)
         for e in back: row[ei[e]]+=1
         for e in ext: row[ei[e]]-=li.backedge_count
@@ -499,17 +612,23 @@ def solve_ir_block_bounds(blocks: dict[str, IRBlock], loops: list[LoopInfo], ent
         eq(row,rhs)
     bounds=[(0,None)]*nvar
     A=np.array(Aeq) if Aeq else None; B=np.array(beq) if beq else None
+    AU=np.array(Aub) if Aub else None; BU=np.array(bub) if bub else None
     result={}
     status={}
     for b in names:
         c=np.zeros(nvar); c[xi[b]]=1
-        lo=linprog(c,A_eq=A,b_eq=B,bounds=bounds,method='highs')
-        hi=linprog(-c,A_eq=A,b_eq=B,bounds=bounds,method='highs')
+        lo=linprog(c,A_ub=AU,b_ub=BU,A_eq=A,b_eq=B,bounds=bounds,method='highs')
+        hi=linprog(-c,A_ub=AU,b_ub=BU,A_eq=A,b_eq=B,bounds=bounds,method='highs')
         lower=float(lo.fun) if lo.success else None
         upper=float(-hi.fun) if hi.success else None
         result[b]=Bound(lower,upper)
         status[b]={'min_status':lo.message,'max_status':hi.message}
-    return result, {'unknown_loops':unknown_loops,'reachable':sorted(reachable),'solver_status':status}
+    return result, {
+        'unknown_loops': unknown_loops,
+        'bounded_unknown_loops': bounded_unknown_loops,
+        'reachable': sorted(reachable),
+        'solver_status': status,
+    }
 
 
 # ---------- MIR machine CFG ----------
@@ -524,6 +643,12 @@ class MachineBlock:
     successors: list[int]
     instructions: int
     calls: list[str]
+    edge_instruction_costs: dict[int, int] = field(default_factory=dict)
+    # Final post-macro-expansion assembly instructions.  MIR-only callers may
+    # leave this empty.  Runtime semantics use it to identify architectural
+    # synchronization operations such as stop/resume without guessing from
+    # source basic-block names.
+    assembly_instructions: list[str] = field(default_factory=list)
 
 
 def run_late_mir(llc: str, named_ir: Path, out_path: Path) -> None:
@@ -531,6 +656,23 @@ def run_late_mir(llc: str, named_ir: Path, out_path: Path) -> None:
     p=subprocess.run(cmd,text=True,capture_output=True)
     if p.returncode!=0:
         raise RuntimeError(f"llc MIR failed: {' '.join(cmd)}\n{p.stdout}\n{p.stderr}")
+
+
+def run_annotated_assembly(llc: str, named_ir: Path, out_path: Path) -> None:
+    """Emit the final MCInst stream after DPU macro-instruction expansion."""
+    cmd = [
+        llc,
+        "-mtriple=dpu-upmem-dpurte",
+        "--asm-show-inst",
+        str(named_ir),
+        "-o",
+        str(out_path),
+    ]
+    p = subprocess.run(cmd, text=True, capture_output=True)
+    if p.returncode != 0:
+        raise RuntimeError(
+            f"llc annotated assembly failed: {' '.join(cmd)}\n{p.stdout}\n{p.stderr}"
+        )
 
 
 def parse_mir(text: str, ir_block_names: dict[str,set[str]] | None=None) -> dict[str,list[MachineBlock]]:
@@ -569,16 +711,417 @@ def parse_mir(text: str, ir_block_names: dict[str,set[str]] | None=None) -> dict
         if not raw.startswith('    '): continue
         s=raw.strip()
         if not s or s.startswith(('successors:','liveins:','DBG_VALUE','CFI_INSTRUCTION','frame-setup CFI_INSTRUCTION','#',';')): continue
-        # CFI directives do not emit DPU instructions; all remaining late MIR MIs
-        # at this pass correspond one-for-one with final instructions for tested DPU kernels.
+        # CFI/debug directives do not emit DPU instructions.  Ordinary late
+        # MIR MIs are charged here; target libcalls and inline-assembly
+        # templates are expanded separately by the interprocedural/runtime
+        # semantics layer.
         cur.instructions += 1
+        # A machine block can end in a conditional branch followed by an
+        # unconditional branch.  Taking the first edge skips the later
+        # instruction(s), so block cost is edge-dependent rather than always
+        # equal to the number of listed MIs.
+        for target in (int(x) for x in re.findall(r'%bb\.(\d+)', s)):
+            if target in cur.successors:
+                cur.edge_instruction_costs.setdefault(target, cur.instructions)
         cm=re.search(r'\bCALL\w*.*?@([-A-Za-z$._0-9]+)',s)
         if cm: cur.calls.append(cm.group(1))
     finish_fn()
     return out
 
 
-def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) -> tuple[Bound,dict[str,Bound],dict]:
+def parse_annotated_assembly(
+    text: str,
+    ir_block_names: dict[str, set[str]] | None = None,
+) -> dict[str, list[MachineBlock]]:
+    """Parse the final DPU MCInst stream into a machine CFG.
+
+    Late MIR still contains target macros such as ``ADD64rr`` and ``Jcc64``.
+    UPMEM's ``DPU Resolve Macro Instructions`` pass expands those only while
+    emitting assembly.  With ``--asm-show-inst`` every real emitted
+    instruction carries an ``<MCInst`` annotation, so counting this stream
+    avoids assigning one instruction to a multi-instruction macro.
+
+    LLVM prints final machine-block numbers either as ``// %bb.N`` comments
+    (entry and newly created blocks) or in ``.LBBF_N`` labels.  The optional
+    trailing ``// %ir_name`` comment retains the original IR-block anchor.
+    """
+    out: dict[str, list[MachineBlock]] = {}
+    pending_function: str | None = None
+    function: str | None = None
+    blocks: list[MachineBlock] = []
+    instructions_by_block: dict[int, list[str]] = {}
+    current: MachineBlock | None = None
+
+    def finish_function() -> None:
+        nonlocal function, blocks, instructions_by_block, current
+        if function is None:
+            return
+        if blocks:
+            ordered = blocks
+            existing = {block.number for block in ordered}
+            for index, block in enumerate(ordered):
+                instructions = instructions_by_block.get(block.number, [])
+                successors: list[int] = []
+                edge_costs: dict[int, int] = {}
+                prevents_fallthrough = False
+                for instruction_index, instruction in enumerate(instructions, start=1):
+                    opcode = instruction.split(None, 1)[0] if instruction else ""
+                    targets = [
+                        int(value)
+                        for value in re.findall(r"\.LBB\d+_(\d+)", instruction)
+                    ]
+                    for target in targets:
+                        if target in existing and target not in successors:
+                            successors.append(target)
+                            edge_costs[target] = instruction_index
+                    if targets and (
+                        opcode == "jump"
+                        or re.search(r",\s*true\s*,", instruction)
+                    ):
+                        prevents_fallthrough = True
+                    elif opcode == "jump" and not targets:
+                        # ``jump r23`` is the ordinary function return.
+                        prevents_fallthrough = True
+                if not prevents_fallthrough and index + 1 < len(ordered):
+                    fallthrough = ordered[index + 1].number
+                    if fallthrough not in successors:
+                        successors.append(fallthrough)
+                block.successors = successors
+                block.edge_instruction_costs = edge_costs
+            out[function] = ordered
+        function = None
+        blocks = []
+        instructions_by_block = {}
+        current = None
+
+    for raw in text.splitlines():
+        type_match = re.match(r"\s*\.type\s+([^,]+),@function", raw)
+        if type_match:
+            pending_function = type_match.group(1).strip()
+            continue
+        if pending_function and re.match(
+            rf"^\s*{re.escape(pending_function)}:\s*(?://.*)?$", raw
+        ):
+            finish_function()
+            function = pending_function
+            pending_function = None
+            continue
+        if function is None:
+            continue
+        if re.match(rf"\s*\.size\s+{re.escape(function)}\s*,", raw):
+            finish_function()
+            continue
+
+        block_number: int | None = None
+        ir_block: str | None = None
+        label_match = re.search(r"\.LBB\d+_(\d+):(?:\s*//\s*%([-A-Za-z$._0-9]+))?", raw)
+        if label_match:
+            block_number = int(label_match.group(1))
+            ir_block = label_match.group(2)
+        else:
+            comment_match = re.match(
+                r"\s*//\s*%bb\.(\d+):(?:\s*//\s*%([-A-Za-z$._0-9]+))?",
+                raw,
+            )
+            if comment_match:
+                block_number = int(comment_match.group(1))
+                ir_block = comment_match.group(2)
+        if block_number is not None:
+            if current is not None and current.number == block_number:
+                if current.ir_block is None and ir_block is not None:
+                    current.ir_block = ir_block
+                continue
+            if ir_block_names and function in ir_block_names:
+                if ir_block not in ir_block_names[function]:
+                    ir_block = None
+            current = MachineBlock(
+                function,
+                f"bb.{block_number}" + (f".{ir_block}" if ir_block else ""),
+                block_number,
+                f"bb.{block_number}" + (f".{ir_block}" if ir_block else ""),
+                ir_block,
+                [],
+                0,
+                [],
+            )
+            blocks.append(current)
+            instructions_by_block.setdefault(block_number, [])
+            continue
+
+        if current is not None and "<MCInst" in raw:
+            instruction = raw.split("//", 1)[0].strip()
+            if instruction:
+                instructions_by_block[current.number].append(instruction)
+                current.assembly_instructions.append(instruction)
+                current.instructions += 1
+                if instruction.startswith("acquire ") and re.search(
+                    r",\s*(?:nz|z)\s*,\s*\.Ltmp\d+(?:\+0)?\s*$", instruction
+                ):
+                    # Atomic acquire retries through a temporary local label,
+                    # not a MachineBasicBlock label.  Its dynamic count
+                    # depends on cross-tasklet contention, so expose it to the
+                    # interprocedural layer instead of silently charging one.
+                    current.calls.append("__atomic_acquire_retry")
+                if instruction.startswith("call "):
+                    call_match = re.search(r"\bcall\s+[^,]+,\s*([-A-Za-z$._0-9]+)", instruction)
+                    if call_match:
+                        current.calls.append(call_match.group(1))
+
+    finish_function()
+    return out
+
+
+def compare_machine_cfgs(
+    mir: dict[str, list[MachineBlock]],
+    assembly: dict[str, list[MachineBlock]],
+) -> dict:
+    """Describe and validate MIR-to-final-assembly machine-block mapping.
+
+    The final DPU macro-expansion pass may split a late-MIR block into several
+    new MachineBasicBlocks.  In particular, a ``Jcc64`` pseudo branch becomes
+    multiple 32-bit branches in assembly-only blocks.  Consequently the two
+    CFGs are not required to have identical block sets or direct edges.
+
+    Original blocks are joined by function name and ``bb.N``.  For each late-
+    MIR edge, final-assembly paths are contracted across assembly-only blocks;
+    the first original blocks reached by those paths must equal the MIR
+    successor set.  The final assembly remains authoritative for instruction
+    counts *and* for the CFG subsequently analyzed, so instructions introduced
+    by macro expansion are not discarded.
+    """
+    functions = []
+    error_count = 0
+    warning_count = 0
+
+    for function in sorted(set(mir) | set(assembly)):
+        mir_blocks = {block.number: block for block in mir.get(function, [])}
+        assembly_blocks = {
+            block.number: block for block in assembly.get(function, [])
+        }
+        block_rows = []
+        function_errors = 0
+        function_warnings = 0
+
+        original_numbers = set(mir_blocks)
+        lowering_numbers = set(assembly_blocks) - original_numbers
+        lowering_owners: dict[int, set[int]] = {
+            number: set() for number in lowering_numbers
+        }
+
+        def contracted_successors(number: int) -> tuple[list[int], list[int]]:
+            """Reach original blocks while traversing only lowering blocks."""
+            block = assembly_blocks.get(number)
+            if block is None:
+                return [], []
+            projected: set[int] = set()
+            traversed: set[int] = set()
+            pending = list(block.successors)
+            while pending:
+                successor = pending.pop()
+                if successor in original_numbers:
+                    projected.add(successor)
+                    continue
+                if successor in traversed:
+                    continue
+                lowering_block = assembly_blocks.get(successor)
+                if lowering_block is None:
+                    continue
+                traversed.add(successor)
+                pending.extend(lowering_block.successors)
+            return sorted(projected), sorted(traversed)
+
+        contracted_by_original: dict[int, list[int]] = {}
+        for number in sorted(original_numbers & set(assembly_blocks)):
+            projected, traversed = contracted_successors(number)
+            contracted_by_original[number] = projected
+            for lowering_number in traversed:
+                lowering_owners.setdefault(lowering_number, set()).add(number)
+
+        for number in sorted(set(mir_blocks) | set(assembly_blocks)):
+            mir_block = mir_blocks.get(number)
+            assembly_block = assembly_blocks.get(number)
+            errors: list[dict[str, object]] = []
+            warnings: list[dict[str, object]] = []
+
+            if mir_block is None:
+                owners = sorted(lowering_owners.get(number, set()))
+                if not owners:
+                    errors.append(
+                        {
+                            "code": "unanchored_assembly_lowering_block",
+                            "message": (
+                                f"assembly-only bb.{number} is not reachable from "
+                                "any late-MIR block"
+                            ),
+                        }
+                    )
+            elif assembly_block is None:
+                errors.append(
+                    {
+                        "code": "block_missing_in_assembly",
+                        "message": f"bb.{number} exists only in late MIR",
+                    }
+                )
+            else:
+                mir_successors = sorted(set(mir_block.successors))
+                projected_successors = contracted_by_original[number]
+                if mir_successors != projected_successors:
+                    errors.append(
+                        {
+                            "code": "successors_mismatch",
+                            "message": (
+                                f"bb.{number} successors differ after contracting "
+                                "assembly-only lowering blocks: "
+                                f"MIR={mir_successors}, "
+                                f"assembly={projected_successors}"
+                            ),
+                        }
+                    )
+                if mir_block.ir_block != assembly_block.ir_block:
+                    warnings.append(
+                        {
+                            "code": "ir_block_annotation_mismatch",
+                            "message": (
+                                f"bb.{number} IR annotations differ: "
+                                f"MIR={mir_block.ir_block!r}, "
+                                f"assembly={assembly_block.ir_block!r}"
+                            ),
+                        }
+                    )
+
+            function_errors += len(errors)
+            function_warnings += len(warnings)
+            block_rows.append(
+                {
+                    "machine_block_number": number,
+                    "mapping_status": (
+                        "backend_lowering_block"
+                        if mir_block is None
+                        else "missing_in_assembly"
+                        if assembly_block is None
+                        else "mapped"
+                    ),
+                    "mir": (
+                        {
+                            "label": mir_block.label,
+                            "ir_block": mir_block.ir_block,
+                            "successors": sorted(set(mir_block.successors)),
+                            "pre_expansion_instruction_count": mir_block.instructions,
+                        }
+                        if mir_block is not None
+                        else None
+                    ),
+                    "annotated_assembly": (
+                        {
+                            "label": assembly_block.label,
+                            "ir_block": assembly_block.ir_block,
+                            "successors": sorted(set(assembly_block.successors)),
+                            "contracted_successors": (
+                                contracted_by_original.get(number)
+                                if mir_block is not None
+                                else None
+                            ),
+                            "reachable_from_original_blocks": (
+                                sorted(lowering_owners.get(number, set()))
+                                if mir_block is None
+                                else None
+                            ),
+                            "emitted_mcinst_count": assembly_block.instructions,
+                        }
+                        if assembly_block is not None
+                        else None
+                    ),
+                    "errors": errors,
+                    "warnings": warnings,
+                }
+            )
+
+        error_count += function_errors
+        warning_count += function_warnings
+        functions.append(
+            {
+                "function": function,
+                "status": (
+                    "error"
+                    if function_errors
+                    else "match_with_warnings"
+                    if function_warnings
+                    else "match"
+                ),
+                "errors": function_errors,
+                "warnings": function_warnings,
+                "late_mir_blocks": len(mir_blocks),
+                "final_assembly_blocks": len(assembly_blocks),
+                "backend_lowering_blocks": len(lowering_numbers),
+                "blocks": block_rows,
+            }
+        )
+
+    return {
+        "status": (
+            "error"
+            if error_count
+            else "match_with_warnings"
+            if warning_count
+            else "match"
+        ),
+        "join_key": "function name + machine block number (bb.N)",
+        "cfg_authority": "final annotated-assembly successors",
+        "validation_method": (
+            "late-MIR successors compared with final-assembly successors after "
+            "contracting assembly-only backend-lowering blocks"
+        ),
+        "instruction_count_source": "final annotated assembly MCInst stream",
+        "errors": error_count,
+        "warnings": warning_count,
+        "functions": functions,
+    }
+
+
+def merge_machine_cfgs(
+    mir: dict[str, list[MachineBlock]],
+    assembly: dict[str, list[MachineBlock]],
+    validation: dict,
+) -> dict[str, list[MachineBlock]]:
+    """Keep the validated final CFG and fill missing IR provenance from MIR."""
+    if validation.get("status") == "error":
+        raise ValueError("cannot merge inconsistent MIR and assembly machine CFGs")
+
+    merged: dict[str, list[MachineBlock]] = {}
+    for function, assembly_blocks in assembly.items():
+        mir_blocks = {block.number: block for block in mir.get(function, [])}
+        merged[function] = [
+            MachineBlock(
+                function=block.function,
+                key=block.key,
+                number=block.number,
+                label=block.label,
+                ir_block=(
+                    block.ir_block
+                    or (
+                        mir_blocks[block.number].ir_block
+                        if block.number in mir_blocks
+                        else None
+                    )
+                ),
+                successors=sorted(set(block.successors)),
+                instructions=block.instructions,
+                calls=list(block.calls),
+                edge_instruction_costs=dict(block.edge_instruction_costs),
+                assembly_instructions=list(block.assembly_instructions),
+            )
+            for block in assembly_blocks
+        ]
+    return merged
+
+
+def solve_machine_total(
+    blocks: list[MachineBlock],
+    ir_bounds: dict[str, Bound],
+    bound_block_numbers: set[int] | None = None,
+    ir_loops: list[LoopInfo] | None = None,
+    machine_block_bounds: dict[int, Bound] | None = None,
+) -> tuple[Bound,dict[str,Bound],dict]:
     if not blocks: return Bound(None,None),{}, {'reason':'no machine blocks'}
     nums=[b.number for b in blocks]; bynum={b.number:b for b in blocks}; entry=blocks[0].number
     edges=[]
@@ -601,29 +1144,350 @@ def solve_machine_total(blocks: list[MachineBlock], ir_bounds: dict[str,Bound]) 
         for e in edges:
             if e[0]==b.number: row[ei[e]]+=1
         eq(row,0)
+    # One IR basic block may lower to several machine basic blocks.  In
+    # particular, PHI elimination can create several predecessor-specific MBBs
+    # carrying the same ``%ir-block`` annotation before they converge on the
+    # block that contains the actual instructions.  Constraining *each* such
+    # MBB to the IR execution count is incorrect: only one predecessor path is
+    # taken per IR-block execution, and the resulting constraints can become
+    # infeasible.
+    #
+    # Anchor the execution count to a representative MBB that is reached from
+    # every external entry into the group.  With ordinary one-to-one lowering
+    # that is the sole MBB.  With PHI/critical-edge lowering it is the first
+    # common convergence block (for example, two predecessor-specific copies
+    # followed by the actual IR block).  Anchoring external *flow* instead is
+    # insufficient for a loop consisting of one self-looping MBB: external
+    # flow counts loop entries, whereas the IR bound counts all iterations.
+    groups: dict[str, set[int]] = {}
+    for block in blocks:
+        if block.ir_block and block.ir_block in ir_bounds:
+            groups.setdefault(block.ir_block, set()).add(block.number)
+
+    # Only constrain IR/MBB mappings when needed to bound a machine cycle or
+    # eliminate a specialized-away path. Ordinary acyclic blocks, including
+    # groups created by tail duplication, are already governed by machine-flow
+    # conservation. Pinning such a group to the source IR execution count is
+    # unsound because its repeated IR annotation describes provenance, not a
+    # set of blocks that must collectively execute exactly once.
+    def reaches_itself(start: int) -> bool:
+        pending = list(bynum[start].successors)
+        seen: set[int] = set()
+        while pending:
+            current = pending.pop()
+            if current == start:
+                return True
+            if current in seen or current not in bynum:
+                continue
+            seen.add(current)
+            pending.extend(bynum[current].successors)
+        return False
+
+    cyclic_blocks = {number for number in nums if reaches_itself(number)}
+
     anchors=[]
-    for b in blocks:
-        if b.ir_block and b.ir_block in ir_bounds:
-            bd=ir_bounds[b.ir_block]
+    def reachable_within(start: int, members: set[int]) -> dict[int, int]:
+        distance={start:0}
+        pending=[start]
+        while pending:
+            current=pending.pop(0)
+            for successor in bynum[current].successors:
+                if successor in members and successor not in distance:
+                    distance[successor]=distance[current]+1
+                    pending.append(successor)
+        return distance
+
+    for ir_block, members in groups.items():
+        bd=ir_bounds[ir_block]
+        needs_anchor = (
+            bool(members & cyclic_blocks)
+            or (bd.upper is not None and bd.upper <= 0)
+        )
+        if not needs_anchor:
+            anchors.append({
+                'machine_blocks':[bynum[number].label for number in sorted(members)],
+                'ir_block':ir_block,
+                'anchor_kind':'machine_flow_only',
+                'entry_machine_blocks':[],
+                'representative_machine_block':None,
+                'bound':bd.to_dict(),
+            })
+            continue
+        entry_targets={
+            edge[1] for edge in edges
+            if edge[1] in members and edge[0] not in members
+        }
+        if entry in members:
+            entry_targets.add(entry)
+        if not entry_targets:
+            # An unreachable group has no external predecessor.  Any member is
+            # sufficient; its IR bound will normally be exactly zero.
+            entry_targets.add(min(members))
+        reachability=[reachable_within(target,members) for target in entry_targets]
+        common=set.intersection(*(set(paths) for paths in reachability))
+        representative=None
+        if common:
+            # Choose the earliest common convergence point.  This minimizes
+            # the maximum distance from any alternative group entry.
+            representative=min(
+                common,
+                key=lambda number:(
+                    max(paths[number] for paths in reachability), number
+                ),
+            )
             if bd.lower is not None:
-                row=np.zeros(nvar); row[xi[b.number]]=-1; ub(row,-bd.lower)
+                row=np.zeros(nvar); row[xi[representative]]=-1
+                ub(row,-bd.lower)
             if bd.upper is not None:
-                row=np.zeros(nvar); row[xi[b.number]]=1; ub(row,bd.upper)
-            anchors.append({'machine_block':b.label,'ir_block':b.ir_block,'bound':bd.to_dict()})
+                row=np.zeros(nvar); row[xi[representative]]=1
+                ub(row,bd.upper)
+        else:
+            # Conservatively bound every fragment.  This fallback is expected
+            # only for target lowering that branches out of an IR block before
+            # reconverging; it prevents artificial unbounded machine cycles.
+            for number in members:
+                if bd.upper is not None:
+                    row=np.zeros(nvar); row[xi[number]]=1
+                    ub(row,bd.upper)
+        anchors.append({
+            'machine_blocks':[bynum[number].label for number in sorted(members)],
+            'ir_block':ir_block,
+            'anchor_kind':'common_group_representative' if representative is not None else 'per_fragment_upper_fallback',
+            'entry_machine_blocks':[bynum[number].label for number in sorted(entry_targets)],
+            'representative_machine_block':bynum[representative].label if representative is not None else None,
+            'bound':bd.to_dict(),
+        })
+
+    # Transfer exact loop-entry/backedge facts into the Machine CFG only when
+    # the correspondence is mechanically provable.  Merely pinning a machine
+    # header to its exact IR execution count permits a disconnected circulation
+    # around the machine loop.  The entry/backedge equations below ensure that
+    # those executions form real loop invocations connected to function flow.
+    predecessors: dict[int, set[int]] = {number: set() for number in nums}
+    for source, target in edges:
+        predecessors[target].add(source)
+
+    reachable = {entry}
+    pending = [entry]
+    while pending:
+        current = pending.pop()
+        for successor in bynum[current].successors:
+            if successor in bynum and successor not in reachable:
+                reachable.add(successor)
+                pending.append(successor)
+
+    dominators: dict[int, set[int]] = {
+        number: ({entry} if number == entry else set(reachable))
+        for number in reachable
+    }
+    changed = True
+    while changed:
+        changed = False
+        for number in reachable - {entry}:
+            reachable_predecessors = predecessors[number] & reachable
+            if not reachable_predecessors:
+                new = {number}
+            else:
+                common = set.intersection(
+                    *(dominators[pred] for pred in reachable_predecessors)
+                )
+                new = {number} | common
+            if new != dominators[number]:
+                dominators[number] = new
+                changed = True
+
+    loop_flow_facts = []
+    for loop in ir_loops or []:
+        fact = {
+            'ir_loop_header': loop.header,
+            'scev_backedge_count_per_entry': loop.backedge_count,
+            'applied': False,
+        }
+
+        header_bound = ir_bounds.get(loop.header)
+        if loop.backedge_count is None:
+            fact['reason'] = 'SCEV backedge count is not exact'
+            loop_flow_facts.append(fact)
+            continue
+        if header_bound is None or not header_bound.exact:
+            fact['reason'] = 'IR loop-header execution count is not exact'
+            loop_flow_facts.append(fact)
+            continue
+
+        machine_headers = groups.get(loop.header, set()) & cyclic_blocks
+        if len(machine_headers) != 1:
+            fact['reason'] = (
+                'IR loop header does not map to exactly one cyclic machine block'
+            )
+            fact['candidate_machine_headers'] = [
+                bynum[number].label for number in sorted(machine_headers)
+            ]
+            loop_flow_facts.append(fact)
+            continue
+        machine_header = next(iter(machine_headers))
+
+        machine_backedges = [
+            edge
+            for edge in edges
+            if edge[1] == machine_header
+            and machine_header in dominators.get(edge[0], set())
+        ]
+        if not machine_backedges:
+            fact['reason'] = 'no natural Machine-CFG backedge reaches the header'
+            loop_flow_facts.append(fact)
+            continue
+
+        machine_loop = {machine_header}
+        reverse_pending = [source for source, _ in machine_backedges]
+        while reverse_pending:
+            current = reverse_pending.pop()
+            if current in machine_loop:
+                continue
+            machine_loop.add(current)
+            reverse_pending.extend(predecessors[current] - machine_loop)
+
+        entry_edges = [
+            edge
+            for edge in edges
+            if edge[0] not in machine_loop and edge[1] in machine_loop
+        ]
+        if any(target != machine_header for _, target in entry_edges):
+            fact['reason'] = 'machine loop has an entry that bypasses its header'
+            loop_flow_facts.append(fact)
+            continue
+        implicit_function_entry = 1 if machine_header == entry else 0
+        if len(entry_edges) + implicit_function_entry != 1:
+            fact['reason'] = 'machine loop is not single-entry'
+            fact['entry_edges'] = [list(edge) for edge in entry_edges]
+            loop_flow_facts.append(fact)
+            continue
+
+        header_executions = round(header_bound.lower)
+        trip_count = loop.backedge_count + 1
+        if (
+            abs(header_bound.lower - header_executions) > 1e-7
+            or header_executions % trip_count != 0
+        ):
+            fact['reason'] = (
+                'exact header count is not an integral multiple of trip count'
+            )
+            loop_flow_facts.append(fact)
+            continue
+        entry_count = header_executions // trip_count
+        if implicit_function_entry and entry_count != 1:
+            fact['reason'] = (
+                'function-entry loop count is inconsistent with one invocation'
+            )
+            loop_flow_facts.append(fact)
+            continue
+
+        exit_edges = [
+            edge
+            for edge in edges
+            if edge[0] in machine_loop and edge[1] not in machine_loop
+        ]
+        if entry_count > 0 and not exit_edges:
+            fact['reason'] = 'finite machine loop has no exit edge'
+            loop_flow_facts.append(fact)
+            continue
+
+        row=np.zeros(nvar)
+        for edge in entry_edges:
+            row[ei[edge]] += 1
+        eq(row, float(entry_count - implicit_function_entry))
+
+        row=np.zeros(nvar)
+        for edge in machine_backedges:
+            row[ei[edge]] += 1
+        eq(row, float(header_executions - entry_count))
+
+        row=np.zeros(nvar)
+        for edge in exit_edges:
+            row[ei[edge]] += 1
+        eq(row, float(entry_count))
+
+        fact.update({
+            'applied': True,
+            'reason': 'exact SCEV count and verified single-entry natural machine loop',
+            'machine_header': bynum[machine_header].label,
+            'machine_loop_blocks': [
+                bynum[number].label for number in sorted(machine_loop)
+            ],
+            'header_execution_count': header_executions,
+            'entry_count': entry_count,
+            'total_backedge_count': header_executions - entry_count,
+            'exit_count': entry_count,
+            'entry_edges': [list(edge) for edge in entry_edges],
+            'backedges': [list(edge) for edge in machine_backedges],
+            'exit_edges': [list(edge) for edge in exit_edges],
+        })
+        loop_flow_facts.append(fact)
+
+    # Runtime collective semantics occasionally know the execution count of a
+    # target machine block more precisely than source/IR analysis does.  For
+    # example, a complete barrier generation executes the stop path T-1 times
+    # and the final resume-loop T-2 times.  Keep these constraints explicit in
+    # the same flow LP instead of replacing CFG-derived instruction costs with
+    # handwritten constants.
+    applied_machine_block_bounds = []
+    for number, bound in (machine_block_bounds or {}).items():
+        if number not in xi:
+            raise ValueError(f"unknown machine block bb.{number}")
+        if bound.lower is not None:
+            row=np.zeros(nvar); row[xi[number]]=-1
+            ub(row,-bound.lower)
+        if bound.upper is not None:
+            row=np.zeros(nvar); row[xi[number]]=1
+            ub(row,bound.upper)
+        applied_machine_block_bounds.append({
+            'machine_block': bynum[number].label,
+            'bound': bound.to_dict(),
+        })
+
     bounds=[(0,None)]*nvar
     AeqN=np.array(Aeq) if Aeq else None;beqN=np.array(beq) if beq else None
     AubN=np.array(Aub) if Aub else None;bubN=np.array(bub) if bub else None
     def solve(c): return linprog(c,A_ub=AubN,b_ub=bubN,A_eq=AeqN,b_eq=beqN,bounds=bounds,method='highs')
+    # Per-block extrema are useful for diagnostics but require two LP solves
+    # per MBB.  Production counting only requests blocks that contain an
+    # unresolved synchronization retry; unit tests/debug callers may omit the
+    # filter to retain the complete diagnostic map.
+    requested_numbers = nums if bound_block_numbers is None else [
+        number for number in nums if number in bound_block_numbers
+    ]
     block_bounds={}
-    for n in nums:
+    for n in requested_numbers:
         c=np.zeros(nvar);c[xi[n]]=1
         lo=solve(c);hi=solve(-c)
         block_bounds[bynum[n].label]=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
     c=np.zeros(nvar)
-    for b in blocks: c[xi[b.number]]=b.instructions
+    for b in blocks:
+        outgoing = [edge for edge in edges if edge[0] == b.number]
+        if outgoing:
+            for edge in outgoing:
+                c[ei[edge]] = b.edge_instruction_costs.get(
+                    edge[1], b.instructions
+                )
+        else:
+            c[xi[b.number]] = b.instructions
     lo=solve(c);hi=solve(-c)
     total=Bound(float(lo.fun) if lo.success else None,float(-hi.fun) if hi.success else None)
-    return total,block_bounds,{'anchors':anchors,'machine_blocks':[{**asdict(b),'execution_bound':block_bounds[b.label].to_dict()} for b in blocks]}
+    return total,block_bounds,{
+        'anchors':anchors,
+        'loop_flow_facts':loop_flow_facts,
+        'runtime_machine_block_bounds':applied_machine_block_bounds,
+        'machine_blocks':[
+            {
+                **asdict(b),
+                'execution_bound': (
+                    block_bounds[b.label].to_dict()
+                    if b.label in block_bounds
+                    else None
+                ),
+            }
+            for b in blocks
+        ],
+    }
 
 
 def add_bounds(a: Bound,b: Bound)->Bound:
@@ -637,4 +1501,3 @@ def mul_bounds(a: Bound,b: Bound)->Bound:
     lo=None if a.lower is None or b.lower is None else a.lower*b.lower
     hi=None if a.upper is None or b.upper is None else a.upper*b.upper
     return Bound(lo,hi)
-

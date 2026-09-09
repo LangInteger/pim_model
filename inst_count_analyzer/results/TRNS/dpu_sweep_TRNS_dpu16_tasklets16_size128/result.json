@@ -1,0 +1,2883 @@
+{
+  "benchmark": "TRNS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "benchmark": "TRNS",
+    "num_dpus": 16,
+    "num_tasklets": 16,
+    "data_prep_params": 128,
+    "dpu_build_options": {
+      "BL": 8
+    },
+    "setting_id": "dpu_sweep_TRNS_dpu16_tasklets16_size128"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/TRNS",
+    "make_args": [
+      "BL=8"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 623584,
+    "upper": 4187192,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 1,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 2,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 3,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 4,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 5,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 6,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 7,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 8,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 9,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 10,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 11,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 12,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 13,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 14,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 15,
+      "bound": {
+        "lower": 623584.0,
+        "upper": 4187192.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 3,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 4,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 5,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        },
+        {
+          "execution": 6,
+          "function": "main_kernel1",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 154076,
+            "upper": 431559,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7278edf805a7b6cd/result.json"
+        },
+        {
+          "execution": 7,
+          "function": "main_kernel2",
+          "params": {
+            "m": 4,
+            "n": 8,
+            "M_": 128,
+            "kernel": 1
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1820,
+            "upper": 615239,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/63c3c85bc72e4ace/result.json"
+        }
+      ]
+    }
+  ]
+}

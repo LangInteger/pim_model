@@ -1,0 +1,10 @@
+experiment,num_dpus,num_tasklets,static_instructions_lower,static_instructions_midpoint,static_instructions_upper,simulator_instructions,static_midpoint_minus_simulator,static_midpoint_error_percent,simulator_within_static_interval,unexpanded_callees,simulator_source
+tasklet_sweep,1,1,3766680.0,6820188.0,9873696.0,3769128.0,3051060.0,80.94869688691921,True,,aggregated_summary
+tasklet_sweep,1,2,3767124.0,6820999.5,9874875.0,3769785.0,3051214.5,80.93868748483004,True,,aggregated_summary
+tasklet_sweep,1,4,3767988.0,6823282.5,9878577.0,3771990.0,3051292.5,80.89344086278065,True,,aggregated_summary
+tasklet_sweep,1,8,3769716.0,6830584.5,9891453.0,3779376.0,3051208.5,80.73312896097133,True,,aggregated_summary
+tasklet_sweep,1,16,3773172.0,6856132.5,9939093.0,3806100.0,3050032.5,80.1353747930953,True,,aggregated_summary
+dpu_sweep,1,16,38133492.0,102290308.5,166447125.0,53124852.0,49165456.5,92.54699947211147,True,,aggregated_summary
+dpu_sweep,4,16,9538548.0,25599940.5,41661333.0,13308564.0,12291376.5,92.35689515412783,True,,aggregated_summary
+dpu_sweep,16,16,2389812.0,6427348.5,10464885.0,3354996.0,3072352.5,91.57544450127511,True,,aggregated_summary
+dpu_sweep,64,16,602484.0,1634560.5,2666637.0,866412.0,768148.5,88.65857121092506,True,,aggregated_summary

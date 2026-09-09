@@ -1,0 +1,103 @@
+{
+  "benchmark": "MLP",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 4,
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "MLP",
+    "num_dpus": 1,
+    "num_tasklets": 4,
+    "data_prep_params": 256,
+    "dpu_build_options": {
+      "BL": 10
+    },
+    "setting_id": "tasklet_sweep_MLP_dpu1_tasklets4_size256"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/MLP",
+    "make_args": [
+      "BL=10"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 3767988,
+    "upper": 9878577,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 3767988.0,
+        "upper": 9878577.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 256,
+            "n_size_pad": 256,
+            "nr_rows": 256,
+            "max_rows": 256
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1255996,
+            "upper": 3292859,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
+        },
+        {
+          "execution": 1,
+          "function": "main",
+          "params": {
+            "n_size": 256,
+            "n_size_pad": 256,
+            "nr_rows": 256,
+            "max_rows": 256
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1255996,
+            "upper": 3292859,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
+        },
+        {
+          "execution": 2,
+          "function": "main",
+          "params": {
+            "n_size": 256,
+            "n_size_pad": 256,
+            "nr_rows": 256,
+            "max_rows": 256
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1255996,
+            "upper": 3292859,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/7192293a1a711ca5/result.json"
+        }
+      ]
+    }
+  ]
+}

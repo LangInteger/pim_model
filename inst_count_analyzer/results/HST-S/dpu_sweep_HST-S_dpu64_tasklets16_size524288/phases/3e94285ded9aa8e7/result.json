@@ -1,0 +1,24 @@
+{
+  "benchmark": "HST-S",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "bins": 256,
+    "kernel": 0,
+    "size": 32768,
+    "transfer_size": 32768
+  },
+  "dynamic_instruction_bound": {
+    "lower": 164042,
+    "upper": 432334,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 64,
+    "data_prep_params": 524288,
+    "setting_id": "dpu_sweep_HST-S_dpu64_tasklets16_size524288"
+  }
+}

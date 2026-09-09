@@ -1,0 +1,492 @@
+from __future__ import annotations
+
+import sys
+import unittest
+from pathlib import Path
+
+
+ANALYZER_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ANALYZER_ROOT))
+
+from upmem_icount.generic_cfg import (  # noqa: E402
+    Bound,
+    LoopInfo,
+    MachineBlock,
+    compare_machine_cfgs,
+    merge_machine_cfgs,
+    parse_annotated_assembly,
+    parse_lowered_callsites,
+    solve_machine_total,
+)
+from upmem_icount.runtime_semantics import (  # noqa: E402
+    _inline_asm_path_bound,
+    barrier_generation_bound,
+    barrier_generation_retry_bound,
+    barrier_runtime_path_bounds,
+    fair_round_robin_retry_bound,
+    runtime_function_instruction_bound,
+)
+from upmem_icount.generic_count import _descendant_unexpanded_calls  # noqa: E402
+from upmem_icount.source_loop_semantics import (  # noqa: E402
+    source_loop_backedge_bounds,
+    source_loop_total_backedge_bounds,
+)
+
+
+class MachineIrAnchoringTests(unittest.TestCase):
+    def test_one_ir_block_split_across_alternative_machine_paths(self) -> None:
+        blocks = [
+            MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1, 2], 1, []),
+            MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [3], 2, []),
+            MachineBlock("f", "bb.2.b", 2, "bb.2.b", "b", [3], 4, []),
+            MachineBlock("f", "bb.3.b", 3, "bb.3.b", "b", [], 3, []),
+        ]
+        total, block_bounds, metadata = solve_machine_total(
+            blocks,
+            {"a": Bound(1, 1), "b": Bound(1, 1)},
+        )
+
+        self.assertEqual(total.lower, 6)
+        self.assertEqual(total.upper, 8)
+        self.assertEqual(block_bounds["bb.3.b"].lower, 1)
+        b_anchor = next(a for a in metadata["anchors"] if a["ir_block"] == "b")
+        self.assertEqual(
+            b_anchor["machine_blocks"], ["bb.1.b", "bb.2.b", "bb.3.b"]
+        )
+        self.assertEqual(b_anchor["anchor_kind"], "machine_flow_only")
+        self.assertIsNone(b_anchor["representative_machine_block"])
+
+
+class MachineCfgValidationTests(unittest.TestCase):
+    def test_records_block_mapping_and_matching_successors(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 3, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 2, []),
+            ]
+        }
+
+        report = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(report["status"], "match")
+        block = report["functions"][0]["blocks"][0]
+        self.assertEqual(block["mapping_status"], "mapped")
+        self.assertEqual(block["mir"]["successors"], [1])
+        self.assertEqual(block["annotated_assembly"]["emitted_mcinst_count"], 3)
+
+    def test_reports_missing_blocks_and_successor_mismatches(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [], 3, []),
+                MachineBlock("f", "bb.2", 2, "bb.2", None, [], 4, []),
+            ]
+        }
+
+        report = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(report["status"], "error")
+        codes = {
+            issue["code"]
+            for block in report["functions"][0]["blocks"]
+            for issue in block["errors"]
+        }
+        self.assertEqual(
+            codes,
+            {
+                "successors_mismatch",
+                "block_missing_in_assembly",
+                "unanchored_assembly_lowering_block",
+            },
+        )
+
+    def test_merge_uses_final_edges_and_assembly_instruction_counts(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 2, []),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0", 0, "bb.0", None, [1], 4, ["g"]),
+                MachineBlock("f", "bb.1.b", 1, "bb.1.b", "b", [], 3, []),
+            ]
+        }
+        validation = compare_machine_cfgs(mir, assembly)
+
+        merged = merge_machine_cfgs(mir, assembly, validation)
+
+        self.assertEqual(merged["f"][0].successors, [1])
+        self.assertEqual(merged["f"][0].instructions, 4)
+        self.assertEqual(merged["f"][0].ir_block, "a")
+        self.assertEqual(merged["f"][0].calls, ["g"])
+
+    def test_accepts_and_preserves_post_mir_branch_expansion_blocks(self) -> None:
+        mir = {
+            "f": [
+                MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 2], 1, []),
+                MachineBlock("f", "bb.1.left", 1, "bb.1.left", "left", [], 1, []),
+                MachineBlock("f", "bb.2.right", 2, "bb.2.right", "right", [], 1, []),
+            ]
+        }
+        assembly = {
+            "f": [
+                MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [3, 4], 2, []),
+                MachineBlock("f", "bb.3", 3, "bb.3", None, [1, 4], 2, []),
+                MachineBlock("f", "bb.4", 4, "bb.4", None, [2], 1, []),
+                MachineBlock("f", "bb.1.left", 1, "bb.1.left", "left", [], 1, []),
+                MachineBlock("f", "bb.2.right", 2, "bb.2.right", "right", [], 1, []),
+            ]
+        }
+
+        validation = compare_machine_cfgs(mir, assembly)
+
+        self.assertEqual(validation["status"], "match")
+        function = validation["functions"][0]
+        self.assertEqual(function["backend_lowering_blocks"], 2)
+        rows = {row["machine_block_number"]: row for row in function["blocks"]}
+        self.assertEqual(
+            rows[0]["annotated_assembly"]["contracted_successors"], [1, 2]
+        )
+        self.assertEqual(rows[3]["mapping_status"], "backend_lowering_block")
+        self.assertEqual(
+            rows[3]["annotated_assembly"]["reachable_from_original_blocks"], [0]
+        )
+
+        merged = merge_machine_cfgs(mir, assembly, validation)
+        self.assertEqual([block.number for block in merged["f"]], [0, 3, 4, 1, 2])
+        self.assertEqual(merged["f"][0].successors, [3, 4])
+        self.assertEqual(merged["f"][1].instructions, 2)
+        self.assertIsNone(merged["f"][1].ir_block)
+
+    def test_self_loop_uses_ir_execution_count_not_external_entry_count(self) -> None:
+        blocks = [
+            MachineBlock("f", "bb.0.a", 0, "bb.0.a", "a", [1], 1, []),
+            MachineBlock("f", "bb.1.loop", 1, "bb.1.loop", "loop", [1, 2], 2, []),
+            MachineBlock("f", "bb.2.exit", 2, "bb.2.exit", "exit", [], 1, []),
+        ]
+        total, block_bounds, _ = solve_machine_total(
+            blocks,
+            {"a": Bound(1, 1), "loop": Bound(5, 5), "exit": Bound(1, 1)},
+        )
+
+        self.assertEqual(block_bounds["bb.1.loop"].lower, 5)
+        self.assertEqual(block_bounds["bb.1.loop"].upper, 5)
+        self.assertEqual(total.lower, 12)
+        self.assertEqual(total.upper, 12)
+
+    def test_cost_stops_at_the_taken_machine_branch(self) -> None:
+        blocks = [
+            MachineBlock(
+                "f", "bb.0.a", 0, "bb.0.a", "a", [1, 2], 2, [], {1: 1, 2: 2}
+            ),
+            MachineBlock("f", "bb.1.left", 1, "bb.1.left", None, [], 1, []),
+            MachineBlock("f", "bb.2.right", 2, "bb.2.right", None, [], 1, []),
+        ]
+        total, _, _ = solve_machine_total(blocks, {"a": Bound(1, 1)})
+
+        self.assertEqual(total.lower, 2)
+        self.assertEqual(total.upper, 3)
+
+    def test_single_exact_ir_anchor_does_not_disable_merged_taken_path(self) -> None:
+        # MBB 1 is labelled as the optional predecessor but also contains the
+        # following IR block after tail duplication.  Requiring the separately
+        # labelled MBB 2 to execute exactly once would incorrectly force MBB 1
+        # to zero executions.
+        blocks = [
+            MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 2], 1, []),
+            MachineBlock("f", "bb.1.taken", 1, "bb.1.taken", "taken", [3], 5, []),
+            MachineBlock("f", "bb.2.cont", 2, "bb.2.cont", "cont", [3], 2, []),
+            MachineBlock("f", "bb.3.exit", 3, "bb.3.exit", "exit", [], 1, []),
+        ]
+        total, block_bounds, metadata = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "taken": Bound(0, 1),
+                "cont": Bound(1, 1),
+                "exit": Bound(1, 1),
+            },
+        )
+
+        self.assertEqual(total, Bound(4, 7))
+        self.assertEqual(block_bounds["bb.1.taken"], Bound(0, 1))
+        cont = next(a for a in metadata["anchors"] if a["ir_block"] == "cont")
+        self.assertEqual(cont["anchor_kind"], "machine_flow_only")
+
+    def test_exact_loop_flow_fact_eliminates_disconnected_circulation(self) -> None:
+        blocks = [
+            MachineBlock("f", "bb.0.entry", 0, "bb.0.entry", "entry", [1, 4], 1, []),
+            MachineBlock("f", "bb.1", 1, "bb.1", None, [2], 6, []),
+            MachineBlock("f", "bb.2.loop", 2, "bb.2.loop", "loop", [3], 2, []),
+            MachineBlock("f", "bb.3", 3, "bb.3", None, [2, 4], 3, []),
+            MachineBlock("f", "bb.4.exit", 4, "bb.4.exit", "exit", [], 1, []),
+        ]
+        ir_bounds = {
+            "entry": Bound(1, 1),
+            "loop": Bound(3, 3),
+            "exit": Bound(1, 1),
+        }
+        loop = LoopInfo("f", "loop", 1, ["loop"], ["loop"], ["loop"], 2)
+
+        loose, _, _ = solve_machine_total(blocks, ir_bounds)
+        tight, block_bounds, metadata = solve_machine_total(
+            blocks, ir_bounds, ir_loops=[loop]
+        )
+
+        self.assertEqual(loose, Bound(17, 23))
+        self.assertEqual(tight, Bound(23, 23))
+        self.assertEqual(block_bounds["bb.1"], Bound(1, 1))
+        self.assertEqual(
+            metadata["loop_flow_facts"],
+            [
+                {
+                    "ir_loop_header": "loop",
+                    "scev_backedge_count_per_entry": 2,
+                    "applied": True,
+                    "reason": (
+                        "exact SCEV count and verified single-entry natural machine loop"
+                    ),
+                    "machine_header": "bb.2.loop",
+                    "machine_loop_blocks": ["bb.2.loop", "bb.3"],
+                    "header_execution_count": 3,
+                    "entry_count": 1,
+                    "total_backedge_count": 2,
+                    "exit_count": 1,
+                    "entry_edges": [[1, 2]],
+                    "backedges": [[3, 2]],
+                    "exit_edges": [[3, 4]],
+                }
+            ],
+        )
+
+
+class FinalAssemblyParsingTests(unittest.TestCase):
+    def test_counts_expanded_mcinsts_and_machine_edges(self) -> None:
+        assembly = r"""
+        .type f,@function
+f:                                      // @f
+// %bb.0: // %entry
+        add r0, r0, r1 // <MCInst #1 ADDrrr>
+        addc r2, r2, r3 // <MCInst #2 ADDCrrr>
+        jeq r0, 0, .LBB0_2 // <MCInst #3 JEQrii>
+.LBB0_1: // %left
+        add r4, r4, 1 // <MCInst #4 ADDrri>
+        jump .LBB0_3 // <MCInst #5 JUMPi>
+.LBB0_2: // %right
+        sub r4, r4, 1 // <MCInst #6 SUBrri>
+.LBB0_3: // %exit
+        jump r23 // <MCInst #7 JUMPr>
+        .size f, .-f
+"""
+        blocks = parse_annotated_assembly(
+            assembly,
+            {"f": {"entry", "left", "right", "exit"}},
+        )["f"]
+
+        self.assertEqual([block.instructions for block in blocks], [3, 2, 1, 1])
+        self.assertEqual(blocks[0].successors, [2, 1])
+        self.assertEqual(blocks[0].edge_instruction_costs, {2: 3})
+        self.assertEqual(blocks[1].successors, [3])
+        total, _, _ = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "left": Bound(0, 1),
+                "right": Bound(0, 1),
+                "exit": Bound(1, 1),
+            },
+        )
+        self.assertEqual(total, Bound(5, 6))
+        fast_total, fast_block_bounds, metadata = solve_machine_total(
+            blocks,
+            {
+                "entry": Bound(1, 1),
+                "left": Bound(0, 1),
+                "right": Bound(0, 1),
+                "exit": Bound(1, 1),
+            },
+            bound_block_numbers=set(),
+        )
+        self.assertEqual(fast_total, total)
+        self.assertEqual(fast_block_bounds, {})
+        self.assertTrue(
+            all(block["execution_bound"] is None for block in metadata["machine_blocks"])
+        )
+
+    def test_exposes_atomic_acquire_retry_as_collective_cost(self) -> None:
+        assembly = r"""
+.type lock,@function
+lock:                                   // @lock
+// %bb.0: // %entry
+.Ltmp1:
+        acquire zero, lock_bit, nz, .Ltmp1+0 // <MCInst #1 ACQUIRErici>
+        jump r23 // <MCInst #2 JUMPr>
+        .size lock, .-lock
+"""
+        block = parse_annotated_assembly(assembly, {"lock": {"entry"}})["lock"][0]
+        self.assertEqual(block.instructions, 2)
+        self.assertIn("__atomic_acquire_retry", block.calls)
+
+
+class GemvLoopSemanticsTests(unittest.TestCase):
+    def test_gemv_64_element_remainder_and_pos_loop(self) -> None:
+        loops = [
+            LoopInfo("main", "outer", 1, ["outer"], ["outer"], ["outer"], 127),
+            LoopInfo("main", "pos", 2, [f"p{i}" for i in range(20)], [], []),
+            LoopInfo("main", "remainder", 3, ["r0", "r1"], [], []),
+        ]
+        bounds = source_loop_backedge_bounds(
+            "GEMV", "main", loops, {"n_size": 64}
+        )
+        self.assertEqual(bounds["pos"], Bound(1, 1))
+        self.assertEqual(bounds["remainder"], Bound(63, 63))
+
+    def test_mlp_full_chunks_and_256_element_remainder(self) -> None:
+        loops = [
+            LoopInfo("main", "chunks", 3, [f"c{i}" for i in range(6)], [], []),
+            LoopInfo("main", "remainder", 3, ["r0", "r1"], [], []),
+        ]
+        bounds = source_loop_backedge_bounds(
+            "MLP", "main", loops, {"n_size": 1024}
+        )
+        self.assertEqual(bounds["chunks"], Bound(2, 2))
+        self.assertEqual(bounds["remainder"], Bound(255, 255))
+
+
+class TrnsLoopSemanticsTests(unittest.TestCase):
+    def test_shared_tile_domain_is_amortized_across_tasklets(self) -> None:
+        loops = [
+            LoopInfo("main_kernel2", "outer", 1, ["outer"], [], []),
+            LoopInfo("main_kernel2", "inner", 2, ["inner"], [], []),
+        ]
+        bounds = source_loop_total_backedge_bounds(
+            "TRNS",
+            "main_kernel2",
+            loops,
+            {"M_": 1024, "n": 4},
+            16,
+        )
+        self.assertEqual(bounds, {"outer": Bound(0, 256), "inner": Bound(0, 256)})
+
+
+class TargetLoweringTests(unittest.TestCase):
+    def test_i32_multiply_is_recorded_as_mulsi3_call(self) -> None:
+        ir = """define i32 @f(i32 %a, i32 %b) {
+bb:
+  %x = mul nsw i32 %a, %b
+  ret i32 %x
+}
+"""
+        calls = parse_lowered_callsites(ir)["f"]
+        self.assertEqual([(x.block, x.callee) for x in calls], [("bb", "__mulsi3")])
+
+    def test_mul32_inline_asm_path_bound(self) -> None:
+        source = (
+            ANALYZER_ROOT.parent
+            / "sdk/LoCaLUT/upmem-2023.2.0-Linux-x86_64/src/dpu-rt/src/syslib/mul32.c"
+        )
+        if not source.is_file():
+            # The LoCaLUT SDK is an optional (and platform-specific) submodule.
+            # The checked-in uPIMulator SDK mirror contains the same runtime
+            # source and keeps this source-parser unit test runnable on macOS.
+            source = (
+                ANALYZER_ROOT.parent
+                / "uPIMulator/golang/uPIMulator/sdk/syslib/mul32.c"
+            )
+        bound = _inline_asm_path_bound(source, "__mulsi3")
+        self.assertEqual(bound, Bound(6, 37))
+        adjusted, provenance = runtime_function_instruction_bound(
+            "__mulsi3", source, Bound(2, 2)
+        )
+        self.assertEqual(adjusted, Bound(7, 38))
+        self.assertEqual(provenance["kind"], "inline_asm_path_expansion")
+
+    def test_nested_unresolved_runtime_costs_are_propagated(self) -> None:
+        retry = {"callee": "__atomic_acquire_retry", "reason": "contention"}
+        summary = {
+            "unexpanded_calls": [],
+            "expanded_calls": [
+                {"callee_unexpanded_calls": [retry]},
+                {"callee_unexpanded_calls": [retry]},
+            ],
+        }
+        self.assertEqual(_descendant_unexpanded_calls(summary), [retry])
+
+
+class RuntimeSynchronizationSemanticsTests(unittest.TestCase):
+    @staticmethod
+    def barrier_blocks() -> list[MachineBlock]:
+        return [
+            MachineBlock(
+                "barrier_wait", "bb.0", 0, "bb.0", None, [1, 2], 2, [],
+                assembly_instructions=["acquire r1, 0, nz, .Ltmp1", "jeq r3, 1, .LBB0_2"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.1", 1, "bb.1", None, [], 3, [],
+                assembly_instructions=["release r1, 0", "stop false, 0", "jump r23"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.2", 2, "bb.2", None, [5, 6], 1, [],
+                assembly_instructions=["jeq r2, 255, .LBB0_5"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.3", 3, "bb.3", None, [3, 4], 4, [],
+                assembly_instructions=["resume r3, 0", "and r3, r3, 255", "lbu r3, r3, table", "jneq r3, r2, .LBB0_3"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.4", 4, "bb.4", None, [5], 1, [],
+                assembly_instructions=["resume r2, 0"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.5", 5, "bb.5", None, [], 2, [],
+                assembly_instructions=["release r1, 0", "jump r23"],
+            ),
+            MachineBlock(
+                "barrier_wait", "bb.6", 6, "bb.6", None, [3, 4], 2, [],
+                assembly_instructions=["lbu r3, r2, table", "jeq r3, r2, .LBB0_4"],
+            ),
+        ]
+
+    def test_barrier_paths_are_constrained_at_generation_scope(self) -> None:
+        nonlast, last, metadata = barrier_runtime_path_bounds(
+            self.barrier_blocks(), 4
+        )
+        self.assertEqual(nonlast, Bound(5, 5))
+        self.assertEqual(last, Bound(16, 16))
+        self.assertEqual(barrier_generation_bound(4, nonlast, last), Bound(31, 31))
+        self.assertEqual(metadata["participants"], 4)
+
+    def test_single_participant_barrier_uses_empty_queue_path(self) -> None:
+        nonlast, last, _ = barrier_runtime_path_bounds(self.barrier_blocks(), 1)
+        self.assertEqual(nonlast, Bound(5, 5))
+        self.assertEqual(last, Bound(5, 5))
+        self.assertEqual(barrier_generation_bound(1, nonlast, last), Bound(5, 5))
+
+    def test_atomic_retry_bound_preserves_zero_contention_lower(self) -> None:
+        retry, metadata = fair_round_robin_retry_bound(
+            Bound(2, 2), Bound(11, 17), 4
+        )
+        self.assertEqual(retry, Bound(0, 102))
+        self.assertEqual(metadata["participants"], 4)
+
+    def test_barrier_retry_bound_removes_stopped_contenders(self) -> None:
+        retry, metadata = barrier_generation_retry_bound(Bound(15, 16), 4)
+        self.assertEqual(retry, Bound(0, 96))
+        self.assertEqual(metadata["contender_holder_pairs"], 6)
+
+
+if __name__ == "__main__":
+    unittest.main()

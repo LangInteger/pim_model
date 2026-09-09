@@ -38,6 +38,11 @@ def _float(v):
 def load_static_results(root: Path):
     seen = set()
     for p in sorted(root.rglob("*.json")):
+        # Exact-setting sweeps keep reusable per-phase results below this
+        # directory. Only the composed per-setting result is comparable with a
+        # whole simulator execution.
+        if "phases" in p.parts:
+            continue
         compact_path = p.with_name("result.json")
         if p.name in {"debug.json", "generic_count.json"} and compact_path.is_file():
             continue
@@ -49,16 +54,17 @@ def load_static_results(root: Path):
             continue
         # Keep result.json compact on disk, but borrow optional matching metadata
         # from its debug sibling for this in-memory comparison.
-        if p.name == "result.json" and not d.get("simulator_match"):
+        if p.name == "result.json" and not d.get("experiment_setting"):
             debug_path = p.with_name("debug.json")
             if debug_path.is_file():
                 try:
                     debug = json.loads(debug_path.read_text())
-                    if debug.get("simulator_match"):
-                        d["simulator_match"] = debug["simulator_match"]
+                    if debug.get("experiment_setting"):
+                        d["experiment_setting"] = debug["experiment_setting"]
                 except Exception:
                     pass
-        sig = (d.get("benchmark"), d.get("tasklets"), json.dumps(d.get("params", {}), sort_keys=True), json.dumps(d.get("simulator_match", {}), sort_keys=True))
+        setting = d.get("experiment_setting") or d.get("simulator_match", {})
+        sig = (d.get("benchmark"), d.get("tasklets"), json.dumps(d.get("params", {}), sort_keys=True), json.dumps(setting, sort_keys=True))
         if sig in seen:
             continue
         seen.add(sig)
@@ -68,7 +74,7 @@ def load_static_results(root: Path):
 def candidate_rows(sim_rows, d):
     b = d.get("benchmark")
     t = d.get("tasklets")
-    meta = d.get("simulator_match") or {}
+    meta = d.get("experiment_setting") or d.get("simulator_match") or {}
     out = []
     for r in sim_rows:
         if r.get("benchmark") != b:
@@ -77,7 +83,8 @@ def candidate_rows(sim_rows, d):
             continue
         if meta.get("experiment") is not None and r.get("experiment") != str(meta["experiment"]):
             continue
-        if meta.get("num_dpus_configured") is not None and _norm(r.get("num_dpus_configured")) != _norm(meta["num_dpus_configured"]):
+        meta_num_dpus = meta.get("num_dpus", meta.get("num_dpus_configured"))
+        if meta_num_dpus is not None and _norm(r.get("num_dpus")) != _norm(meta_num_dpus):
             continue
         if meta.get("data_prep_params") is not None and _norm(r.get("data_prep_params")) != _norm(meta["data_prep_params"]):
             continue
@@ -138,7 +145,7 @@ def main():
         if len(matches) != 1:
             base.update({
                 "status": "unmatched" if not matches else "ambiguous",
-                "experiment": "", "num_dpus_configured": "", "data_prep_params": "",
+                "experiment": "", "num_dpus": "", "data_prep_params": "",
                 "sim_instructions_mean": "", "sim_instructions_min": "", "sim_instructions_max": "",
                 "exact_error_pct": "", "midpoint_error_pct": "", "distance_to_interval_pct": "",
                 "sim_inside_static_interval": "", "static_interval_width_pct_of_sim": "",
@@ -164,7 +171,7 @@ def main():
         base.update({
             "status": "matched",
             "experiment": r.get("experiment", ""),
-            "num_dpus_configured": r.get("num_dpus_configured", ""),
+            "num_dpus": r.get("num_dpus", ""),
             "data_prep_params": r.get("data_prep_params", ""),
             "sim_instructions_mean": gt,
             "sim_instructions_min": _float(r.get("instructions_min")),
@@ -180,7 +187,7 @@ def main():
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     fields = [
-        "benchmark", "experiment", "num_dpus_configured", "tasklets", "data_prep_params",
+        "benchmark", "experiment", "num_dpus", "tasklets", "data_prep_params",
         "static_lower", "static_upper", "static_exact", "sim_instructions_mean",
         "sim_instructions_min", "sim_instructions_max", "exact_error_pct", "midpoint_error_pct",
         "distance_to_interval_pct", "sim_inside_static_interval", "static_interval_width_pct_of_sim",

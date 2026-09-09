@@ -1,0 +1,153 @@
+{
+  "benchmark": "GEMV",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "benchmark": "GEMV",
+    "num_dpus": 4,
+    "num_tasklets": 16,
+    "data_prep_params": 4096,
+    "dpu_build_options": {
+      "BL": 10
+    },
+    "setting_id": "dpu_sweep_GEMV_dpu4_tasklets16_size4096"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/GEMV",
+    "make_args": [
+      "BL=10"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1288444,
+    "upper": 3355655,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 1288444.0,
+        "upper": 3355655.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1288444,
+            "upper": 3355655,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/5be9a83f80e017a5/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 1,
+      "bound": {
+        "lower": 1288444.0,
+        "upper": 3355655.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1288444,
+            "upper": 3355655,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/5be9a83f80e017a5/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 2,
+      "bound": {
+        "lower": 1288444.0,
+        "upper": 3355655.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1288444,
+            "upper": 3355655,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/5be9a83f80e017a5/result.json"
+        }
+      ]
+    },
+    {
+      "dpu": 3,
+      "bound": {
+        "lower": 1288444.0,
+        "upper": 3355655.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main",
+          "params": {
+            "n_size": 64,
+            "n_size_pad": 64,
+            "nr_rows": 1024,
+            "max_rows": 1024
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1288444,
+            "upper": 3355655,
+            "exact": false
+          },
+          "unexpanded_callees": [],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/5be9a83f80e017a5/result.json"
+        }
+      ]
+    }
+  ]
+}

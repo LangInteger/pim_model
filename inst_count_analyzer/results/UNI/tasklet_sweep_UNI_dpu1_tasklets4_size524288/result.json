@@ -1,0 +1,65 @@
+{
+  "benchmark": "UNI",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 4,
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "benchmark": "UNI",
+    "num_dpus": 1,
+    "num_tasklets": 4,
+    "data_prep_params": 524288,
+    "dpu_build_options": {
+      "BL": 10
+    },
+    "setting_id": "tasklet_sweep_UNI_dpu1_tasklets4_size524288"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/UNI",
+    "make_args": [
+      "BL=10"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1930595,
+    "upper": 4264965,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 1930595.0,
+        "upper": 4264965.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 4194304,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 1930595,
+            "upper": 4264965,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/6c3ec017b09b476d/result.json"
+        }
+      ]
+    }
+  ]
+}

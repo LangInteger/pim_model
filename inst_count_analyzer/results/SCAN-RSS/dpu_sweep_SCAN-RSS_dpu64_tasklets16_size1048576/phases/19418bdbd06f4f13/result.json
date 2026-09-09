@@ -1,0 +1,22 @@
+{
+  "benchmark": "SCAN-RSS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "kernel": 0,
+    "size": 131072
+  },
+  "dynamic_instruction_bound": {
+    "lower": 51379,
+    "upper": 59550,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 64,
+    "data_prep_params": 1048576,
+    "setting_id": "dpu_sweep_SCAN-RSS_dpu64_tasklets16_size1048576"
+  }
+}

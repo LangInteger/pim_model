@@ -1,0 +1,23 @@
+{
+  "benchmark": "UNI",
+  "tasklets": 1,
+  "params": {
+    "kernel": 0,
+    "size": 4194304
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1871928,
+    "upper": 4030540,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry",
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 524288,
+    "setting_id": "tasklet_sweep_UNI_dpu1_tasklets1_size524288"
+  }
+}

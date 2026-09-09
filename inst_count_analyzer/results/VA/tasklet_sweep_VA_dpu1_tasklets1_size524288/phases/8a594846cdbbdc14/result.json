@@ -1,0 +1,23 @@
+{
+  "benchmark": "VA",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 1,
+  "params": {
+    "kernel": 0,
+    "size": 2097152,
+    "transfer_size": 2097152
+  },
+  "dynamic_instruction_bound": {
+    "lower": 3721285,
+    "upper": 3723346,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "num_dpus": 1,
+    "data_prep_params": 524288,
+    "setting_id": "tasklet_sweep_VA_dpu1_tasklets1_size524288"
+  }
+}

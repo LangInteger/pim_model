@@ -1,0 +1,26 @@
+{
+  "benchmark": "TRNS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "M_": 128,
+    "kernel": 1,
+    "m": 4,
+    "n": 8
+  },
+  "dynamic_instruction_bound": {
+    "lower": 1820,
+    "upper": 615239,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 16,
+    "data_prep_params": 128,
+    "setting_id": "dpu_sweep_TRNS_dpu16_tasklets16_size128"
+  }
+}

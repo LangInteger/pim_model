@@ -1,0 +1,28 @@
+{
+  "benchmark": "MLP",
+  "tasklets": 4,
+  "params": {
+    "max_rows": 256,
+    "n_size": 256,
+    "n_size_pad": 256,
+    "nr_rows": 256
+  },
+  "dynamic_instruction_bound": {
+    "lower": null,
+    "upper": null,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "barrier_wait",
+    "puts"
+  ],
+  "simulator_match": {
+    "experiment": "tasklet_sweep",
+    "num_dpus_configured": 1,
+    "data_prep_params": 256,
+    "setting_id": "tasklet_sweep_MLP_dpu1_tasklets4_size256"
+  },
+  "unknown_loop_backedge_uppers": {
+    "main": 256
+  }
+}

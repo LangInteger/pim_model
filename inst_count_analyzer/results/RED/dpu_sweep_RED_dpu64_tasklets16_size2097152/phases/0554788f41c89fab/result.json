@@ -1,0 +1,22 @@
+{
+  "benchmark": "RED",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "kernel": 0,
+    "size": 262144
+  },
+  "dynamic_instruction_bound": {
+    "lower": 171027,
+    "upper": 179456,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 64,
+    "data_prep_params": 2097152,
+    "setting_id": "dpu_sweep_RED_dpu64_tasklets16_size2097152"
+  }
+}

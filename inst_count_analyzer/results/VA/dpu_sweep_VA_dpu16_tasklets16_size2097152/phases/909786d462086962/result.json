@@ -1,0 +1,24 @@
+{
+  "benchmark": "VA",
+  "tasklets": 16,
+  "params": {
+    "kernel": 0,
+    "size": 524288,
+    "transfer_size": 524288
+  },
+  "dynamic_instruction_bound": {
+    "lower": 930597,
+    "upper": 931398,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry",
+    "barrier_wait"
+  ],
+  "simulator_match": {
+    "experiment": "dpu_sweep",
+    "num_dpus_configured": 16,
+    "data_prep_params": 2097152,
+    "setting_id": "dpu_sweep_VA_dpu16_tasklets16_size2097152"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "benchmark": "BS",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "params": {
+    "input_size": 131072,
+    "kernel": 0,
+    "slice_per_dpu": 4096
+  },
+  "dynamic_instruction_bound": {
+    "lower": 169692,
+    "upper": 19755415,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "num_dpus": 4,
+    "data_prep_params": 131072,
+    "setting_id": "dpu_sweep_BS_dpu4_tasklets16_size131072"
+  },
+  "unknown_loop_backedge_uppers": {
+    "main_kernel1": 14,
+    "search": 32
+  }
+}

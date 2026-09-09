@@ -62,15 +62,26 @@ def _compact_bound(bound: dict) -> dict:
 
 
 def compact_result(result: dict) -> dict:
-    return {
+    compact = {
         "benchmark": result["benchmark"],
+        "analysis_schema_version": result["analysis_schema_version"],
         "tasklets": result["tasklets"],
         "params": result.get("params", {}),
         "dynamic_instruction_bound": _compact_bound(
             result.get("dynamic_instruction_bound", {})
         ),
         "unexpanded_callees": collect_unexpanded_callees(result),
+        "machine_cfg_validation_status": result.get("artifacts", {})
+        .get("machine_cfg_validation", {})
+        .get("status", "not_checked"),
     }
+    if result.get("experiment_setting"):
+        compact["experiment_setting"] = result["experiment_setting"]
+    if result.get("unknown_loop_backedge_uppers"):
+        compact["unknown_loop_backedge_uppers"] = result[
+            "unknown_loop_backedge_uppers"
+        ]
+    return compact
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -88,6 +99,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--params", help="JSON object containing concrete DPU_INPUT_ARGUMENTS values")
     p.add_argument("--param", action="append", default=[], help="NAME=VALUE; repeat as needed")
     p.add_argument("--make-arg", action="append", default=[], help="extra Make assignment, e.g. BL=10")
+    p.add_argument(
+        "--unknown-loop-bound",
+        action="append",
+        default=[],
+        metavar="FUNCTION=MAX_BACKEDGES",
+        help=(
+            "source-derived upper bound for each SCEV-unknown loop in FUNCTION; "
+            "repeat as needed"
+        ),
+    )
     p.add_argument(
         "--outdir",
         required=True,
@@ -111,7 +132,7 @@ def main(argv: list[str] | None = None) -> int:
         help="override the final result path (default: <outdir>/result.json)",
     )
 
-    # Optional metadata used only to align this result with simulator summary.csv.
+    # Optional metadata used to identify an experiment setting.
     p.add_argument("--experiment")
     p.add_argument("--num-dpus", type=int)
     p.add_argument("--data-prep-param")
@@ -131,6 +152,18 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit(f"bad --param {kv!r}; expected NAME=VALUE")
         k, v = kv.split("=", 1)
         params[k] = _parse_scalar(v)
+
+    unknown_loop_bounds: dict[str, int] = {}
+    for item in a.unknown_loop_bound:
+        if "=" not in item:
+            raise SystemExit(
+                f"bad --unknown-loop-bound {item!r}; expected FUNCTION=MAX_BACKEDGES"
+            )
+        function, raw_bound = item.split("=", 1)
+        bound = int(raw_bound, 0)
+        if bound < 0:
+            raise SystemExit("unknown-loop backedge bounds must be non-negative")
+        unknown_loop_bounds[function] = bound
 
     result_dir = Path(a.outdir).resolve()
     result_dir.mkdir(parents=True, exist_ok=True)
@@ -153,24 +186,47 @@ def main(argv: list[str] | None = None) -> int:
             a.sdk_root,
             a.function,
             a.make_arg,
+            unknown_loop_backedge_uppers=unknown_loop_bounds,
         )
     except Exception as e:
+        cfg_validation = getattr(e, "machine_cfg_validation", None)
+        if cfg_validation is not None:
+            (result_dir / "machine_cfg_validation.json").write_text(
+                json.dumps(cfg_validation, indent=2) + "\n"
+            )
+            if a.debug:
+                (result_dir / "debug.json").write_text(
+                    json.dumps(
+                        {
+                            "status": "error",
+                            "error": str(e),
+                            "machine_cfg_validation": cfg_validation,
+                        },
+                        indent=2,
+                    )
+                    + "\n"
+                )
         print(f"error: {e}", file=sys.stderr)
         return 2
 
     setting = {
         "experiment": a.experiment,
-        "num_dpus_configured": a.num_dpus,
+        "num_dpus": a.num_dpus,
         "data_prep_params": _parse_scalar(a.data_prep_param) if a.data_prep_param is not None else None,
         "setting_id": a.setting_id,
     }
     setting = {k: v for k, v in setting.items() if v is not None}
     if setting:
-        result["simulator_match"] = setting
+        result["experiment_setting"] = setting
 
     result_path = Path(a.output).resolve() if a.output else result_dir / "result.json"
     result_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.write_text(json.dumps(compact_result(result), indent=2) + "\n")
+    cfg_validation = result.get("artifacts", {}).get("machine_cfg_validation")
+    if cfg_validation is not None:
+        (result_dir / "machine_cfg_validation.json").write_text(
+            json.dumps(cfg_validation, indent=2) + "\n"
+        )
     if a.debug:
         (result_dir / "debug.json").write_text(json.dumps(result, indent=2) + "\n")
 

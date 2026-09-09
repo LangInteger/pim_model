@@ -1,0 +1,24 @@
+{
+  "benchmark": "GEMV",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 2,
+  "params": {
+    "max_rows": 2048,
+    "n_size": 64,
+    "n_size_pad": 64,
+    "nr_rows": 2048
+  },
+  "dynamic_instruction_bound": {
+    "lower": 2572572,
+    "upper": 6667881,
+    "exact": false
+  },
+  "unexpanded_callees": [],
+  "machine_cfg_validation_status": "match",
+  "experiment_setting": {
+    "experiment": "tasklet_sweep",
+    "num_dpus": 1,
+    "data_prep_params": 2048,
+    "setting_id": "tasklet_sweep_GEMV_dpu1_tasklets2_size2048"
+  }
+}

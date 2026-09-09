@@ -1,0 +1,69 @@
+{
+  "benchmark": "HST-L",
+  "analysis_schema_version": "runtime-sync-expansion-v2",
+  "tasklets": 16,
+  "experiment_setting": {
+    "experiment": "dpu_sweep",
+    "benchmark": "HST-L",
+    "num_dpus": 1,
+    "num_tasklets": 16,
+    "data_prep_params": 524288,
+    "dpu_build_options": {
+      "BL": 10,
+      "NR_HISTO": 1
+    },
+    "setting_id": "dpu_sweep_HST-L_dpu1_tasklets16_size524288"
+  },
+  "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+  "machine_cfg_validation_status": "match",
+  "provenance": {
+    "argument_source": "summary_csv_semantic_execution_inputs",
+    "benchmark_source_dir": "/home/pim/lang_evaluation/pim_model/uPIMulator/golang/uPIMulator/benchmark/HST-L",
+    "make_args": [
+      "BL=10",
+      "NR_HISTO=1"
+    ]
+  },
+  "dynamic_instruction_bound": {
+    "lower": 11609411,
+    "upper": 27878594,
+    "exact": false
+  },
+  "unexpanded_callees": [
+    "__atomic_acquire_retry"
+  ],
+  "per_dpu": [
+    {
+      "dpu": 0,
+      "bound": {
+        "lower": 11609411.0,
+        "upper": 27878594.0,
+        "exact": false
+      },
+      "phases": [
+        {
+          "execution": 0,
+          "function": "main_kernel1",
+          "params": {
+            "size": 2097152,
+            "transfer_size": 2097152,
+            "bins": 256,
+            "kernel": 0
+          },
+          "unknown_loop_backedge_uppers": {},
+          "bound": {
+            "lower": 11609411,
+            "upper": 27878594,
+            "exact": false
+          },
+          "unexpanded_callees": [
+            "__atomic_acquire_retry"
+          ],
+          "machine_cfg_validation_status": "match",
+          "arguments_source": "summary.csv:dpu_execution_inputs_json",
+          "result_path": "phases/029d6c2f5e7b1533/result.json"
+        }
+      ]
+    }
+  ]
+}

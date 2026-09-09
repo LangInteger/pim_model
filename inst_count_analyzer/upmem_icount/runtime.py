@@ -4,7 +4,17 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from .generic_cfg import IRBlock, MachineBlock, parse_ir_cfg, parse_mir, run_late_mir
+from .generic_cfg import (
+    IRBlock,
+    MachineBlock,
+    compare_machine_cfgs,
+    merge_machine_cfgs,
+    parse_annotated_assembly,
+    parse_ir_cfg,
+    parse_mir,
+    run_annotated_assembly,
+    run_late_mir,
+)
 from .toolchain import Toolchain
 
 
@@ -19,8 +29,10 @@ class AnalysisModule:
     llvm_ir: Path
     named_ir: Path
     late_mir: Path
+    annotated_assembly: Path
     cfg: dict[str, dict[str, IRBlock]]
     machine: dict[str, list[MachineBlock]]
+    machine_cfg_validation: dict
     emit_info: dict
 
     def artifact_dict(self) -> dict:
@@ -31,7 +43,9 @@ class AnalysisModule:
             "llvm_ir": str(self.llvm_ir),
             "named_ir": str(self.named_ir),
             "late_mir": str(self.late_mir),
+            "annotated_assembly": str(self.annotated_assembly),
             "functions": sorted(set(self.cfg) & set(self.machine)),
+            "machine_cfg_validation_status": self.machine_cfg_validation["status"],
             "emit_info": self.emit_info,
         }
 
@@ -54,9 +68,28 @@ RUNTIME_TRANSLATION_UNITS = (
         "src/syslib/barrier.c",
         frozenset({"barrier_wait"}),
     ),
+    RuntimeTranslationUnit(
+        "syslib_handshake",
+        "src/syslib/handshake.c",
+        frozenset({"handshake_notify", "handshake_wait_for"}),
+    ),
+    RuntimeTranslationUnit(
+        "syslib_mul32",
+        "src/syslib/mul32.c",
+        frozenset({"__mulsi3"}),
+    ),
 )
 
-DEFAULT_RUNTIME_FUNCTIONS = frozenset({"mem_alloc", "mem_reset"})
+DEFAULT_RUNTIME_FUNCTIONS = frozenset(
+    {
+        "mem_alloc",
+        "mem_reset",
+        "barrier_wait",
+        "handshake_notify",
+        "handshake_wait_for",
+        "__mulsi3",
+    }
+)
 
 
 def _run(command: list[str], cwd: Path | None = None) -> subprocess.CompletedProcess:
@@ -132,7 +165,28 @@ def _prepare_runtime_module(
     late_mir = module_dir / "module.late.mir"
     run_late_mir(llc, named_ir, late_mir)
     ir_names = {function: set(blocks) for function, blocks in cfg.items()}
-    machine = parse_mir(late_mir.read_text(), ir_names)
+    annotated_assembly = module_dir / "module.annotated.s"
+    run_annotated_assembly(llc, named_ir, annotated_assembly)
+    mir_machine = parse_mir(late_mir.read_text(), ir_names)
+    assembly_machine = parse_annotated_assembly(
+        annotated_assembly.read_text(), ir_names
+    )
+    machine_cfg_validation = compare_machine_cfgs(
+        mir_machine, assembly_machine
+    )
+    if translation_unit.name == "syslib_mul32":
+        # __mulsi3 is handwritten cyclic-looking inline assembly contained in
+        # one LLVM MBB.  Its source-level path expansion below needs the single
+        # late-MIR INLINEASM placeholder rather than the flattened MCInst list.
+        machine = mir_machine
+    else:
+        machine = (
+            assembly_machine
+            if machine_cfg_validation["status"] == "error"
+            else merge_machine_cfgs(
+                mir_machine, assembly_machine, machine_cfg_validation
+            )
+        )
 
     missing = translation_unit.requested_functions - (set(cfg) & set(machine))
     if missing:
@@ -149,8 +203,10 @@ def _prepare_runtime_module(
         llvm_ir=llvm_ir,
         named_ir=named_ir,
         late_mir=late_mir,
+        annotated_assembly=annotated_assembly,
         cfg=cfg,
         machine=machine,
+        machine_cfg_validation=machine_cfg_validation,
         emit_info=emit_info,
     )
 

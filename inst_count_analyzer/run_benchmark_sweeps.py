@@ -8,6 +8,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -150,6 +151,11 @@ def clean_number(value: float) -> int | float:
     return int(value) if float(value).is_integer() else value
 
 
+def clean_seconds(value: float) -> float:
+    """Keep timing output compact without discarding sub-millisecond values."""
+    return round(value, 6)
+
+
 def analyze_setting(
     args: argparse.Namespace,
     setting: dict[str, Any],
@@ -181,6 +187,7 @@ def analyze_setting(
             return cached
         print(f"RERUN {sid}: cached build options do not match summary")
 
+    setting_started = time.perf_counter()
     phases = load_summary_phases(setting["dpu_execution_inputs"])
     phase_dpus = {phase.dpu for phase in phases}
     expected_dpus = set(range(setting["num_dpus"]))
@@ -308,6 +315,7 @@ def analyze_setting(
         if "match_with_warnings" in cfg_statuses
         else "match"
     )
+    analysis_wall_seconds = time.perf_counter() - setting_started
     result = {
         "benchmark": benchmark,
         "analysis_schema_version": ANALYSIS_SCHEMA_VERSION,
@@ -336,9 +344,15 @@ def analyze_setting(
         },
         "unexpanded_callees": sorted(all_unexpanded),
         "per_dpu": per_dpu,
+        # Wall-clock time for this configuration's instruction analysis,
+        # including compilation, machine-CFG analysis, and result composition.
+        "analysis_wall_seconds": clean_seconds(analysis_wall_seconds),
     }
     output_path.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
-    print(f"DONE {sid}: {clean_number(lower)}..{clean_number(upper)}")
+    print(
+        f"DONE {sid}: {clean_number(lower)}..{clean_number(upper)} "
+        f"({analysis_wall_seconds:.3f}s)"
+    )
     unexpected = all_unexpanded
     if unexpected:
         print(
@@ -380,6 +394,9 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
                 "machine_cfg_validation_status": result[
                     "machine_cfg_validation_status"
                 ],
+                "analysis_wall_seconds": result.get(
+                    "analysis_wall_seconds", ""
+                ),
             }
         )
     rows.sort(
@@ -397,6 +414,7 @@ def write_summary(results_root: Path, benchmark: str, results: list[dict[str, An
         "instructions_upper", "instructions_midpoint", "exact",
         "instruction_scope", "unexpanded_callees", "result_path",
         "machine_cfg_validation_status",
+        "analysis_wall_seconds",
     ]
     with path.open("w", newline="", encoding="utf-8") as output:
         writer = csv.DictWriter(output, fieldnames=fields, lineterminator="\n")

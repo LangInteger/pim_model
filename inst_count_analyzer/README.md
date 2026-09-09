@@ -79,6 +79,11 @@ inst_count_analyzer/results/<BENCHMARK>/<setting-id>/result.json
 inst_count_analyzer/results/<BENCHMARK>/<setting-id>/phases/<key>/machine_cfg_validation.json
 ```
 
+Each completed setting records its end-to-end instruction-analysis wall time in
+the top-level `analysis_wall_seconds` field of `result.json`. The same field is
+included as a column in `instruction_counts.csv`. It covers compilation,
+machine-CFG analysis, and composition of the setting result.
+
 Each phase also stores a Git-trackable Machine-CFG validation report. It maps
 every `function + bb.N` between late MIR and final annotated assembly, records
 both successor sets and the emitted MCInst count, and preserves missing-block,

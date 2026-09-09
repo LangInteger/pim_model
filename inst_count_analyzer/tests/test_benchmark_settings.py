@@ -20,7 +20,7 @@ from upmem_icount.benchmark_settings import (  # noqa: E402
 )
 from upmem_icount.makecmd import apply_required_compile_defines  # noqa: E402
 from upmem_icount.version import ANALYSIS_SCHEMA_VERSION  # noqa: E402
-from run_benchmark_sweeps import cached_build_matches  # noqa: E402
+from run_benchmark_sweeps import cached_build_matches, write_summary  # noqa: E402
 
 
 def load_estimate_cost_module():
@@ -96,6 +96,34 @@ class BenchmarkSettingTests(unittest.TestCase):
             loop_backedge_uppers("TRNS", {"kernel": 1, "M_": 128, "n": 8}),
             {},
         )
+
+    def test_instruction_summary_records_configuration_wall_time(self):
+        result = {
+            "tasklets": 16,
+            "experiment_setting": {
+                "experiment": "dpu_sweep",
+                "benchmark": "VA",
+                "num_dpus": 4,
+                "num_tasklets": 16,
+                "data_prep_params": 2097152,
+                "dpu_build_options": {"BL": 10, "TYPE": "INT32"},
+                "setting_id": "dpu_sweep_VA_dpu4_tasklets16_size2097152",
+            },
+            "dynamic_instruction_bound": {
+                "lower": 100,
+                "upper": 120,
+                "exact": False,
+            },
+            "instruction_scope": "maximum_per_dpu_sum_of_sequential_executions",
+            "unexpanded_callees": [],
+            "machine_cfg_validation_status": "match",
+            "analysis_wall_seconds": 12.345678,
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            path = write_summary(Path(temporary), "VA", [result])
+            with path.open(newline="", encoding="utf-8") as input_file:
+                row = next(csv.DictReader(input_file))
+        self.assertEqual(row["analysis_wall_seconds"], "12.345678")
 
 
 class EstimateInstructionLoaderTests(unittest.TestCase):

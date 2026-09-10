@@ -16,4 +16,7 @@ fi
 && .venv/bin/python3 draw_figs/scripts/plot_va_cross_setting_validation.py \
 && .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_validation.py \
 && .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_cycle_midpoint.py \
-&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_component_sensitivity.py
+&& .venv/bin/python3 draw_figs/scripts/plot_all_benchmark_component_sensitivity.py \
+&& .venv/bin/python3 draw_figs/scripts/summarize_upimulator_wall_time.py \
+&& .venv/bin/python3 draw_figs/scripts/summarize_wall_time_comparison.py \
+&& .venv/bin/python3 draw_figs/scripts/plot_wall_time_speedup.py

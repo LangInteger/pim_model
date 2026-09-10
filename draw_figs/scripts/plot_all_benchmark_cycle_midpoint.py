@@ -211,7 +211,6 @@ def write_plot(
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
     plt.rcParams.update(
         {
@@ -228,13 +227,19 @@ def write_plot(
         }
     )
 
-    figure, axes = plt.subplots(1, 2, figsize=(7.0, 2.35), sharey=True)
+    figure, axes = plt.subplots(
+        2,
+        1,
+        figsize=(3.35, 4.50),
+        sharex=True,
+        sharey=True,
+    )
     figure.subplots_adjust(
-        left=0.073,
-        right=0.995,
-        bottom=0.255,
-        top=0.775,
-        wspace=0.075,
+        left=0.155,
+        right=0.985,
+        bottom=0.135,
+        top=0.905,
+        hspace=0.30,
     )
     for axis, (experiment, _field, values, title, legend_title) in zip(
         axes, EXPERIMENTS
@@ -248,53 +253,15 @@ def write_plot(
             legend_title,
         )
 
-    axes[1].tick_params(axis="y", left=False, labelleft=False)
+    axes[0].tick_params(axis="x", bottom=False, labelbottom=False)
     figure.text(
-        0.012,
-        0.51,
-        "PIMSA / uPIMulator",
+        0.018,
+        0.52,
+        "Composed-cycle interval / uPIMulator",
         rotation=90,
         ha="center",
         va="center",
-        fontsize=7.2,
-    )
-    explanation = [
-        Line2D(
-            [0],
-            [0],
-            marker="o",
-            color="none",
-            markerfacecolor="#4B5563",
-            markeredgecolor="white",
-            markeredgewidth=0.3,
-            markersize=4.3,
-            label="interval midpoint",
-        ),
-        Line2D(
-            [0],
-            [0],
-            color="#4B5563",
-            alpha=0.55,
-            linewidth=0.8,
-            label="lower--upper interval",
-        ),
-        Line2D(
-            [0],
-            [0],
-            color="#202124",
-            linestyle=(0, (3.0, 2.2)),
-            linewidth=0.85,
-            label="uPIMulator (normalized to 1)",
-        ),
-    ]
-    figure.legend(
-        handles=explanation,
-        loc="upper center",
-        bbox_to_anchor=(0.5, 0.995),
-        ncol=3,
-        frameon=False,
-        handlelength=2.0,
-        columnspacing=1.5,
+        fontsize=7.0,
     )
 
     output.parent.mkdir(parents=True, exist_ok=True)

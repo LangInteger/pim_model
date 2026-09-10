@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     default_results = script_dir.parent / "results" / "va"
     parser = argparse.ArgumentParser(
         description=(
-            "Create the full-width VA cross-setting validation figure used in "
+            "Create the compact VA cross-setting validation figure used in "
             "Section 5.5."
         )
     )
@@ -147,7 +147,6 @@ def write_plot(
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    from matplotlib.lines import Line2D
 
     plt.rcParams.update(
         {
@@ -163,13 +162,21 @@ def write_plot(
         }
     )
 
-    figure, axes = plt.subplots(1, 4, figsize=(7.0, 1.75))
+    figure, axes_grid = plt.subplots(
+        2,
+        2,
+        figsize=(3.35, 3.00),
+        sharex="col",
+        sharey="row",
+    )
+    axes = list(axes_grid.flat)
     figure.subplots_adjust(
-        left=0.078,
-        right=0.995,
-        bottom=0.170,
-        top=0.770,
-        wspace=0.30,
+        left=0.205,
+        right=0.985,
+        bottom=0.105,
+        top=0.955,
+        wspace=0.16,
+        hspace=0.34,
     )
     instruction_color = "#0072B2"
     cycle_color = "#D55E00"
@@ -195,8 +202,8 @@ def write_plot(
             instruction_color,
         )
         instruction_axis.set_title(
-            f"({'ab'[sweep_index]}) "
-            + ("Tasklets" if experiment == "tasklet_sweep" else "DPUs"),
+            f"({'ab'[sweep_index]}) Inst.: "
+            + ("tasklets" if experiment == "tasklet_sweep" else "DPUs"),
             loc="left",
             pad=3,
             fontweight="bold",
@@ -213,8 +220,8 @@ def write_plot(
             cycle_color,
         )
         cycle_axis.set_title(
-            f"({'cd'[sweep_index]}) "
-            + ("Tasklets" if experiment == "tasklet_sweep" else "DPUs"),
+            f"({'cd'[sweep_index]}) Cycles: "
+            + ("tasklets" if experiment == "tasklet_sweep" else "DPUs"),
             loc="left",
             pad=3,
             fontweight="bold",
@@ -245,9 +252,11 @@ def write_plot(
         axis.set_yticks((0.8, 1.0, 1.2, 1.4, 1.6))
     axes[1].tick_params(labelleft=False)
     axes[3].tick_params(labelleft=False)
+    axes[0].tick_params(axis="x", bottom=False, labelbottom=False)
+    axes[1].tick_params(axis="x", bottom=False, labelbottom=False)
     figure.text(
-        0.018,
-        0.470,
+        0.025,
+        0.515,
         "PIMSA / uPIMulator",
         ha="center",
         va="center",
@@ -255,40 +264,6 @@ def write_plot(
         fontsize=7.8,
     )
 
-    legend_handles = [
-        Line2D(
-            [0],
-            [0],
-            color=instruction_color,
-            linewidth=2.0,
-            label="PIMSA instruction-count interval",
-        ),
-        Line2D(
-            [0],
-            [0],
-            color=cycle_color,
-            linewidth=2.0,
-            label="PIMSA composed-cycle interval",
-        ),
-        Line2D(
-            [0],
-            [0],
-            color=measured_color,
-            linestyle=(0, (2, 1.6)),
-            linewidth=1.0,
-            label="uPIMulator measurement (normalized to 1)",
-        ),
-    ]
-    figure.legend(
-        handles=legend_handles,
-        loc="upper center",
-        bbox_to_anchor=(0.53, 0.985),
-        ncol=3,
-        frameon=False,
-        columnspacing=1.25,
-        handlelength=1.9,
-        borderaxespad=0,
-    )
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output)
     plt.close(figure)

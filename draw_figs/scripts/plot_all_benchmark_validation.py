@@ -252,13 +252,18 @@ def write_plot(
         }
     )
 
-    figure, axes = plt.subplots(1, 2, figsize=(7.0, 2.72))
+    figure, axes = plt.subplots(
+        2,
+        1,
+        figsize=(3.35, 4.65),
+        sharex=True,
+    )
     figure.subplots_adjust(
-        left=0.095,
-        right=0.995,
-        bottom=0.305,
-        top=0.905,
-        wspace=0.075,
+        left=0.205,
+        right=0.985,
+        bottom=0.205,
+        top=0.965,
+        hspace=0.17,
     )
     cmap = plt.get_cmap("RdBu_r")
     norm = TwoSlopeNorm(vmin=-4.25, vcenter=0.0, vmax=3.0)
@@ -279,10 +284,11 @@ def write_plot(
         cmap,
         norm,
         "(b) Composed-cycle interval",
-        show_ylabels=False,
+        show_ylabels=True,
     )
+    axes[0].tick_params(axis="x", bottom=False, labelbottom=False)
 
-    color_axis = figure.add_axes((0.285, 0.155, 0.43, 0.028))
+    color_axis = figure.add_axes((0.225, 0.115, 0.70, 0.018))
     colorbar = figure.colorbar(
         ScalarMappable(norm=norm, cmap=cmap),
         cax=color_axis,
@@ -300,14 +306,14 @@ def write_plot(
         pad=2.0,
     )
 
-    legend_axis = figure.add_axes((0.16, 0.012, 0.68, 0.075))
+    legend_axis = figure.add_axes((0.13, 0.018, 0.82, 0.060))
     legend_axis.set_xlim(0, 1)
     legend_axis.set_ylim(0, 1)
     legend_axis.axis("off")
 
-    cell_y = 0.27
-    cell_width = 0.072
-    cell_height = 0.48
+    cell_y = 0.30
+    cell_width = 0.070
+    cell_height = 0.40
 
     def draw_legend_cell(
         x: float,
@@ -380,14 +386,14 @@ def write_plot(
         )
 
     # The split example makes the lower/upper ordering visible directly.
-    draw_legend_cell(0.0, "cell: lower | upper", (-1.0, 1.0), letters=True)
+    draw_legend_cell(0.0, "lower | upper", (-1.0, 1.0), letters=True)
     draw_legend_cell(
-        0.38,
-        "measurement outside interval",
+        0.39,
+        "outside interval",
         (-1.5, -0.5),
         outside=True,
     )
-    draw_legend_cell(0.79, "missing data", None, missing=True)
+    draw_legend_cell(0.78, "missing", None, missing=True)
     output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output)
     plt.close(figure)

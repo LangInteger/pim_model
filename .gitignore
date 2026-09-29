@@ -2,3 +2,4 @@
 .DS_Store
 *.pdf
 /draw_figs/.work/
+inst_count_analyzer/_tmp_*.py

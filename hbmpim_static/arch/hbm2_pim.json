@@ -1,0 +1,52 @@
+{
+  "_doc": "PIMSA architecture instance A = <M, B, P> for Samsung HBM-PIM as modeled by PIMSimulator. Every value cites its source in papers/pim/artifacts/Samsung_PIMSimulator.",
+  "name": "HBM2-PIM (PIMSimulator, pseudo-channel mode)",
+  "M": {
+    "L": 2,
+    "levels": ["pseudo-channel", "bank"],
+    "I1_channels": {"value": 64, "src": "system_hbm_64ch.ini NUM_CHANS"},
+    "I2_banks": {"value": 16, "src": "ini/HBM2_samsung_2M_16B_x64.ini NUM_BANKS"},
+    "bank_groups": {"value": 4, "src": "ini NUM_BANK_GROUPS"},
+    "rows": {"value": 16384, "src": "ini NUM_ROWS"},
+    "burst_columns_per_row": {"value": 32, "src": "ini NUM_COLS / BL = 128/4 (KernelAddrGen.h num_cols_per_bl_)"},
+    "bytes_per_column_access": {"value": 32, "src": "BL * JEDEC_DATA_BUS_BITS / 8 = 4*64/8"}
+  },
+  "B": {
+    "_doc": "No software-managed SRAM. The open DRAM row buffer is the modeled buffer: j = L (bank), B = 1, BSize = one row.",
+    "j": 2, "B": 1, "BSize_bytes": 1024
+  },
+  "P": {
+    "k": "bank pair (PIM block)",
+    "P_per_channel": {"value": 8, "src": "ini NUM_PIM_BLOCKS"},
+    "W": {"value": 16, "src": "README: FP16 SIMD, 256-bit GRF entries"},
+    "ESize": 2,
+    "R": {"value": 16, "src": "PIMKernel.h num_grfA_ = num_grfB_ = 8"},
+    "execution": "command-triggered: each all-bank column command in PIM mode advances the CRF and drives all PIM blocks of the channel in lockstep"
+  },
+  "timing_cycles": {
+    "tCCD_L": {"value": 4, "src": "ini tCCDL"},
+    "tCCD_S": {"value": 2, "src": "ini tCCDS"},
+    "tRCD_RD": {"value": 14, "src": "ini tRCDRD"},
+    "tRCD_WR": {"value": 10, "src": "ini tRCDWR"},
+    "tRP": {"value": 14, "src": "ini tRP"},
+    "tRAS": {"value": 33, "src": "ini tRAS"},
+    "RL": {"value": 20, "src": "ini RL"},
+    "WL": {"value": 8, "src": "ini WL"},
+    "BL": {"value": 4, "src": "ini BL"},
+    "tRTRS": {"value": 1, "src": "ini tRTRS"},
+    "tWTR_L": {"value": 9, "src": "ini tWTRL"},
+    "tRFC": {"value": 350, "src": "ini tRFC"},
+    "tREFI": {"value": 3900, "src": "ini tREFI"}
+  },
+  "kernel_constants": {
+    "_doc": "Values the frontend leaves symbolic because PIMKernel reads them from config at run time.",
+    "num_pim_ranks_": 1,
+    "num_banks_": 16,
+    "num_bank_groups_": 4,
+    "num_pim_blocks_": 8,
+    "num_grfA_": 8,
+    "num_grfB_": 8,
+    "num_grf_": 8,
+    "transaction_size_": 32
+  }
+}

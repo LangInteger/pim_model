@@ -45,4 +45,15 @@ namespace clang { namespace tooling { class FrontendActionFactory; } }
 
 std::unique_ptr<clang::tooling::FrontendActionFactory> createUPMEMActionFactory(std::map<std::string, FunctionSummary> &Summaries);
 
+// HBM-PIM target: lower selected entry functions to PIMSA-IR (JSON strings,
+// one per matched entry definition).
+struct HBMFrontendOptions {
+    std::vector<std::string> Entries;     // e.g. "PIMKernel::executeGemv"
+    std::vector<std::string> Primitives;  // e.g. "MultiChannelMemorySystem::addTransaction"
+};
+
+std::unique_ptr<clang::tooling::FrontendActionFactory>
+createHBMPIMActionFactory(const HBMFrontendOptions &Opts,
+                          std::vector<std::string> &Entries);
+
 #endif // ANALYZER_H

@@ -20,6 +20,7 @@ add_executable(pim-analyzer
     main.cpp
     lib/Analyzer.cpp
     lib/UPMEMMatchers.cpp
+    lib/HBMPIMFrontend.cpp
 )
 
 target_link_libraries(pim-analyzer

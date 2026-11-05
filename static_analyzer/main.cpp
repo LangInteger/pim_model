@@ -10,6 +10,36 @@ using namespace llvm;
 
 static cl::OptionCategory PIMAnalyzerCategory("pim-analyzer options");
 
+static cl::opt<std::string> Target("target", cl::desc("upmem (default) or hbmpim"),
+                                   cl::init("upmem"), cl::cat(PIMAnalyzerCategory));
+static cl::list<std::string> Entry("entry",
+                                   cl::desc("hbmpim: entry function, e.g. PIMKernel::executeGemv"),
+                                   cl::cat(PIMAnalyzerCategory));
+static cl::list<std::string> Primitive(
+    "primitive", cl::desc("hbmpim: primitive call lowered to an IR event"),
+    cl::cat(PIMAnalyzerCategory));
+static cl::opt<std::string> IROut("ir-out", cl::desc("hbmpim: output PIMSA-IR JSON path"),
+                                  cl::init("hbmpim_ir.json"), cl::cat(PIMAnalyzerCategory));
+
+static int runHBMPIM(ClangTool &Tool) {
+    HBMFrontendOptions Opts;
+    Opts.Entries.assign(Entry.begin(), Entry.end());
+    Opts.Primitives.assign(Primitive.begin(), Primitive.end());
+    if (Opts.Primitives.empty())
+        Opts.Primitives = {"MultiChannelMemorySystem::addTransaction",
+                           "MultiChannelMemorySystem::addBarrier"};
+    std::vector<std::string> Entries;
+    int result = Tool.run(createHBMPIMActionFactory(Opts, Entries).get());
+    std::ofstream out(IROut);
+    out << "[\n";
+    for (size_t i = 0; i < Entries.size(); ++i)
+        out << (i ? ",\n" : "") << Entries[i];
+    out << "\n]\n";
+    std::cout << "Wrote " << Entries.size() << " PIMSA-IR entr"
+              << (Entries.size() == 1 ? "y" : "ies") << " to " << IROut << "\n";
+    return Entries.empty() ? 1 : result;
+}
+
 int main(int argc, const char **argv) {
     auto ExpectedParser = CommonOptionsParser::create(argc, argv, PIMAnalyzerCategory);
     if (!ExpectedParser) {
@@ -18,6 +48,9 @@ int main(int argc, const char **argv) {
     }
     CommonOptionsParser &OptionsParser = ExpectedParser.get();
     ClangTool Tool(OptionsParser.getCompilations(), OptionsParser.getSourcePathList());
+
+    if (Target == "hbmpim")
+        return runHBMPIM(Tool);
 
     std::map<std::string, FunctionSummary> Summaries;
     

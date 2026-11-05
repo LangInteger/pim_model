@@ -3,3 +3,6 @@
 *.pdf
 /draw_figs/.work/
 inst_count_analyzer/_tmp_*.py
+/static_analyzer/build/
+/hbmpim_static/build/
+__pycache__/

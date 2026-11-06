@@ -681,6 +681,7 @@ def metric_vector(arch, m: dict, act: int) -> dict:
 
 
 def analyze(ir_path, arch, kname, values):
+    import closed_form  # imports this module; kept local to avoid a cycle
     sym = symbolic_metrics(ir_path, arch, kname)
     inst = sym.subs(values)
     it = concrete_stream(ir_path, arch, kname, values)
@@ -703,6 +704,7 @@ def analyze(ir_path, arch, kname, values):
         "metric_vector": metric_vector(arch, m, act),
         "worst_case": worst_case_additive(arch, m["rd"], m["wr"]),
         "estimate": est,
+        "closed_form": closed_form.estimate(ir_path, arch, kname, values),
     }
 
 

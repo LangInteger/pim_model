@@ -83,7 +83,7 @@ class Cmd:
 
 
 class _Bank:
-    __slots__ = ("state", "row", "idle_at", "nxt", "cause")
+    __slots__ = ("state", "row", "idle_at", "nxt", "cause", "src")
 
     def __init__(self):
         self.state = "idle"
@@ -91,6 +91,7 @@ class _Bank:
         self.idle_at = 0
         self.nxt = [0, 0, 0, 0]  # earliest RD, WR, ACT, PRE
         self.cause = ["", "", "", ""]  # constraint that last raised each
+        self.src = [None, None, None, None]  # index of the command that raised it
 
 
 def delays(t: dict) -> dict:
@@ -109,13 +110,18 @@ ABMR_RA, SBMR_RA = 0x27FF, 0x2FFF  # Configuration.h PIM_ABMR_RA / PIM_SBMR_RA
 
 
 def schedule(cmds: list[Cmd], timing: dict, ranks: int, banks: int, banks_per_bg: int,
-             queue_depth: int = 64, trace: list | None = None):
+             queue_depth: int = 64, trace: list | None = None, edges: list | None = None):
     """Issue times of `cmds` (one channel) under the controller rules.
 
     Returns (cycles, breakdown, counts): runPIM cycle count, cycles charged to
     each constraint (gap since the previous command on the channel, charged to
     the constraint that set the issued command's ready time), and DRAM command
     counts.
+
+    If `edges` is a list, one tuple per issued command is appended:
+    (index, kind, bank, time, constraint, predecessor index). The predecessor is
+    the command whose issue raised the ready time this command waited for, so
+    following predecessors from the last command gives the critical path.
     """
     t_ = timing
     d = delays(t_)
@@ -139,10 +145,13 @@ def schedule(cmds: list[Cmd], timing: dict, ranks: int, banks: int, banks_per_bg
     sbmr = [set() for _ in range(ranks)]
     mode_events = []  # (time the rank sees it, rank, new SB flag)
 
+    nissued = 0
+
     def raise_(bk, f, val, why):
         if val > bk.nxt[f]:
             bk.nxt[f] = val
             bk.cause[f] = why
+            bk.src[f] = nissued - 1  # the command being issued (counter already advanced)
 
     def issuable(kind, r, b, row=None):
         bk = B[r][b]
@@ -157,17 +166,22 @@ def schedule(cmds: list[Cmd], timing: dict, ranks: int, banks: int, banks_per_bg
         return bk.state == "active" and t >= bk.nxt[kind] and row == bk.row
 
     def issue(kind, r, b, row=None, col=None):
-        nonlocal last_issue, done
+        nonlocal last_issue, done, nissued
         bk = B[r][b]
         gap = t - last_issue
         why = bk.cause[kind] if kind != REF and bk.nxt[kind] == t and bk.cause[kind] else None
+        pred = bk.src[kind] if why is not None else None
         if why is None:
             why = "tCMD" if gap <= t_["tCMD"] else "order"
+            pred = nissued - 1 if nissued else None
+        if edges is not None:
+            edges.append((nissued, NAMES[kind], b, t, why, pred))
         breakdown[why] = breakdown.get(why, 0) + gap
         if trace is not None:
             trace.append((t, NAMES[kind], b, row if row is not None else bk.row, why, gap))
         last_issue = t
         counts[kind] += 1
+        nissued += 1
         if kind in (RD, WR):
             for rr in range(ranks):
                 for bb in range(banks):

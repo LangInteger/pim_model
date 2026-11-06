@@ -199,7 +199,41 @@ class Controller(unittest.TestCase):
         self.assertEqual(cnt["RD"], 1)
 
 
+class RefreshCount(unittest.TestCase):
+    def test_refresh_issued_only_before_the_final_closed_instant(self):
+        import closed_form as CF
+        first = T["tREFI"] // 2
+        # due exactly at the last all-closed instant: issued; one cycle later: not
+        self.assertEqual(CF.refreshes(ARCH, first + 110, 110), 1)
+        self.assertEqual(CF.refreshes(ARCH, first + 109, 110), 0)
+        # each issued refresh pushes the end out by tRFC
+        k2 = first + (T["tREFI"] - T["tRFC"]) + 110
+        self.assertEqual(CF.refreshes(ARCH, k2, 110), 2)
+
+
 IR = os.environ.get("PIMSA_HBM_IR")
+
+
+@unittest.skipUnless(IR and Path(IR).exists(), "set PIMSA_HBM_IR to PIMKernel PIMSA-IR")
+class ClosedForm(unittest.TestCase):
+    """Refresh-free closed form equals the constraint evaluation."""
+
+    def check(self, kernel, grid):
+        import closed_form as CF
+        f = CF.formula(Path(IR), ARCH, kernel)
+        t = dict(T, tREFI=10 ** 12)
+        for vals in grid:
+            it = P.concrete_stream(Path(IR), ARCH, kernel, vals)
+            cyc = P.ctl.schedule(it.cmds, t, 2, 16, 4, 64)[0]
+            self.assertEqual(int(f.subs(vals)), cyc, (kernel, vals))
+
+    def test_gemv(self):
+        self.check("GEMV", [{P.M: m, P.N: n, P.BT: b, P.C: c}
+                            for m, n, b, c in [(512, 640, 1, 4), (1024, 1000, 2, 8), (300, 256, 3, 2)]])
+
+    def test_eltwise(self):
+        for k in ("ADD", "MUL", "RELU"):
+            self.check(k, [{P.L: l, P.BT: b, P.C: c} for l, b, c in [(1 << 16, 1, 2), (3 << 15, 2, 4)]])
 
 
 @unittest.skipUnless(IR and Path(IR).exists(), "set PIMSA_HBM_IR to PIMKernel PIMSA-IR")

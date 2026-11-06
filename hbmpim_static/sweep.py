@@ -92,6 +92,9 @@ def main():
             "est_cycles": round(st["estimate"]["total"]),
             "worst_cycles": round(st["worst_case"]["total"]),
             "est_ratio": st["estimate"]["total"] / sim["cycles"],
+            "closed_cycles": st["closed_form"]["total"],
+            "closed_ratio": st["closed_form"]["total"] / sim["cycles"],
+            "closed_refresh_free": st["closed_form"]["refresh_free"],
             "worst_ratio": st["worst_case"]["total"] / sim["cycles"],
             "sim_rd": ch0["rd"], "static_rd": m["rd"],
             "sim_wr": ch0["wr"], "static_wr": m["wr"],
@@ -129,6 +132,8 @@ def main():
           f"mean |err| {sum(abs(x - 1) for x in ratios) / len(ratios):.3%}")
     exact_cyc = sum(r["sim_cycles"] == r["est_cycles"] for r in rows)
     print(f"cycle count exact: {exact_cyc}/{len(rows)}")
+    cerr = [abs(r["closed_ratio"] - 1) for r in rows]
+    print(f"closed form vs sim: max |err| {max(cerr):.3%} mean {sum(cerr) / len(cerr):.3%}")
     print(f"worst-case/sim: min {min(r['worst_ratio'] for r in rows):.2f} "
           f"max {max(r['worst_ratio'] for r in rows):.2f}")
 

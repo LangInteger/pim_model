@@ -61,6 +61,34 @@ It also returns the cycles grouped into the paper's cost terms (`estimate.by_ter
 
 The terms partition the total.
 
+### Closed-form cycle count (`closed_form.py`)
+
+Each kernel's command stream is a loop nest of identical periods, so its schedule is periodic: after one iteration of transient, every iteration costs a constant amount. In max-plus terms that amount is the weight of the critical cycle. `closed_form.py` derives it once per kernel and architecture, independent of problem size:
+1. On tiny instances (1–5 iterations per loop), it schedules the derived stream with the constraint model (refresh disabled). It records, for each command, the earlier command whose constraint it waited for (`controller.schedule(..., edges=...)`).
+2. It walks these predecessors back from the last command to get the critical path. Every edge must equal a named delay's nominal value.
+3. The difference between n+1 and n iterations is one period's critical cycle. Periodicity and additivity across loop levels are both checked.
+
+Resulting per-period costs, as sums of named delays:
+
+| kernel | period | critical cycle | cycles |
+| --- | --- | --- | ---: |
+| ADD, MUL | tile | 42·tCCD_L + 2·W2R + 2·tRCD_RD + 2·tRCD_WR + 4·tRP + 4·tRTP | 322 |
+| RELU | tile | 28·tCCD_L + 2·W2R + 2·tRCD_WR + 2·tRP + 2·tRTP | 204 |
+| GEMV | odd input tile | 69·tCCD_L + 2·tRCD_RD + tRCD_WR + 3·tRP + 2·tRTP + tWR | 388 |
+| GEMV | even input tile | 69·tCCD_L + R2W + W2R + tRCD_RD + tRP + tRTP | 341 |
+| GEMV | output tile × batch | 76·tCCD_L + R2W + W2R + tRCD_RD + tRCD_WR + 2·tRP + tRTP + tWR | 419 |
+
+Refresh-free closed forms, with R = B·⌈M/(64C)⌉ and n_t = ⌊B⌈L/16⌉/(128C)⌋:
+- GEMV: T₀ = 331 + R·(419 + 388·⌊n_in/2⌋ + 341·(⌈n_in/2⌉ − 1))
+- ADD, MUL: T₀ = 409 + 322·n_t
+- RELU: T₀ = 409 + 204·n_t
+
+These equal the constraint evaluation exactly, which `test_pimsa_hbm.ClosedForm` checks on shapes and channel counts not used in the derivation.
+
+The formulas are symbolic in the workload parameters. In the timing parameters they are piecewise: with other timing values a different cycle can become critical, so the derivation is redone per architecture.
+
+**Refresh.** A pending REF issues only when no bank of the rank has an open row (`CommandQueue.cpp:169-205`). Other commands keep issuing meanwhile; the guard that would stop them is commented out at `CommandQueue.cpp:213-214`. A REF still pending at the end is dropped, because `runPIM` stops when nothing is pending. The last all-rows-closed instant is a constant 110 cycles before the end: this is the final parking phase. Rank-0 refresh k is therefore issued iff tREFI/2 + k·tREFI ≤ T₀ − 110 + k·tRFC, and each issued refresh is charged tRFC. Its true cost varies by ±14 cycles with phase, which is the only residual error: closed form vs simulator, max 0.42 % and mean 0.26 % over the 42 configurations.
+
 ## Validation (results/sweep.json, 42 configurations)
 
 - RD/WR counts equal the simulator's channel-0 counts: **42/42**.

@@ -1,5 +1,9 @@
 # PIMSA static analysis for HBM-PIM (plan A)
 
+Overview, with a worked GEMV example: dissertation repo,
+`manuscripts/pimsa/case_studies/hbmpim/OVERVIEW_2026-11-06.md` (Chinese:
+`OVERVIEW_2026-11-06.zh.md`).
+
 Applies the PIMSA method (manuscripts/pimsa: architecture model, metric
 extraction, cost model, automatic factor estimation) to Samsung HBM-PIM, with
 the same structure as the UPMEM case study:
@@ -20,14 +24,15 @@ the same structure as the UPMEM case study:
    pseudo-channel) column reads, column writes and barriers, as closed forms in
    M, N, L, batch B and channel count C. The loop over `pim_chans_` is the PIMSA
    parallel region over PUs, so per-PU metrics are not scaled by it.
-3. **Row factor estimation** (`pimsa_hbm.py`, concrete): abstract execution of
-   one PU's address stream through `addrGenSafe` (column overflow carries into
-   the row), with the PIMSimulator controller row policy (rows not reused by the
-   next barrier group are precharged early -> cold miss; same-bank row change
-   inside a group -> conflict miss). No data, timing or simulator involved.
-4. **Cost model**: `T = (rd+wr)·tCCD_L + conflict·(tRP+tRCD) + cold·tRCD +
-   turnarounds + refresh`, all coefficients from `arch/hbm2_pim.json`, each
-   citing its source in the simulator's ini/Configuration.h. No fitted values.
+3. **Command-stream timing** (`controller.py`, concrete): abstract execution
+   of one PU's column-command stream (direction, bank, row via `addrGenSafe`,
+   column, BAR), then its issue time under the PIMSimulator controller's
+   constraint table and issue rules (BAR fence, eager precharge, refresh
+   stagger, all-bank-mode ACT restriction). Every delay is an ini timing
+   parameter or a Configuration.h derived delay; every rule cites the source
+   line enforcing it. Output: total cycles plus cycles per constraint. No data,
+   PIM instruction semantics or simulator involved. Derivation:
+   `manuscripts/pimsa/case_studies/hbmpim/COST_DERIVATION_FROM_CONTROLLER_2026-11-05.md`.
 
 Per-channel closed forms (n_in = ⌈N/128⌉, n_out = ⌈M/(64C)⌉,
 n_t = ⌊B⌈L/16⌉/(128C)⌋), checked on a grid by `test_pimsa_hbm.py`:
@@ -38,20 +43,34 @@ n_t = ⌊B⌈L/16⌉/(128C)⌋), checked on a grid by `test_pimsa_hbm.py`:
 | ADD, MUL | 32·n_t + 32 | 16·n_t + 9 | 6·n_t + 8 |
 | RELU | 16·n_t + 32 | 16·n_t + 9 | 4·n_t + 8 |
 
+The same commands are also counted, as closed forms, by the boundary their data crosses. This is decided from the row address (`classify()`):
+- `bank2pu` / `pu2bank`: data rows, P·32 B inside the die per command;
+- `host2pu` / `pu2host`: the PIM register row 0x3fff, 32 B over the bus;
+- `mode_rd` / `mode_wr`: parking and ABMR/SBMR, no payload.
+
+`analyze()` returns these as the paper's per-PU `metric_vector`:
+- N_host, V_host;
+- N_mem, V_mem = P·32 B·N_mem;
+- C_step = N_mem;
+- N_mode, N_bar, N_act, ρ_row.
+
+It also returns the cycles grouped into the paper's cost terms (`estimate.by_term`):
+- `column` = tCCD (the V/BW term);
+- `row` = tRCD/tRP/tRAS/tRC/tRTP/tWR/tRRD (the ρ_row term);
+- `refresh`, `turnaround`, `issue` and `drain`.
+
+The terms partition the total.
+
 ## Validation (results/sweep.json, 42 configurations)
 
-- Column-command counts equal the simulator's channel-0 READ/WRITE counts in
-  **42/42** configurations; estimated ACT counts within 1.5%.
-- Cycle estimate / simulated: GEMV 0.978–1.011 (mean |err| 1.1%);
-  ADD/MUL 1.012–1.349 (1.018–1.047 above 5k cycles); RELU 1.166–1.513.
-  Overall mean |err| 6.9%.
-- Worst-case factors (every transaction a row conflict and a bus turnaround):
-  7.9–11.4× the simulated cycles.
-
-Known residuals: very short runs (< ~3k cycles) are dominated by mode-switch
-and parking overhead that the additive model over-charges; RELU over-charges
-because activation and bus turnaround overlap in hardware but are added in the
-model (the paper's cost composition is additive).
+- RD/WR counts equal the simulator's channel-0 counts: **42/42**.
+- Cycle count equals the simulator's: **42/42**; ACT counts 42/42.
+- Cost terms vs the simulator's attribution grouped the same way: within 19 cycles (column, refresh and turnaround exact).
+- Per-constraint breakdown vs the simulator's stall attribution
+  (`../hbmpim_sim/instrument.py`): within 19 cycles everywhere (trailing PREs
+  and one REF issued during the read drain, after the last transaction).
+- `worst_case_additive` (every column command a full row cycle + turnaround):
+  10.9–15.4× the simulated cycles; its soundness is not yet argued.
 
 ## Reproduce
 

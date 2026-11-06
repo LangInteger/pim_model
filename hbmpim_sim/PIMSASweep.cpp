@@ -19,6 +19,13 @@
 #include "tests/TestCases.h"
 
 extern uint64_t pimsa_cmd_count[64][8];
+// Stall attribution (see instrument.py); index order matches the enum there.
+static const char* kCause[] = {"none", "tRCDRD", "tRCDWR", "tCCDL", "tCCDS", "R2W", "W2R",
+                               "tRTRS", "W2R_rank", "tRC", "tRP", "tRRDL", "tRRDS", "tRFC",
+                               "tRTP", "tWR", "tRAS", "slot", "other"};
+static const int kNC = sizeof(kCause) / sizeof(kCause[0]);
+extern uint64_t pimsa_gap[64][19], pimsa_gapn[64][19], pimsa_gap_by[64][8][19];
+extern uint64_t pimsa_last_issue[64], pimsa_mc_cycle[64];
 
 using namespace DRAMSim;
 using namespace std;
@@ -58,5 +65,26 @@ TEST(PIMSASweep, run)
          << ",\"batch\":" << batch << ",\"chans\":" << chans
          << ",\"cycles\":" << kernel->getCycle() << ",\"ch0\":{\"rd\":" << c[0]
          << ",\"wr\":" << c[1] << ",\"act\":" << c[2] << ",\"pre\":" << c[3] << ",\"ref\":" << c[4]
-         << "}}" << endl;
+         << "},\"mc_cycle\":" << pimsa_mc_cycle[0] << ",\"last_issue\":" << pimsa_last_issue[0]
+         << ",\"gap\":{";
+    // Channel-0 inter-command gaps, charged to the binding constraint:
+    // {"cause": [cycles, commands, {by issued type: cycles}]}
+    static const char* kType[] = {"RD", "WR", "ACT", "PRE", "REF", "t5", "t6", "t7"};
+    bool first = true;
+    for (int i = 0; i < kNC; i++)
+    {
+        if (!pimsa_gapn[0][i]) continue;
+        cout << (first ? "" : ",") << "\"" << kCause[i] << "\":[" << pimsa_gap[0][i] << ","
+             << pimsa_gapn[0][i] << ",{";
+        first = false;
+        bool f2 = true;
+        for (int t = 0; t < 8; t++)
+            if (pimsa_gap_by[0][t][i])
+            {
+                cout << (f2 ? "" : ",") << "\"" << kType[t] << "\":" << pimsa_gap_by[0][t][i];
+                f2 = false;
+            }
+        cout << "}]";
+    }
+    cout << "}}" << endl;
 }

@@ -12,17 +12,8 @@ rm -rf "$OUT"; mkdir -p "$(dirname "$OUT")"
 cp -R "$SRC" "$OUT"
 cp "$HERE/PIMSASweep.cpp" "$OUT/src/tests/PIMSASweep.cpp"
 
-# Counting-only instrumentation: per-channel DRAM command counts by
-# BusPacketType (READ, WRITE, ACTIVATE, PRECHARGE, REF). Timing is untouched.
-python3 - "$OUT/src/MemoryController.cpp" <<'PY'
-import sys
-p = sys.argv[1]; s = open(p).read()
-s = "#include <cstdint>\nuint64_t pimsa_cmd_count[64][8];\n" + s
-anchor = "void MemoryController::updateCommandQueue(BusPacket* poppedBusPacket)\n{\n"
-assert anchor in s
-s = s.replace(anchor, anchor + "    pimsa_cmd_count[parentMemorySystem->systemID][poppedBusPacket->busPacketType]++;\n")
-open(p, "w").write(s)
-PY
+# Bookkeeping-only instrumentation (counts + stall attribution); timing untouched.
+python3 "$HERE/instrument.py" "$OUT/src/MemoryController.cpp"
 
 PREFIX="$(brew --prefix 2>/dev/null || echo /usr/local)"
 cd "$OUT"

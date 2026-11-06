@@ -15,12 +15,14 @@ Two analyses over the same IR:
    trip count, and a loop over the PU set (pseudo-channels) is the PIMSA
    parallel region, so per-PU metrics are not scaled by it.
 
-2. Row-activation estimation (paper, "Automatic Factor Estimation", row
-   factor rho_row): abstract execution of the address stream of one PU at a
-   concrete instantiation, through the architecture's address mapping
-   (PIMAddrManager::addrGenSafe: column overflow carries into the row), with an
-   open-page row-buffer state per bank. No data values, timing or simulator
-   are involved.
+2. Command-stream timing (paper, "Automatic Factor Estimation"): abstract
+   execution of one PU's column-command stream at a concrete instantiation,
+   through the architecture's address mapping (PIMAddrManager::addrGenSafe:
+   column overflow carries into the row), then the issue time of that stream
+   under the memory controller's timing constraints and issue rules
+   (controller.py). Row activations, precharges and refreshes, and hence
+   rho_row, fall out of the same evaluation. No data values, PIM instruction
+   semantics or simulator are involved.
 """
 from __future__ import annotations
 
@@ -31,6 +33,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import sympy as sp
+
+import controller as ctl
 
 HERE = Path(__file__).resolve().parent
 
@@ -106,6 +110,28 @@ class Break(Exception):
     pass
 
 
+def classify(arch, write: bool, row):
+    """Boundary class of a column command, from its row address alone.
+
+    Rows with bit 13 set are reserved (PIMRank.h isReservedRA) and never reach
+    the DRAM array. The PIM register row maps GRF/CRF/SRF and the control word
+    (PIMRank::writeHab); the other reserved rows are bank parking (0x2000) and
+    the all-bank mode registers (ABMR/SBMR). Every other row is a data row: in
+    all-bank mode a column command to it moves one column between each of the
+    P PIM blocks and its bank (Rank::sendToBank -> doPIM / readHab / writeHab).
+    Returns None when the row is not a known integer.
+    """
+    if not isinstance(row, (int, sp.Integer)):
+        return None
+    pr = arch["M"]["pim_rows"]
+    r = int(row)
+    if r & (1 << pr["reserved_bit"]["value"]):
+        if r == pr["register_row"]["value"]:
+            return "host2pu" if write else "pu2host"
+        return "mode_wr" if write else "mode_rd"
+    return "pu2bank" if write else "bank2pu"
+
+
 def is_true(v):
     if v is True or v is sp.true:
         return True
@@ -127,9 +153,17 @@ class Metrics:
     rd: sp.Expr = sp.Integer(0)  # column reads issued to this PU's channel
     wr: sp.Expr = sp.Integer(0)  # column writes issued to this PU's channel
     bar: sp.Expr = sp.Integer(0)  # barriers on this channel
+    # The same column commands, by the architectural boundary their data crosses
+    # (classify()). rd = bank2pu + pu2host + mode_rd, wr = pu2bank + host2pu + mode_wr.
+    bank2pu: sp.Expr = sp.Integer(0)  # RD of a data row: bank -> PIM block (memory-register)
+    pu2bank: sp.Expr = sp.Integer(0)  # WR of a data row: PIM block -> bank (register-memory)
+    host2pu: sp.Expr = sp.Integer(0)  # WR of the PIM register row: host -> GRF/CRF/SRF/control
+    pu2host: sp.Expr = sp.Integer(0)  # RD of the PIM register row: PIM registers -> host
+    mode_rd: sp.Expr = sp.Integer(0)  # RD of another reserved row (bank parking): no payload
+    mode_wr: sp.Expr = sp.Integer(0)  # WR of another reserved row (ABMR/SBMR mode switch)
     notes: list = field(default_factory=list)
 
-    KEYS = ("rd", "wr", "bar")
+    KEYS = ("rd", "wr", "bar", "bank2pu", "pu2bank", "host2pu", "pu2host", "mode_rd", "mode_wr")
 
     def __add__(self, o):
         return Metrics(*(getattr(self, k) + getattr(o, k) for k in self.KEYS),
@@ -172,8 +206,12 @@ class Interp:
         self.uid = 0
         # concrete-pass state: per-PU address stream split into barrier groups
         self.groups = [[]]
-        self.counts = {"rd": 0, "wr": 0, "bar": 0, "w2r": 0, "r2w": 0}
+        self.cmds = []  # channel-0 column-command stream, in program order
+        self.banks_per_bg = (arch["M"]["I2_banks"]["value"] // arch["M"]["bank_groups"]["value"])
+        self.counts = {k: 0 for k in Metrics.KEYS}
+        self.counts.update(w2r=0, r2w=0, data_outside_all_bank=0)
         self.last_dir = None
+        self.all_bank = False  # concrete pass: rank 0 of channel 0 is in all-bank mode
 
     # -- expressions ---------------------------------------------------------
     def lookup(self, name, env):
@@ -281,7 +319,9 @@ class Interp:
             return self.path(obj, "." + fn, env)
         if fn in ("addrGenSafe", "addrGen"):
             if not self.concrete:
-                return Opaque(fn)
+                # Symbolic pass: keep the row/column expressions (no carry), which
+                # is enough to classify the command by its row (classify()).
+                return Addr(*args)
             ch, ra, bg, bank, row, col = (int(x) for x in args)
             if fn == "addrGenSafe":
                 # PIMAddrManager::addrGenSafe(chan, rank, bg, bank, unsigned& row, unsigned& col)
@@ -361,6 +401,8 @@ class Interp:
                     self.counts["bar"] += 1
                     if self.groups[-1]:
                         self.groups.append([])
+                    if self.cmds:
+                        self.cmds[-1].bar = True
                 return Metrics()
             return Metrics(bar=sp.Integer(1))
         if op == "addTransaction":
@@ -373,17 +415,37 @@ class Interp:
                     return Metrics()
                 write = is_true(w)
                 self.counts["wr" if write else "rd"] += 1
+                cls = classify(self.arch, write, addr.row)
+                self.counts[cls] += 1
+                pr = self.arch["M"]["pim_rows"]
+                if write and addr.row == pr["abmr_row"]["value"]:
+                    self.all_bank = True
+                elif write and addr.row == pr["sbmr_row"]["value"]:
+                    self.all_bank = False
+                elif cls in ("bank2pu", "pu2bank") and not self.all_bank:
+                    # A single-bank access to the array: analyze() rejects it, because
+                    # the fan-out to all P PIM blocks used for V_mem needs all-bank mode.
+                    self.counts["data_outside_all_bank"] += 1
                 if self.last_dir is not None and self.last_dir != write:
                     self.counts["w2r" if self.last_dir else "r2w"] += 1
                 self.last_dir = write
                 self.groups[-1].append(((addr.ra, addr.bg, addr.bank), addr.row))
+                self.cmds.append(ctl.Cmd(write, addr.ra, addr.bg * self.banks_per_bg + addr.bank,
+                                         addr.row, addr.col))
                 return Metrics()
-            if is_true(w):
-                return Metrics(wr=sp.Integer(1))
-            if is_false(w):
-                return Metrics(rd=sp.Integer(1))
-            return Metrics(rd=sp.Integer(1), wr=sp.Integer(1),
-                           notes=["unknown direction counted as read and write"])
+            addr = self.ev(args[1], env)
+            row = addr.row if isinstance(addr, Addr) else None
+            dirs = [True] if is_true(w) else [False] if is_false(w) else [False, True]
+            out = {}
+            notes = [] if len(dirs) == 1 else ["unknown direction counted as read and write"]
+            for write in dirs:
+                out["wr" if write else "rd"] = sp.Integer(1)
+                cls = classify(self.arch, write, row)
+                if cls is None:
+                    cls = "pu2bank" if write else "bank2pu"
+                    notes.append(f"row not a known integer ({row}), counted as a data row")
+                out[cls] = sp.Integer(1)
+            return Metrics(**out, notes=notes)
         raise ValueError(f"unknown primitive {op}")
 
     # -- loops ------------------------------------------------------------------
@@ -516,107 +578,130 @@ def symbolic_metrics(ir_path, arch, kname):
     return Metrics(*(sp.simplify(getattr(m, k)) for k in Metrics.KEYS), notes=sorted(set(m.notes)))
 
 
-def row_misses(groups):
-    """Row-buffer misses of one PU's address stream under the controller policy.
-
-    Samsung PIMSimulator's CommandQueue scans each bank queue only up to the
-    first BAR-tagged packet: process_command activates rows only for packets
-    before it, and process_precharge closes any open row that no packet in that
-    window references. Hence, at the start of each barrier group, rows not
-    reused by the group are closed early (their precharge overlaps the previous
-    group), and a later access to that bank is a *cold* miss (ACT only). An
-    access to a bank still open on a different row is a *conflict* miss
-    (PRE + ACT on the critical path).
-    """
-    open_row = {}
-    cold = conflict = 0
-    open_banks = 0
-    for g in groups:
-        refs = set(g)
-        for key in [k for k, r in open_row.items() if (k, r) not in refs]:
-            del open_row[key]
-        for key, row in g:
-            if key not in open_row:
-                cold += 1
-            elif open_row[key] != row:
-                conflict += 1
-            open_row[key] = row
-        open_banks += len(open_row)
-    return {"cold": cold, "conflict": conflict,
-            "avg_open_banks": open_banks / max(1, len(groups))}
-
-
-def concrete_counts(ir_path, arch, kname, values):
+def concrete_stream(ir_path, arch, kname, values):
+    """Abstract execution of one PU's command stream at a concrete instance."""
     kern = KERNELS[kname]
     entry = load_entry(ir_path, kern["entry"])
     bind = {k: sp.sympify(v).subs(values) for k, v in kern["bind"].items()}
     it = Interp(arch, bind, sp.Integer(values[C]), concrete=True)
     env = {p: (sp.sympify(bind[p]) if p in bind else Ref(p)) for p in entry["params"]}
     it.run(entry["body"], env)
-    return {**it.counts, **row_misses([g for g in it.groups if g])}
+    return it
 
 
 # ----------------------------------------------------------------------------
-# Cost model (paper Section "Detailed cost formulation"), per PU = per channel.
-#   Cost_buffer : V_buf / BW_buf with BW_buf = 32 B per tCCD_L: every column
-#                 command moves one 32-B burst between a bank row buffer and
-#                 the PIM block registers (or the host).
-#   Cost_memory : N_mem * t_mem * rho_row with N_mem = column transactions.
-#                 A conflict miss costs tRP + tRCD; a cold miss (bank already
-#                 precharged by the controller) costs tRCD. Worst case: every
-#                 transaction is a conflict miss (rho_row = 1).
-#   Turnaround  : a read->write or write->read switch on the channel's data bus
-#                 costs the DRAMSim2 turnaround delay beyond the tCCD_L already
-#                 charged (Configuration.h READ_TO_WRITE_DELAY and
-#                 WRITE_TO_READ_DELAY_B_LONG).
-#   Refresh     : an all-bank REF every tREFI blocks the channel for tRFC and
-#                 closes the open rows (cold misses afterwards).
-# Compute has no separate term: HBM-PIM ALU operations are triggered by the
-# column commands and are paced by them (t_op folded into tCCD_L).
+# Cost model, per PU = per pseudo-channel.
+#
+# HBM-PIM has no PU-side instruction stream to time: every PIM operation is
+# triggered by an all-bank column command and paced by it, so Cost_compute is
+# folded into the command stream and Cost_host is zero inside the timed region.
+# Cost_memory and Cost_buffer are the issue time of the PU's DRAM command
+# stream under the memory controller, evaluated by controller.schedule: every
+# delay is a named timing parameter (arch timing_cycles, from the device ini)
+# or a Configuration.h derived delay, and every issue rule cites the
+# PIMSimulator line that enforces it. The result is reported both as a total
+# and broken down by the constraint each command waited on.
+#
+# worst_case_additive() is the earlier additive bound, kept until the
+# worst-case analysis is redone.
 # ----------------------------------------------------------------------------
-def cost(arch, rd, wr, cold, conflict, open_banks=0.0, r2w=0, w2r=0):
-    t = {k: v["value"] for k, v in arch["timing_cycles"].items()}
+def timing(arch):
+    return {k: v["value"] for k, v in arch["timing_cycles"].items()}
+
+
+def estimate(arch, cmds):
+    m = arch["M"]
+    cycles, breakdown, counts = ctl.schedule(
+        cmds, timing(arch), m["ranks_per_channel"]["value"], m["I2_banks"]["value"],
+        m["I2_banks"]["value"] // m["bank_groups"]["value"], m["command_queue_depth"]["value"])
+    return {"total": cycles, "by_constraint": breakdown, "commands": counts}
+
+
+def worst_case_additive(arch, rd, wr):
+    """Every column command pays a full row cycle and a bus turnaround."""
+    t = timing(arch)
+    d = ctl.delays(t)
     ncol = rd + wr
-    t_buf = ncol * t["tCCD_L"]
-    t_row = conflict * (t["tRP"] + t["tRCD_RD"]) + cold * t["tRCD_RD"]
-    r2w_delay = t["RL"] + t["BL"] // 2 + t["tRTRS"] - t["WL"]
-    w2r_delay = t["WL"] + t["BL"] // 2 + t["tWTR_L"]
-    t_turn = (r2w * max(0, r2w_delay - t["tCCD_L"])
-              + w2r * max(0, w2r_delay - t["tCCD_L"]))
-    base = t_buf + t_row + t_turn
-    # Fixed point of T = base + n_ref * (tRFC + reopen), n_ref = floor(T / tREFI).
-    reopen = open_banks * t["tRCD_RD"]
-    n_ref, total = 0, base
-    while int(total // t["tREFI"]) > n_ref:
-        n_ref = int(total // t["tREFI"])
-        total = base + n_ref * (t["tRFC"] + reopen)
-    return {"T_buf": t_buf, "T_row": t_row, "T_turn": t_turn, "n_ref": n_ref,
-            "total": total}
+    per = (max(d["READ_TO_PRE"], d["WRITE_TO_PRE"]) + t["tRP"] + max(t["tRCD_RD"], t["tRCD_WR"])
+           + max(d["READ_TO_WRITE"], d["WRITE_TO_READ_B_LONG"]))
+    base = ncol * per
+    n_ref = -(-base // (t["tREFI"] // 2))  # a refresh every tREFI / NUM_RANKS, bounded above
+    return {"total": base + n_ref * t["tRFC"], "per_command": per, "n_ref": n_ref}
+
+
+# Constraint -> cost term of the paper's cost model. On HBM-PIM the terms are
+# not added up: each is the time the command stream waited on those
+# constraints in one evaluation (controller.schedule), so they partition it.
+#   column     ~ V_mem / BW   (steady column-to-column spacing)
+#   row        ~ N_mem * t_mem * rho_row   (opening/closing rows)
+#   refresh, turnaround, issue: constraints the paper's formula has no term for
+#   drain: read data return after the last command (tCMD + RL + BL/2) + 1
+COST_TERMS = {
+    "column": ("tCCD_L", "tCCD_S"),
+    "row": ("tRCD_RD", "tRCD_WR", "tRP", "tRAS", "tRC", "tRTP", "tWR", "tRRD_L", "tRRD_S"),
+    "refresh": ("tRFC",),
+    "turnaround": ("R2W", "W2R", "tRTRS", "W2R_rank"),
+    "issue": ("tCMD", "order"),
+}
+
+
+def cost_terms(by_constraint: dict, total: int) -> dict:
+    known = {c for cs in COST_TERMS.values() for c in cs}
+    unknown = set(by_constraint) - known
+    if unknown:
+        raise AssertionError(f"constraints without a cost term: {unknown}")
+    out = {t: sum(by_constraint.get(c, 0) for c in cs) for t, cs in COST_TERMS.items()}
+    out["drain"] = total - sum(out.values())
+    return out
+
+
+def metric_vector(arch, m: dict, act: int) -> dict:
+    """The paper's per-PU metric vector, instantiated for HBM-PIM.
+
+    Every column command moves BL * bus width = 32 B. A data-row command in
+    all-bank mode does so between each of the P PIM blocks and its bank, inside
+    the die, so V_mem counts P * 32 B per command while the channel bus carries
+    one command. C_step equals N_mem: the PIM blocks take one step per such
+    command (command-triggered execution), so compute adds no separate term.
+    """
+    col = arch["M"]["bytes_per_column_access"]["value"]
+    p = arch["P"]["P_per_channel"]["value"]
+    n_mem = m["bank2pu"] + m["pu2bank"]
+    n_host = m["host2pu"] + m["pu2host"]
+    n_col = m["rd"] + m["wr"]
+    return {
+        "N_host": n_host, "V_host_bytes": col * n_host,  # host <-> PIM registers, over the bus
+        "N_mem": n_mem, "V_mem_bytes": p * col * n_mem,  # bank <-> PIM blocks, inside the die
+        "internal_bytes_per_command": p * col, "bus_bytes_per_command": col,
+        "C_step": n_mem,
+        "N_mode": m["mode_rd"] + m["mode_wr"],  # parking and mode switches: no payload
+        "N_bar": m["bar"],
+        "N_col": n_col, "N_act": act, "rho_row": act / n_col,
+    }
 
 
 def analyze(ir_path, arch, kname, values):
     sym = symbolic_metrics(ir_path, arch, kname)
     inst = sym.subs(values)
-    conc = concrete_counts(ir_path, arch, kname, values)
-    rd, wr, bar = (int(getattr(inst, k)) for k in Metrics.KEYS)
-    if (rd, wr, bar) != (conc["rd"], conc["wr"], conc["bar"]):
-        raise AssertionError(f"symbolic {rd, wr, bar} != abstract execution {conc}")
-    ncol = rd + wr
-    act = conc["cold"] + conc["conflict"]
-    est = cost(arch, rd, wr, conc["cold"], conc["conflict"], conc["avg_open_banks"],
-               conc["r2w"], conc["w2r"])
+    it = concrete_stream(ir_path, arch, kname, values)
+    m = {k: int(getattr(inst, k)) for k in Metrics.KEYS}
+    conc = {k: it.counts[k] for k in Metrics.KEYS}
+    if m != conc:
+        raise AssertionError(f"symbolic {m} != abstract execution {conc}")
+    if it.counts["data_outside_all_bank"]:
+        raise AssertionError(f"{it.counts['data_outside_all_bank']} data-row commands outside "
+                             "all-bank mode: V_mem's fan-out to all PIM blocks does not hold")
+    est = estimate(arch, it.cmds)
+    est["by_term"] = cost_terms(est["by_constraint"], est["total"])
+    act = est["commands"]["ACT"]
     return {
         "kernel": kname,
         "values": {str(k): int(v) for k, v in values.items()},
         "symbolic": {k: str(getattr(sym, k)) for k in Metrics.KEYS},
         "notes": sym.notes,
-        "metrics": {"rd": rd, "wr": wr, "bar": bar,
-                    "act_cold": conc["cold"], "act_conflict": conc["conflict"],
-                    # refresh closes the open rows: one more ACT per open bank
-                    "act_est": act + round(est["n_ref"] * conc["avg_open_banks"]),
-                    "V_buf_bytes": 32 * ncol, "rho_row": act / ncol},
-        # worst case: every transaction is a row conflict and switches direction
-        "worst_case": cost(arch, rd, wr, 0, ncol, 0.0, ncol, ncol),
+        "metrics": {**m, "act": act, "rho_row": act / (m["rd"] + m["wr"])},
+        "metric_vector": metric_vector(arch, m, act),
+        "worst_case": worst_case_additive(arch, m["rd"], m["wr"]),
         "estimate": est,
     }
 

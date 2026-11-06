@@ -3,40 +3,169 @@
   "name": "HBM2-PIM (PIMSimulator, pseudo-channel mode)",
   "M": {
     "L": 2,
-    "levels": ["pseudo-channel", "bank"],
-    "I1_channels": {"value": 64, "src": "system_hbm_64ch.ini NUM_CHANS"},
-    "I2_banks": {"value": 16, "src": "ini/HBM2_samsung_2M_16B_x64.ini NUM_BANKS"},
-    "bank_groups": {"value": 4, "src": "ini NUM_BANK_GROUPS"},
-    "rows": {"value": 16384, "src": "ini NUM_ROWS"},
-    "burst_columns_per_row": {"value": 32, "src": "ini NUM_COLS / BL = 128/4 (KernelAddrGen.h num_cols_per_bl_)"},
-    "bytes_per_column_access": {"value": 32, "src": "BL * JEDEC_DATA_BUS_BITS / 8 = 4*64/8"}
+    "levels": [
+      "pseudo-channel",
+      "bank"
+    ],
+    "I1_channels": {
+      "value": 64,
+      "src": "system_hbm_64ch.ini NUM_CHANS"
+    },
+    "I2_banks": {
+      "value": 16,
+      "src": "ini/HBM2_samsung_2M_16B_x64.ini NUM_BANKS"
+    },
+    "bank_groups": {
+      "value": 4,
+      "src": "ini NUM_BANK_GROUPS"
+    },
+    "rows": {
+      "value": 16384,
+      "src": "ini NUM_ROWS"
+    },
+    "burst_columns_per_row": {
+      "value": 32,
+      "src": "ini NUM_COLS / BL = 128/4 (KernelAddrGen.h num_cols_per_bl_)"
+    },
+    "bytes_per_column_access": {
+      "value": 32,
+      "src": "BL * JEDEC_DATA_BUS_BITS / 8 = 4*64/8"
+    },
+    "ranks_per_channel": {
+      "value": 2,
+      "src": "derived by MemorySystem.cpp: TOTAL_STORAGE / per-rank storage = (256*64*2 MB / 64 ch) / (NUM_ROWS*NUM_COLS*NUM_BANKS*DEVICE_WIDTH bits) = 2; the kernels use rank 0 only (PIMKernel(mem, 64, 1)), rank 1 is only refreshed"
+    },
+    "command_queue_depth": {
+      "value": 64,
+      "src": "system_hbm_64ch.ini CMD_QUEUE_DEPTH"
+    },
+    "pim_rows": {
+      "reserved_bit": {
+        "value": 13,
+        "src": "PIMRank.h isReservedRA: row & (1 << 13); reserved rows never reach the DRAM array"
+      },
+      "register_row": {
+        "value": 16383,
+        "src": "PIMKernel.h pim_reg_ra_ = 0x3fff; PIMRank::writeHab: col 0x0 control, 0x1 SRF, 0x4-0x7 CRF, 0x8-0xf GRF_A, 0x18-0x1f GRF_B"
+      },
+      "abmr_row": {
+        "value": 10239,
+        "src": "PIMKernel.h pim_abmr_ra_ = 0x27ff (enter all-bank mode)"
+      },
+      "sbmr_row": {
+        "value": 12287,
+        "src": "PIMKernel.h pim_sbmr_ra_ = 0x2fff (leave all-bank mode)"
+      },
+      "park_row": {
+        "value": 8192,
+        "src": "PIMKernel::parkIn/parkOut addrGen(..., 1 << 13, 0)"
+      }
+    }
   },
   "B": {
     "_doc": "No software-managed SRAM. The open DRAM row buffer is the modeled buffer: j = L (bank), B = 1, BSize = one row.",
-    "j": 2, "B": 1, "BSize_bytes": 1024
+    "j": 2,
+    "B": 1,
+    "BSize_bytes": 1024
   },
   "P": {
     "k": "bank pair (PIM block)",
-    "P_per_channel": {"value": 8, "src": "ini NUM_PIM_BLOCKS"},
-    "W": {"value": 16, "src": "README: FP16 SIMD, 256-bit GRF entries"},
+    "P_per_channel": {
+      "value": 8,
+      "src": "ini NUM_PIM_BLOCKS"
+    },
+    "W": {
+      "value": 16,
+      "src": "README: FP16 SIMD, 256-bit GRF entries"
+    },
     "ESize": 2,
-    "R": {"value": 16, "src": "PIMKernel.h num_grfA_ = num_grfB_ = 8"},
+    "R": {
+      "value": 16,
+      "src": "PIMKernel.h num_grfA_ = num_grfB_ = 8"
+    },
     "execution": "command-triggered: each all-bank column command in PIM mode advances the CRF and drives all PIM blocks of the channel in lockstep"
   },
   "timing_cycles": {
-    "tCCD_L": {"value": 4, "src": "ini tCCDL"},
-    "tCCD_S": {"value": 2, "src": "ini tCCDS"},
-    "tRCD_RD": {"value": 14, "src": "ini tRCDRD"},
-    "tRCD_WR": {"value": 10, "src": "ini tRCDWR"},
-    "tRP": {"value": 14, "src": "ini tRP"},
-    "tRAS": {"value": 33, "src": "ini tRAS"},
-    "RL": {"value": 20, "src": "ini RL"},
-    "WL": {"value": 8, "src": "ini WL"},
-    "BL": {"value": 4, "src": "ini BL"},
-    "tRTRS": {"value": 1, "src": "ini tRTRS"},
-    "tWTR_L": {"value": 9, "src": "ini tWTRL"},
-    "tRFC": {"value": 350, "src": "ini tRFC"},
-    "tREFI": {"value": 3900, "src": "ini tREFI"}
+    "tCCD_L": {
+      "value": 4,
+      "src": "ini tCCDL"
+    },
+    "tCCD_S": {
+      "value": 2,
+      "src": "ini tCCDS"
+    },
+    "tRCD_RD": {
+      "value": 14,
+      "src": "ini tRCDRD"
+    },
+    "tRCD_WR": {
+      "value": 10,
+      "src": "ini tRCDWR"
+    },
+    "tRP": {
+      "value": 14,
+      "src": "ini tRP"
+    },
+    "tRAS": {
+      "value": 33,
+      "src": "ini tRAS"
+    },
+    "RL": {
+      "value": 20,
+      "src": "ini RL"
+    },
+    "WL": {
+      "value": 8,
+      "src": "ini WL"
+    },
+    "BL": {
+      "value": 4,
+      "src": "ini BL"
+    },
+    "tRTRS": {
+      "value": 1,
+      "src": "ini tRTRS"
+    },
+    "tWTR_L": {
+      "value": 9,
+      "src": "ini tWTRL"
+    },
+    "tRFC": {
+      "value": 350,
+      "src": "ini tRFC"
+    },
+    "tREFI": {
+      "value": 3900,
+      "src": "ini tREFI"
+    },
+    "tRTP_L": {
+      "value": 5,
+      "src": "ini tRTPL"
+    },
+    "tWR": {
+      "value": 16,
+      "src": "ini tWR"
+    },
+    "tRRD_L": {
+      "value": 6,
+      "src": "ini tRRDL"
+    },
+    "tRRD_S": {
+      "value": 4,
+      "src": "ini tRRDS"
+    },
+    "tRC": {
+      "value": 47,
+      "src": "ini tRC"
+    },
+    "AL": {
+      "value": 0,
+      "src": "ini AL"
+    },
+    "tCMD": {
+      "value": 1,
+      "src": "ini tCMD"
+    }
   },
   "kernel_constants": {
     "_doc": "Values the frontend leaves symbolic because PIMKernel reads them from config at run time.",

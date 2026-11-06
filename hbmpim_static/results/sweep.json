@@ -6,21 +6,127 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 3662,
-    "est_cycles": 3658,
-    "worst_cycles": 39750,
-    "est_ratio": 0.9989077007099946,
-    "worst_ratio": 10.854724194429274,
+    "est_cycles": 3662,
+    "worst_cycles": 54025,
+    "est_ratio": 1.0,
+    "worst_ratio": 14.752867285636265,
     "sim_rd": 544,
     "static_rd": 544,
     "sim_wr": 81,
     "static_wr": 81,
     "sim_act": 65,
-    "static_act": 66,
+    "static_act": 65,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 2225,
+    "est_row": 928,
+    "est_refresh": 350,
+    "est_turnaround": 116,
+    "est_issue": 19,
+    "est_drain": 24,
+    "N_host": 67,
+    "V_host_bytes": 2144,
+    "N_mem": 520,
+    "V_mem_bytes": 133120,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 520,
+    "N_mode": 38,
+    "N_bar": 81,
+    "N_col": 625,
+    "N_act": 65,
+    "rho_row": 0.104,
+    "by_constraint": {
+      "R2W": [
+        59,
+        59
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        2223,
+        2223
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        20,
+        19
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        228,
+        228
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        235,
+        235
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        48,
+        48
+      ],
+      "tWR": [
+        193,
+        193
+      ]
+    },
+    "by_term": {
+      "column": [
+        2225,
+        2225
+      ],
+      "row": [
+        946,
+        928
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        116,
+        116
+      ],
+      "issue": [
+        20,
+        19
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -30,21 +136,127 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 3662,
-    "est_cycles": 3658,
-    "worst_cycles": 39750,
-    "est_ratio": 0.9989077007099946,
-    "worst_ratio": 10.854724194429274,
+    "est_cycles": 3662,
+    "worst_cycles": 54025,
+    "est_ratio": 1.0,
+    "worst_ratio": 14.752867285636265,
     "sim_rd": 544,
     "static_rd": 544,
     "sim_wr": 81,
     "static_wr": 81,
     "sim_act": 65,
-    "static_act": 66,
+    "static_act": 65,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 2225,
+    "est_row": 928,
+    "est_refresh": 350,
+    "est_turnaround": 116,
+    "est_issue": 19,
+    "est_drain": 24,
+    "N_host": 67,
+    "V_host_bytes": 2144,
+    "N_mem": 520,
+    "V_mem_bytes": 133120,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 520,
+    "N_mode": 38,
+    "N_bar": 81,
+    "N_col": 625,
+    "N_act": 65,
+    "rho_row": 0.104,
+    "by_constraint": {
+      "R2W": [
+        59,
+        59
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        2223,
+        2223
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        20,
+        19
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        228,
+        228
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        235,
+        235
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        48,
+        48
+      ],
+      "tWR": [
+        193,
+        193
+      ]
+    },
+    "by_term": {
+      "column": [
+        2225,
+        2225
+      ],
+      "row": [
+        946,
+        928
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        116,
+        116
+      ],
+      "issue": [
+        20,
+        19
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -54,21 +266,131 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 13389,
-    "est_cycles": 13503,
-    "worst_cycles": 151514,
-    "est_ratio": 1.008490698873188,
-    "worst_ratio": 11.316304429008888,
+    "est_cycles": 13389,
+    "worst_cycles": 205459,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.345358129808051,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 303,
     "static_wr": 303,
     "sim_act": 145,
-    "static_act": 147,
+    "static_act": 145,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8874,
+    "est_row": 2901,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 265,
+    "V_host_bytes": 8480,
+    "N_mem": 2080,
+    "V_mem_bytes": 532480,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2080,
+    "N_mode": 38,
+    "N_bar": 306,
+    "N_col": 2383,
+    "N_act": 145,
+    "rho_row": 0.060847671002937476,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        8872,
+        8872
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        53,
+        52
+      ],
+      "tRAS": [
+        91,
+        73
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        276,
+        276
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        192,
+        192
+      ],
+      "tWR": [
+        577,
+        577
+      ]
+    },
+    "by_term": {
+      "column": [
+        8874,
+        8874
+      ],
+      "row": [
+        2919,
+        2901
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -78,21 +400,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 13389,
-    "est_cycles": 13503,
-    "worst_cycles": 151514,
-    "est_ratio": 1.008490698873188,
-    "worst_ratio": 11.316304429008888,
+    "est_cycles": 13389,
+    "worst_cycles": 205459,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.345358129808051,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 303,
     "static_wr": 303,
     "sim_act": 145,
-    "static_act": 147,
+    "static_act": 145,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8874,
+    "est_row": 2901,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 265,
+    "V_host_bytes": 8480,
+    "N_mem": 2080,
+    "V_mem_bytes": 532480,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2080,
+    "N_mode": 38,
+    "N_bar": 306,
+    "N_col": 2383,
+    "N_act": 145,
+    "rho_row": 0.060847671002937476,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        8872,
+        8872
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        53,
+        52
+      ],
+      "tRAS": [
+        91,
+        73
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        276,
+        276
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        192,
+        192
+      ],
+      "tWR": [
+        577,
+        577
+      ]
+    },
+    "by_term": {
+      "column": [
+        8874,
+        8874
+      ],
+      "row": [
+        2919,
+        2901
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -102,21 +534,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 13166,
-    "est_cycles": 13299,
-    "worst_cycles": 149774,
-    "est_ratio": 1.010088434173198,
-    "worst_ratio": 11.375816497037825,
+    "est_cycles": 13166,
+    "worst_cycles": 202919,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.412349992404678,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 273,
     "static_wr": 273,
     "sim_act": 140,
-    "static_act": 141,
+    "static_act": 140,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8771,
+    "est_row": 2781,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 259,
+    "V_host_bytes": 8288,
+    "N_mem": 2056,
+    "V_mem_bytes": 526336,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2056,
+    "N_mode": 38,
+    "N_bar": 297,
+    "N_col": 2353,
+    "N_act": 140,
+    "rho_row": 0.05949851253718657,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "order": [
+        4,
+        4
+      ],
+      "tCCD_L": [
+        8769,
+        8769
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        49,
+        48
+      ],
+      "tRAS": [
+        72,
+        54
+      ],
+      "tRCD_RD": [
+        774,
+        774
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        198,
+        198
+      ],
+      "tWR": [
+        541,
+        541
+      ]
+    },
+    "by_term": {
+      "column": [
+        8771,
+        8771
+      ],
+      "row": [
+        2799,
+        2781
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -126,21 +668,131 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 13166,
-    "est_cycles": 13299,
-    "worst_cycles": 149774,
-    "est_ratio": 1.010088434173198,
-    "worst_ratio": 11.375816497037825,
+    "est_cycles": 13166,
+    "worst_cycles": 202919,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.412349992404678,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 273,
     "static_wr": 273,
     "sim_act": 140,
-    "static_act": 141,
+    "static_act": 140,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8771,
+    "est_row": 2781,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 259,
+    "V_host_bytes": 8288,
+    "N_mem": 2056,
+    "V_mem_bytes": 526336,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2056,
+    "N_mode": 38,
+    "N_bar": 297,
+    "N_col": 2353,
+    "N_act": 140,
+    "rho_row": 0.05949851253718657,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "order": [
+        4,
+        4
+      ],
+      "tCCD_L": [
+        8769,
+        8769
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        49,
+        48
+      ],
+      "tRAS": [
+        72,
+        54
+      ],
+      "tRCD_RD": [
+        774,
+        774
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        198,
+        198
+      ],
+      "tWR": [
+        541,
+        541
+      ]
+    },
+    "by_term": {
+      "column": [
+        8771,
+        8771
+      ],
+      "row": [
+        2799,
+        2781
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -150,21 +802,131 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 51941,
-    "est_cycles": 51319,
-    "worst_cycles": 591960,
-    "est_ratio": 0.9880305233471373,
-    "worst_ratio": 11.396777112493021,
+    "est_cycles": 51941,
+    "worst_cycles": 800335,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.408540459367359,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1071,
     "static_wr": 1071,
     "sim_act": 440,
-    "static_act": 445,
+    "static_act": 440,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35083,
+    "est_row": 10093,
+    "est_refresh": 4550,
+    "est_turnaround": 1973,
+    "est_issue": 218,
+    "est_drain": 24,
+    "N_host": 1033,
+    "V_host_bytes": 33056,
+    "N_mem": 8224,
+    "V_mem_bytes": 2105344,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8224,
+    "N_mode": 38,
+    "N_bar": 1170,
+    "N_col": 9295,
+    "N_act": 440,
+    "rho_row": 0.047337278106508875,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1194,
+        1194
+      ],
+      "order": [
+        62,
+        62
+      ],
+      "tCCD_L": [
+        35081,
+        35081
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        157,
+        156
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRCD_RD": [
+        2874,
+        2874
+      ],
+      "tRCD_WR": [
+        756,
+        756
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3587,
+        3587
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        786,
+        786
+      ],
+      "tWR": [
+        1959,
+        1959
+      ]
+    },
+    "by_term": {
+      "column": [
+        35083,
+        35083
+      ],
+      "row": [
+        10111,
+        10093
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1973,
+        1973
+      ],
+      "issue": [
+        219,
+        218
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -174,21 +936,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 51941,
-    "est_cycles": 51319,
-    "worst_cycles": 591960,
-    "est_ratio": 0.9880305233471373,
-    "worst_ratio": 11.396777112493021,
+    "est_cycles": 51941,
+    "worst_cycles": 800335,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.408540459367359,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1071,
     "static_wr": 1071,
     "sim_act": 440,
-    "static_act": 445,
+    "static_act": 440,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35083,
+    "est_row": 10093,
+    "est_refresh": 4550,
+    "est_turnaround": 1973,
+    "est_issue": 218,
+    "est_drain": 24,
+    "N_host": 1033,
+    "V_host_bytes": 33056,
+    "N_mem": 8224,
+    "V_mem_bytes": 2105344,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8224,
+    "N_mode": 38,
+    "N_bar": 1170,
+    "N_col": 9295,
+    "N_act": 440,
+    "rho_row": 0.047337278106508875,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1194,
+        1194
+      ],
+      "order": [
+        62,
+        62
+      ],
+      "tCCD_L": [
+        35081,
+        35081
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        157,
+        156
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRCD_RD": [
+        2874,
+        2874
+      ],
+      "tRCD_WR": [
+        756,
+        756
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3587,
+        3587
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        786,
+        786
+      ],
+      "tWR": [
+        1959,
+        1959
+      ]
+    },
+    "by_term": {
+      "column": [
+        35083,
+        35083
+      ],
+      "row": [
+        10111,
+        10093
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1973,
+        1973
+      ],
+      "issue": [
+        219,
+        218
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -198,21 +1070,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 13389,
-    "est_cycles": 13503,
-    "worst_cycles": 151514,
-    "est_ratio": 1.008490698873188,
-    "worst_ratio": 11.316304429008888,
+    "est_cycles": 13389,
+    "worst_cycles": 205459,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.345358129808051,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 303,
     "static_wr": 303,
     "sim_act": 145,
-    "static_act": 147,
+    "static_act": 145,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8874,
+    "est_row": 2901,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 265,
+    "V_host_bytes": 8480,
+    "N_mem": 2080,
+    "V_mem_bytes": 532480,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2080,
+    "N_mode": 38,
+    "N_bar": 306,
+    "N_col": 2383,
+    "N_act": 145,
+    "rho_row": 0.060847671002937476,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        8872,
+        8872
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        53,
+        52
+      ],
+      "tRAS": [
+        91,
+        73
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        276,
+        276
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        192,
+        192
+      ],
+      "tWR": [
+        577,
+        577
+      ]
+    },
+    "by_term": {
+      "column": [
+        8874,
+        8874
+      ],
+      "row": [
+        2919,
+        2901
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -222,21 +1204,127 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 3662,
-    "est_cycles": 3658,
-    "worst_cycles": 39750,
-    "est_ratio": 0.9989077007099946,
-    "worst_ratio": 10.854724194429274,
+    "est_cycles": 3662,
+    "worst_cycles": 54025,
+    "est_ratio": 1.0,
+    "worst_ratio": 14.752867285636265,
     "sim_rd": 544,
     "static_rd": 544,
     "sim_wr": 81,
     "static_wr": 81,
     "sim_act": 65,
-    "static_act": 66,
+    "static_act": 65,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 2225,
+    "est_row": 928,
+    "est_refresh": 350,
+    "est_turnaround": 116,
+    "est_issue": 19,
+    "est_drain": 24,
+    "N_host": 67,
+    "V_host_bytes": 2144,
+    "N_mem": 520,
+    "V_mem_bytes": 133120,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 520,
+    "N_mode": 38,
+    "N_bar": 81,
+    "N_col": 625,
+    "N_act": 65,
+    "rho_row": 0.104,
+    "by_constraint": {
+      "R2W": [
+        59,
+        59
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        2223,
+        2223
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        20,
+        19
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        228,
+        228
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        235,
+        235
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        48,
+        48
+      ],
+      "tWR": [
+        193,
+        193
+      ]
+    },
+    "by_term": {
+      "column": [
+        2225,
+        2225
+      ],
+      "row": [
+        946,
+        928
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        116,
+        116
+      ],
+      "issue": [
+        20,
+        19
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -246,21 +1334,135 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 53222,
-    "est_cycles": 52135,
-    "worst_cycles": 599620,
-    "est_ratio": 0.9795786567530259,
-    "worst_ratio": 11.266393596632971,
+    "est_cycles": 53222,
+    "worst_cycles": 810845,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.23514711961219,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1191,
     "static_wr": 1191,
     "sim_act": 464,
-    "static_act": 469,
+    "static_act": 464,
     "sim_ref": 27,
+    "static_ref": 27,
+    "max_constraint_diff": 18,
+    "est_column": 35464,
+    "est_row": 10640,
+    "est_refresh": 4900,
+    "est_turnaround": 1976,
+    "est_issue": 218,
+    "est_drain": 24,
+    "N_host": 1057,
+    "V_host_bytes": 33824,
+    "N_mem": 8320,
+    "V_mem_bytes": 2129920,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8320,
+    "N_mode": 38,
+    "N_bar": 1206,
+    "N_col": 9415,
+    "N_act": 464,
+    "rho_row": 0.04928305894848646,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        44,
+        44
+      ],
+      "tCCD_L": [
+        35462,
+        35462
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        175,
+        174
+      ],
+      "tRAS": [
+        104,
+        86
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        2874,
+        2874
+      ],
+      "tRCD_WR": [
+        984,
+        984
+      ],
+      "tRFC": [
+        4900,
+        4900
+      ],
+      "tRP": [
+        3690,
+        3690
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        777,
+        777
+      ],
+      "tWR": [
+        2113,
+        2113
+      ]
+    },
+    "by_term": {
+      "column": [
+        35464,
+        35464
+      ],
+      "row": [
+        10658,
+        10640
+      ],
+      "refresh": [
+        4900,
+        4900
+      ],
+      "turnaround": [
+        1976,
+        1976
+      ],
+      "issue": [
+        219,
+        218
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -270,21 +1472,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 13389,
-    "est_cycles": 13503,
-    "worst_cycles": 151514,
-    "est_ratio": 1.008490698873188,
-    "worst_ratio": 11.316304429008888,
+    "est_cycles": 13389,
+    "worst_cycles": 205459,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.345358129808051,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 303,
     "static_wr": 303,
     "sim_act": 145,
-    "static_act": 147,
+    "static_act": 145,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8874,
+    "est_row": 2901,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 265,
+    "V_host_bytes": 8480,
+    "N_mem": 2080,
+    "V_mem_bytes": 532480,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2080,
+    "N_mode": 38,
+    "N_bar": 306,
+    "N_col": 2383,
+    "N_act": 145,
+    "rho_row": 0.060847671002937476,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        8872,
+        8872
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        53,
+        52
+      ],
+      "tRAS": [
+        91,
+        73
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        276,
+        276
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        192,
+        192
+      ],
+      "tWR": [
+        577,
+        577
+      ]
+    },
+    "by_term": {
+      "column": [
+        8874,
+        8874
+      ],
+      "row": [
+        2919,
+        2901
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -294,21 +1606,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 13218,
-    "est_cycles": 13367,
-    "worst_cycles": 150354,
-    "est_ratio": 1.011255554526588,
-    "worst_ratio": 11.37494325919201,
+    "est_cycles": 13218,
+    "worst_cycles": 203649,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.406945074897866,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 283,
     "static_wr": 283,
     "sim_act": 141,
-    "static_act": 143,
+    "static_act": 141,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8806,
+    "est_row": 2792,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 58,
+    "est_drain": 24,
+    "N_host": 261,
+    "V_host_bytes": 8352,
+    "N_mem": 2064,
+    "V_mem_bytes": 528384,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2064,
+    "N_mode": 38,
+    "N_bar": 300,
+    "N_col": 2363,
+    "N_act": 141,
+    "rho_row": 0.059669911129919595,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "order": [
+        10,
+        10
+      ],
+      "tCCD_L": [
+        8804,
+        8804
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        49,
+        48
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        238,
+        238
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        195,
+        195
+      ],
+      "tWR": [
+        553,
+        553
+      ]
+    },
+    "by_term": {
+      "column": [
+        8806,
+        8806
+      ],
+      "row": [
+        2810,
+        2792
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        59,
+        58
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -318,10 +1740,10 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 6970,
-    "est_cycles": 6873,
-    "worst_cycles": 76308,
-    "est_ratio": 0.9861020916710715,
-    "worst_ratio": 10.9480631276901,
+    "est_cycles": 6970,
+    "worst_cycles": 103423,
+    "est_ratio": 1.0,
+    "worst_ratio": 14.838307030129124,
     "sim_rd": 1056,
     "static_rd": 1056,
     "sim_wr": 145,
@@ -329,10 +1751,120 @@
     "sim_act": 91,
     "static_act": 91,
     "sim_ref": 3,
+    "static_ref": 3,
+    "max_constraint_diff": 18,
+    "est_column": 4403,
+    "est_row": 1569,
+    "est_refresh": 700,
+    "est_turnaround": 240,
+    "est_issue": 34,
+    "est_drain": 24,
+    "N_host": 131,
+    "V_host_bytes": 4192,
+    "N_mem": 1032,
+    "V_mem_bytes": 264192,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1032,
+    "N_mode": 38,
+    "N_bar": 153,
+    "N_col": 1201,
+    "N_act": 91,
+    "rho_row": 0.07577019150707744,
+    "by_constraint": {
+      "R2W": [
+        107,
+        107
+      ],
+      "W2R": [
+        133,
+        133
+      ],
+      "order": [
+        6,
+        6
+      ],
+      "tCCD_L": [
+        4401,
+        4401
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        29,
+        28
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        424,
+        424
+      ],
+      "tRCD_WR": [
+        139,
+        139
+      ],
+      "tRFC": [
+        700,
+        700
+      ],
+      "tRP": [
+        473,
+        473
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        99,
+        99
+      ],
+      "tWR": [
+        309,
+        309
+      ]
+    },
+    "by_term": {
+      "column": [
+        4403,
+        4403
+      ],
+      "row": [
+        1587,
+        1569
+      ],
+      "refresh": [
+        700,
+        700
+      ],
+      "turnaround": [
+        240,
+        240
+      ],
+      "issue": [
+        35,
+        34
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -342,21 +1874,131 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 52321,
-    "est_cycles": 51591,
-    "worst_cycles": 594630,
-    "est_ratio": 0.9860522472321702,
-    "worst_ratio": 11.365035071959634,
+    "est_cycles": 52321,
+    "worst_cycles": 803955,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.365818696125839,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1111,
     "static_wr": 1111,
     "sim_act": 451,
-    "static_act": 453,
+    "static_act": 451,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35193,
+    "est_row": 10352,
+    "est_refresh": 4550,
+    "est_turnaround": 1976,
+    "est_issue": 226,
+    "est_drain": 24,
+    "N_host": 1041,
+    "V_host_bytes": 33312,
+    "N_mem": 8256,
+    "V_mem_bytes": 2113536,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8256,
+    "N_mode": 38,
+    "N_bar": 1182,
+    "N_col": 9335,
+    "N_act": 451,
+    "rho_row": 0.048312801285484736,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        63,
+        63
+      ],
+      "tCCD_L": [
+        35191,
+        35191
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        164,
+        163
+      ],
+      "tRAS": [
+        84,
+        66
+      ],
+      "tRCD_RD": [
+        2916,
+        2916
+      ],
+      "tRCD_WR": [
+        832,
+        832
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3664,
+        3664
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        783,
+        783
+      ],
+      "tWR": [
+        2017,
+        2017
+      ]
+    },
+    "by_term": {
+      "column": [
+        35193,
+        35193
+      ],
+      "row": [
+        10370,
+        10352
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1976,
+        1976
+      ],
+      "issue": [
+        227,
+        226
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -366,21 +2008,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 26494,
-    "est_cycles": 25987,
-    "worst_cycles": 298446,
-    "est_ratio": 0.9808566539167416,
-    "worst_ratio": 11.26466369744093,
+    "est_cycles": 26494,
+    "worst_cycles": 403751,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.23933720842455,
     "sim_rd": 4128,
     "static_rd": 4128,
     "sim_wr": 559,
     "static_wr": 559,
     "sim_act": 245,
-    "static_act": 246,
+    "static_act": 245,
     "sim_ref": 13,
+    "static_ref": 13,
+    "max_constraint_diff": 18,
+    "est_column": 17600,
+    "est_row": 5321,
+    "est_refresh": 2450,
+    "est_turnaround": 984,
+    "est_issue": 115,
+    "est_drain": 24,
+    "N_host": 521,
+    "V_host_bytes": 16672,
+    "N_mem": 4128,
+    "V_mem_bytes": 1056768,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 4128,
+    "N_mode": 38,
+    "N_bar": 594,
+    "N_col": 4687,
+    "N_act": 245,
+    "rho_row": 0.052272242372519734,
+    "by_constraint": {
+      "R2W": [
+        395,
+        395
+      ],
+      "W2R": [
+        589,
+        589
+      ],
+      "order": [
+        29,
+        29
+      ],
+      "tCCD_L": [
+        17598,
+        17598
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        87,
+        86
+      ],
+      "tRAS": [
+        78,
+        60
+      ],
+      "tRCD_RD": [
+        1488,
+        1488
+      ],
+      "tRCD_WR": [
+        436,
+        436
+      ],
+      "tRFC": [
+        2450,
+        2450
+      ],
+      "tRP": [
+        1832,
+        1832
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        390,
+        390
+      ],
+      "tWR": [
+        1041,
+        1041
+      ]
+    },
+    "by_term": {
+      "column": [
+        17600,
+        17600
+      ],
+      "row": [
+        5339,
+        5321
+      ],
+      "refresh": [
+        2450,
+        2450
+      ],
+      "turnaround": [
+        984,
+        984
+      ],
+      "issue": [
+        116,
+        115
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -390,21 +2142,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 51941,
-    "est_cycles": 51319,
-    "worst_cycles": 591960,
-    "est_ratio": 0.9880305233471373,
-    "worst_ratio": 11.396777112493021,
+    "est_cycles": 51941,
+    "worst_cycles": 800335,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.408540459367359,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1071,
     "static_wr": 1071,
     "sim_act": 440,
-    "static_act": 445,
+    "static_act": 440,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35083,
+    "est_row": 10093,
+    "est_refresh": 4550,
+    "est_turnaround": 1973,
+    "est_issue": 218,
+    "est_drain": 24,
+    "N_host": 1033,
+    "V_host_bytes": 33056,
+    "N_mem": 8224,
+    "V_mem_bytes": 2105344,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8224,
+    "N_mode": 38,
+    "N_bar": 1170,
+    "N_col": 9295,
+    "N_act": 440,
+    "rho_row": 0.047337278106508875,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1194,
+        1194
+      ],
+      "order": [
+        62,
+        62
+      ],
+      "tCCD_L": [
+        35081,
+        35081
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        157,
+        156
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRCD_RD": [
+        2874,
+        2874
+      ],
+      "tRCD_WR": [
+        756,
+        756
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3587,
+        3587
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        786,
+        786
+      ],
+      "tWR": [
+        1959,
+        1959
+      ]
+    },
+    "by_term": {
+      "column": [
+        35083,
+        35083
+      ],
+      "row": [
+        10111,
+        10093
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1973,
+        1973
+      ],
+      "issue": [
+        219,
+        218
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -414,21 +2276,131 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 13166,
-    "est_cycles": 13299,
-    "worst_cycles": 149774,
-    "est_ratio": 1.010088434173198,
-    "worst_ratio": 11.375816497037825,
+    "est_cycles": 13166,
+    "worst_cycles": 202919,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.412349992404678,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 273,
     "static_wr": 273,
     "sim_act": 140,
-    "static_act": 141,
+    "static_act": 140,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8771,
+    "est_row": 2781,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 52,
+    "est_drain": 24,
+    "N_host": 259,
+    "V_host_bytes": 8288,
+    "N_mem": 2056,
+    "V_mem_bytes": 526336,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2056,
+    "N_mode": 38,
+    "N_bar": 297,
+    "N_col": 2353,
+    "N_act": 140,
+    "rho_row": 0.05949851253718657,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "order": [
+        4,
+        4
+      ],
+      "tCCD_L": [
+        8769,
+        8769
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        49,
+        48
+      ],
+      "tRAS": [
+        72,
+        54
+      ],
+      "tRCD_RD": [
+        774,
+        774
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        198,
+        198
+      ],
+      "tWR": [
+        541,
+        541
+      ]
+    },
+    "by_term": {
+      "column": [
+        8771,
+        8771
+      ],
+      "row": [
+        2799,
+        2781
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        53,
+        52
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -438,21 +2410,135 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 207286,
-    "est_cycles": 202671,
-    "worst_cycles": 2361404,
-    "est_ratio": 0.9777370798046848,
-    "worst_ratio": 11.392009108188686,
+    "est_cycles": 207286,
+    "worst_cycles": 3191399,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.396114547050935,
     "sim_rd": 32800,
     "static_rd": 32800,
     "sim_wr": 4263,
     "static_wr": 4263,
     "sim_act": 1651,
-    "static_act": 1659,
+    "static_act": 1651,
     "sim_ref": 106,
+    "static_ref": 106,
+    "max_constraint_diff": 18,
+    "est_column": 140281,
+    "est_row": 39692,
+    "est_refresh": 18550,
+    "est_turnaround": 7896,
+    "est_issue": 843,
+    "est_drain": 24,
+    "N_host": 4129,
+    "V_host_bytes": 132128,
+    "N_mem": 32896,
+    "V_mem_bytes": 8421376,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 32896,
+    "N_mode": 38,
+    "N_bar": 4662,
+    "N_col": 37063,
+    "N_act": 1651,
+    "rho_row": 0.0445457734128376,
+    "by_constraint": {
+      "R2W": [
+        3054,
+        3054
+      ],
+      "W2R": [
+        4842,
+        4842
+      ],
+      "order": [
+        243,
+        243
+      ],
+      "tCCD_L": [
+        140279,
+        140279
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        601,
+        600
+      ],
+      "tRAS": [
+        124,
+        106
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        11394,
+        11394
+      ],
+      "tRCD_WR": [
+        2919,
+        2919
+      ],
+      "tRFC": [
+        18550,
+        18550
+      ],
+      "tRP": [
+        14375,
+        14375
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        3131,
+        3131
+      ],
+      "tWR": [
+        7651,
+        7651
+      ]
+    },
+    "by_term": {
+      "column": [
+        140281,
+        140281
+      ],
+      "row": [
+        39710,
+        39692
+      ],
+      "refresh": [
+        18550,
+        18550
+      ],
+      "turnaround": [
+        7896,
+        7896
+      ],
+      "issue": [
+        844,
+        843
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -462,21 +2548,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 51941,
-    "est_cycles": 51319,
-    "worst_cycles": 591960,
-    "est_ratio": 0.9880305233471373,
-    "worst_ratio": 11.396777112493021,
+    "est_cycles": 51941,
+    "worst_cycles": 800335,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.408540459367359,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1071,
     "static_wr": 1071,
     "sim_act": 440,
-    "static_act": 445,
+    "static_act": 440,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35083,
+    "est_row": 10093,
+    "est_refresh": 4550,
+    "est_turnaround": 1973,
+    "est_issue": 218,
+    "est_drain": 24,
+    "N_host": 1033,
+    "V_host_bytes": 33056,
+    "N_mem": 8224,
+    "V_mem_bytes": 2105344,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8224,
+    "N_mode": 38,
+    "N_bar": 1170,
+    "N_col": 9295,
+    "N_act": 440,
+    "rho_row": 0.047337278106508875,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1194,
+        1194
+      ],
+      "order": [
+        62,
+        62
+      ],
+      "tCCD_L": [
+        35081,
+        35081
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        157,
+        156
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRCD_RD": [
+        2874,
+        2874
+      ],
+      "tRCD_WR": [
+        756,
+        756
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3587,
+        3587
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        786,
+        786
+      ],
+      "tWR": [
+        1959,
+        1959
+      ]
+    },
+    "by_term": {
+      "column": [
+        35083,
+        35083
+      ],
+      "row": [
+        10111,
+        10093
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1973,
+        1973
+      ],
+      "issue": [
+        219,
+        218
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -486,21 +2682,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 52321,
-    "est_cycles": 51591,
-    "worst_cycles": 594630,
-    "est_ratio": 0.9860522472321702,
-    "worst_ratio": 11.365035071959634,
+    "est_cycles": 52321,
+    "worst_cycles": 803955,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.365818696125839,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1111,
     "static_wr": 1111,
     "sim_act": 451,
-    "static_act": 453,
+    "static_act": 451,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35193,
+    "est_row": 10352,
+    "est_refresh": 4550,
+    "est_turnaround": 1976,
+    "est_issue": 226,
+    "est_drain": 24,
+    "N_host": 1041,
+    "V_host_bytes": 33312,
+    "N_mem": 8256,
+    "V_mem_bytes": 2113536,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8256,
+    "N_mode": 38,
+    "N_bar": 1182,
+    "N_col": 9335,
+    "N_act": 451,
+    "rho_row": 0.048312801285484736,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        63,
+        63
+      ],
+      "tCCD_L": [
+        35191,
+        35191
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        164,
+        163
+      ],
+      "tRAS": [
+        84,
+        66
+      ],
+      "tRCD_RD": [
+        2916,
+        2916
+      ],
+      "tRCD_WR": [
+        832,
+        832
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3664,
+        3664
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        783,
+        783
+      ],
+      "tWR": [
+        2017,
+        2017
+      ]
+    },
+    "by_term": {
+      "column": [
+        35193,
+        35193
+      ],
+      "row": [
+        10370,
+        10352
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1976,
+        1976
+      ],
+      "issue": [
+        227,
+        226
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -510,21 +2816,131 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 13218,
-    "est_cycles": 13367,
-    "worst_cycles": 150354,
-    "est_ratio": 1.011255554526588,
-    "worst_ratio": 11.37494325919201,
+    "est_cycles": 13218,
+    "worst_cycles": 203649,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.406945074897866,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 283,
     "static_wr": 283,
     "sim_act": 141,
-    "static_act": 143,
+    "static_act": 141,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 8806,
+    "est_row": 2792,
+    "est_refresh": 1050,
+    "est_turnaround": 488,
+    "est_issue": 58,
+    "est_drain": 24,
+    "N_host": 261,
+    "V_host_bytes": 8352,
+    "N_mem": 2064,
+    "V_mem_bytes": 528384,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 2064,
+    "N_mode": 38,
+    "N_bar": 300,
+    "N_col": 2363,
+    "N_act": 141,
+    "rho_row": 0.059669911129919595,
+    "by_constraint": {
+      "R2W": [
+        203,
+        203
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "order": [
+        10,
+        10
+      ],
+      "tCCD_L": [
+        8804,
+        8804
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        49,
+        48
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        760,
+        760
+      ],
+      "tRCD_WR": [
+        238,
+        238
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        921,
+        921
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        195,
+        195
+      ],
+      "tWR": [
+        553,
+        553
+      ]
+    },
+    "by_term": {
+      "column": [
+        8806,
+        8806
+      ],
+      "row": [
+        2810,
+        2792
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        488,
+        488
+      ],
+      "issue": [
+        59,
+        58
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -534,21 +2950,131 @@
     "B": 4,
     "C": 16,
     "sim_cycles": 208393,
-    "est_cycles": 204123,
-    "worst_cycles": 2371734,
-    "est_ratio": 0.9795110983463433,
-    "worst_ratio": 11.381063663366811,
+    "est_cycles": 208393,
+    "worst_cycles": 3205179,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.380454237906264,
     "sim_rd": 32800,
     "static_rd": 32800,
     "sim_wr": 4423,
     "static_wr": 4423,
     "sim_act": 1678,
-    "static_act": 1692,
+    "static_act": 1678,
     "sim_ref": 106,
+    "static_ref": 106,
+    "max_constraint_diff": 18,
+    "est_column": 140807,
+    "est_row": 40287,
+    "est_refresh": 18550,
+    "est_turnaround": 7928,
+    "est_issue": 797,
+    "est_drain": 24,
+    "N_host": 4161,
+    "V_host_bytes": 133152,
+    "N_mem": 33024,
+    "V_mem_bytes": 8454144,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 33024,
+    "N_mode": 38,
+    "N_bar": 4710,
+    "N_col": 37223,
+    "N_act": 1678,
+    "rho_row": 0.04507965505198399,
+    "by_constraint": {
+      "R2W": [
+        3083,
+        3083
+      ],
+      "W2R": [
+        4845,
+        4845
+      ],
+      "order": [
+        180,
+        180
+      ],
+      "tCCD_L": [
+        140805,
+        140805
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        618,
+        617
+      ],
+      "tRAS": [
+        111,
+        93
+      ],
+      "tRCD_RD": [
+        11346,
+        11346
+      ],
+      "tRCD_WR": [
+        3208,
+        3208
+      ],
+      "tRFC": [
+        18550,
+        18550
+      ],
+      "tRP": [
+        14552,
+        14552
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        3141,
+        3141
+      ],
+      "tWR": [
+        7873,
+        7873
+      ]
+    },
+    "by_term": {
+      "column": [
+        140807,
+        140807
+      ],
+      "row": [
+        40305,
+        40287
+      ],
+      "refresh": [
+        18550,
+        18550
+      ],
+      "turnaround": [
+        7928,
+        7928
+      ],
+      "issue": [
+        798,
+        797
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -558,21 +3084,131 @@
     "B": 4,
     "C": 64,
     "sim_cycles": 52321,
-    "est_cycles": 51591,
-    "worst_cycles": 594630,
-    "est_ratio": 0.9860522472321702,
-    "worst_ratio": 11.365035071959634,
+    "est_cycles": 52321,
+    "worst_cycles": 803955,
+    "est_ratio": 1.0,
+    "worst_ratio": 15.365818696125839,
     "sim_rd": 8224,
     "static_rd": 8224,
     "sim_wr": 1111,
     "static_wr": 1111,
     "sim_act": 451,
-    "static_act": 453,
+    "static_act": 451,
     "sim_ref": 26,
+    "static_ref": 26,
+    "max_constraint_diff": 18,
+    "est_column": 35193,
+    "est_row": 10352,
+    "est_refresh": 4550,
+    "est_turnaround": 1976,
+    "est_issue": 226,
+    "est_drain": 24,
+    "N_host": 1041,
+    "V_host_bytes": 33312,
+    "N_mem": 8256,
+    "V_mem_bytes": 2113536,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 8256,
+    "N_mode": 38,
+    "N_bar": 1182,
+    "N_col": 9335,
+    "N_act": 451,
+    "rho_row": 0.048312801285484736,
+    "by_constraint": {
+      "R2W": [
+        779,
+        779
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        63,
+        63
+      ],
+      "tCCD_L": [
+        35191,
+        35191
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        164,
+        163
+      ],
+      "tRAS": [
+        84,
+        66
+      ],
+      "tRCD_RD": [
+        2916,
+        2916
+      ],
+      "tRCD_WR": [
+        832,
+        832
+      ],
+      "tRFC": [
+        4550,
+        4550
+      ],
+      "tRP": [
+        3664,
+        3664
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        783,
+        783
+      ],
+      "tWR": [
+        2017,
+        2017
+      ]
+    },
+    "by_term": {
+      "column": [
+        35193,
+        35193
+      ],
+      "row": [
+        10370,
+        10352
+      ],
+      "refresh": [
+        4550,
+        4550
+      ],
+      "turnaround": [
+        1976,
+        1976
+      ],
+      "issue": [
+        227,
+        226
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C)) + 32",
       "wr": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 5)*ceiling(M/(64*C)) + 7",
-      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6"
+      "bar": "3*B*(3*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 3*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 6",
+      "bank2pu": "64*B*(ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + ceiling(ceiling(ceiling(N/16)/8)/2))*ceiling(M/(64*C))",
+      "pu2bank": "8*B*ceiling(M/(64*C))",
+      "host2pu": "2*B*(4*ceiling(ceiling(ceiling(N/16)/8)/2 - 1/2) + 4*ceiling(ceiling(ceiling(N/16)/8)/2) + 1)*ceiling(M/(64*C)) + 1",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -581,21 +3217,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 3349,
-    "est_cycles": 3388,
-    "worst_cycles": 26750,
-    "est_ratio": 1.0116452672439533,
-    "worst_ratio": 7.9874589429680505,
+    "est_cycles": 3349,
+    "worst_cycles": 36625,
+    "est_ratio": 1.0,
+    "worst_ratio": 10.936100328456256,
     "sim_rd": 288,
     "static_rd": 288,
     "sim_wr": 137,
     "static_wr": 137,
     "sim_act": 90,
-    "static_act": 89,
+    "static_act": 90,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 1284,
+    "est_row": 1369,
+    "est_refresh": 350,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 384,
+    "V_mem_bytes": 98304,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 384,
+    "N_mode": 38,
+    "N_bar": 56,
+    "N_col": 425,
+    "N_act": 90,
+    "rho_row": 0.21176470588235294,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        1282,
+        1282
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRC": [
+        14,
+        14
+      ],
+      "tRCD_RD": [
+        298,
+        298
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        465,
+        465
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        93,
+        93
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        1284,
+        1284
+      ],
+      "row": [
+        1387,
+        1369
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -604,10 +3350,10 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 1053,
-    "est_cycles": 1420,
-    "worst_cycles": 8646,
-    "est_ratio": 1.348528015194682,
-    "worst_ratio": 8.21082621082621,
+    "est_cycles": 1053,
+    "worst_cycles": 12101,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.49192782526116,
     "sim_rd": 96,
     "static_rd": 96,
     "sim_wr": 41,
@@ -615,10 +3361,112 @@
     "sim_act": 53,
     "static_act": 53,
     "sim_ref": 0,
+    "static_ref": 0,
+    "max_constraint_diff": 18,
+    "est_column": 328,
+    "est_row": 620,
+    "est_refresh": 0,
+    "est_turnaround": 68,
+    "est_issue": 13,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 96,
+    "V_mem_bytes": 24576,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 96,
+    "N_mode": 38,
+    "N_bar": 20,
+    "N_col": 137,
+    "N_act": 53,
+    "rho_row": 0.38686131386861317,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        326,
+        326
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        14,
+        13
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        116,
+        116
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRP": [
+        143,
+        143
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        24,
+        24
+      ],
+      "tWR": [
+        113,
+        113
+      ]
+    },
+    "by_term": {
+      "column": [
+        328,
+        328
+      ],
+      "row": [
+        638,
+        620
+      ],
+      "refresh": [
+        0,
+        0
+      ],
+      "turnaround": [
+        68,
+        68
+      ],
+      "issue": [
+        14,
+        13
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -627,21 +3475,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 11806,
-    "est_cycles": 12359,
-    "worst_cycles": 100216,
-    "est_ratio": 1.0468554869894109,
-    "worst_ratio": 8.488565136371337,
+    "est_cycles": 11806,
+    "worst_cycles": 136121,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.52981534812807,
     "sim_rd": 1056,
     "static_rd": 1056,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 236,
-    "static_act": 237,
+    "static_act": 236,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 5116,
+    "est_row": 4319,
+    "est_refresh": 1050,
+    "est_turnaround": 1208,
+    "est_issue": 89,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1536,
+    "V_mem_bytes": 393216,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1536,
+    "N_mode": 38,
+    "N_bar": 200,
+    "N_col": 1577,
+    "N_act": 236,
+    "rho_row": 0.14965123652504755,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        12,
+        12
+      ],
+      "tCCD_L": [
+        5114,
+        5114
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        78,
+        77
+      ],
+      "tRAS": [
+        87,
+        69
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        998,
+        998
+      ],
+      "tRCD_WR": [
+        699,
+        699
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        1775,
+        1775
+      ],
+      "tRRD_S": [
+        71,
+        71
+      ],
+      "tRTP": [
+        372,
+        372
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        5116,
+        5116
+      ],
+      "row": [
+        4337,
+        4319
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        90,
+        89
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -650,21 +3612,131 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 3349,
-    "est_cycles": 3388,
-    "worst_cycles": 26750,
-    "est_ratio": 1.0116452672439533,
-    "worst_ratio": 7.9874589429680505,
+    "est_cycles": 3349,
+    "worst_cycles": 36625,
+    "est_ratio": 1.0,
+    "worst_ratio": 10.936100328456256,
     "sim_rd": 288,
     "static_rd": 288,
     "sim_wr": 137,
     "static_wr": 137,
     "sim_act": 90,
-    "static_act": 89,
+    "static_act": 90,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 1284,
+    "est_row": 1369,
+    "est_refresh": 350,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 384,
+    "V_mem_bytes": 98304,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 384,
+    "N_mode": 38,
+    "N_bar": 56,
+    "N_col": 425,
+    "N_act": 90,
+    "rho_row": 0.21176470588235294,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        1282,
+        1282
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRC": [
+        14,
+        14
+      ],
+      "tRCD_RD": [
+        298,
+        298
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        465,
+        465
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        93,
+        93
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        1284,
+        1284
+      ],
+      "row": [
+        1387,
+        1369
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -673,21 +3745,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 45941,
-    "est_cycles": 46759,
-    "worst_cycles": 393730,
-    "est_ratio": 1.0178001377643555,
-    "worst_ratio": 8.570340218976513,
+    "est_cycles": 45941,
+    "worst_cycles": 532705,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.595415859471931,
     "sim_rd": 4128,
     "static_rd": 4128,
     "sim_wr": 2057,
     "static_wr": 2057,
     "sim_act": 818,
-    "static_act": 820,
+    "static_act": 818,
     "sim_ref": 23,
+    "static_ref": 23,
+    "max_constraint_diff": 18,
+    "est_column": 20442,
+    "est_row": 16079,
+    "est_refresh": 4200,
+    "est_turnaround": 4856,
+    "est_issue": 340,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 6144,
+    "V_mem_bytes": 1572864,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 6144,
+    "N_mode": 38,
+    "N_bar": 776,
+    "N_col": 6185,
+    "N_act": 818,
+    "rho_row": 0.1322554567502021,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        4845,
+        4845
+      ],
+      "order": [
+        61,
+        61
+      ],
+      "tCCD_L": [
+        20440,
+        20440
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        280,
+        279
+      ],
+      "tRAS": [
+        123,
+        105
+      ],
+      "tRC": [
+        126,
+        126
+      ],
+      "tRCD_RD": [
+        3770,
+        3770
+      ],
+      "tRCD_WR": [
+        2619,
+        2619
+      ],
+      "tRFC": [
+        4200,
+        4200
+      ],
+      "tRP": [
+        7013,
+        7013
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        1503,
+        1503
+      ],
+      "tWR": [
+        869,
+        869
+      ]
+    },
+    "by_term": {
+      "column": [
+        20442,
+        20442
+      ],
+      "row": [
+        16097,
+        16079
+      ],
+      "refresh": [
+        4200,
+        4200
+      ],
+      "turnaround": [
+        4856,
+        4856
+      ],
+      "issue": [
+        341,
+        340
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -696,21 +3882,135 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 11806,
-    "est_cycles": 12359,
-    "worst_cycles": 100216,
-    "est_ratio": 1.0468554869894109,
-    "worst_ratio": 8.488565136371337,
+    "est_cycles": 11806,
+    "worst_cycles": 136121,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.52981534812807,
     "sim_rd": 1056,
     "static_rd": 1056,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 236,
-    "static_act": 237,
+    "static_act": 236,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 5116,
+    "est_row": 4319,
+    "est_refresh": 1050,
+    "est_turnaround": 1208,
+    "est_issue": 89,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1536,
+    "V_mem_bytes": 393216,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1536,
+    "N_mode": 38,
+    "N_bar": 200,
+    "N_col": 1577,
+    "N_act": 236,
+    "rho_row": 0.14965123652504755,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        12,
+        12
+      ],
+      "tCCD_L": [
+        5114,
+        5114
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        78,
+        77
+      ],
+      "tRAS": [
+        87,
+        69
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        998,
+        998
+      ],
+      "tRCD_WR": [
+        699,
+        699
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        1775,
+        1775
+      ],
+      "tRRD_S": [
+        71,
+        71
+      ],
+      "tRTP": [
+        372,
+        372
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        5116,
+        5116
+      ],
+      "row": [
+        4337,
+        4319
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        90,
+        89
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -719,21 +4019,131 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 3349,
-    "est_cycles": 3388,
-    "worst_cycles": 26750,
-    "est_ratio": 1.0116452672439533,
-    "worst_ratio": 7.9874589429680505,
+    "est_cycles": 3349,
+    "worst_cycles": 36625,
+    "est_ratio": 1.0,
+    "worst_ratio": 10.936100328456256,
     "sim_rd": 288,
     "static_rd": 288,
     "sim_wr": 137,
     "static_wr": 137,
     "sim_act": 90,
-    "static_act": 89,
+    "static_act": 90,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 1284,
+    "est_row": 1369,
+    "est_refresh": 350,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 384,
+    "V_mem_bytes": 98304,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 384,
+    "N_mode": 38,
+    "N_bar": 56,
+    "N_col": 425,
+    "N_act": 90,
+    "rho_row": 0.21176470588235294,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        1282,
+        1282
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRC": [
+        14,
+        14
+      ],
+      "tRCD_RD": [
+        298,
+        298
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        465,
+        465
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        93,
+        93
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        1284,
+        1284
+      ],
+      "row": [
+        1387,
+        1369
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -742,10 +4152,10 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 1053,
-    "est_cycles": 1420,
-    "worst_cycles": 8646,
-    "est_ratio": 1.348528015194682,
-    "worst_ratio": 8.21082621082621,
+    "est_cycles": 1053,
+    "worst_cycles": 12101,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.49192782526116,
     "sim_rd": 96,
     "static_rd": 96,
     "sim_wr": 41,
@@ -753,10 +4163,112 @@
     "sim_act": 53,
     "static_act": 53,
     "sim_ref": 0,
+    "static_ref": 0,
+    "max_constraint_diff": 18,
+    "est_column": 328,
+    "est_row": 620,
+    "est_refresh": 0,
+    "est_turnaround": 68,
+    "est_issue": 13,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 96,
+    "V_mem_bytes": 24576,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 96,
+    "N_mode": 38,
+    "N_bar": 20,
+    "N_col": 137,
+    "N_act": 53,
+    "rho_row": 0.38686131386861317,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        326,
+        326
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        14,
+        13
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        116,
+        116
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRP": [
+        143,
+        143
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        24,
+        24
+      ],
+      "tWR": [
+        113,
+        113
+      ]
+    },
+    "by_term": {
+      "column": [
+        328,
+        328
+      ],
+      "row": [
+        638,
+        620
+      ],
+      "refresh": [
+        0,
+        0
+      ],
+      "turnaround": [
+        68,
+        68
+      ],
+      "issue": [
+        14,
+        13
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -765,21 +4277,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 11806,
-    "est_cycles": 12359,
-    "worst_cycles": 100216,
-    "est_ratio": 1.0468554869894109,
-    "worst_ratio": 8.488565136371337,
+    "est_cycles": 11806,
+    "worst_cycles": 136121,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.52981534812807,
     "sim_rd": 1056,
     "static_rd": 1056,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 236,
-    "static_act": 237,
+    "static_act": 236,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 5116,
+    "est_row": 4319,
+    "est_refresh": 1050,
+    "est_turnaround": 1208,
+    "est_issue": 89,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1536,
+    "V_mem_bytes": 393216,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1536,
+    "N_mode": 38,
+    "N_bar": 200,
+    "N_col": 1577,
+    "N_act": 236,
+    "rho_row": 0.14965123652504755,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        12,
+        12
+      ],
+      "tCCD_L": [
+        5114,
+        5114
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        78,
+        77
+      ],
+      "tRAS": [
+        87,
+        69
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        998,
+        998
+      ],
+      "tRCD_WR": [
+        699,
+        699
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        1775,
+        1775
+      ],
+      "tRRD_S": [
+        71,
+        71
+      ],
+      "tRTP": [
+        372,
+        372
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        5116,
+        5116
+      ],
+      "row": [
+        4337,
+        4319
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        90,
+        89
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -788,21 +4414,131 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 3349,
-    "est_cycles": 3388,
-    "worst_cycles": 26750,
-    "est_ratio": 1.0116452672439533,
-    "worst_ratio": 7.9874589429680505,
+    "est_cycles": 3349,
+    "worst_cycles": 36625,
+    "est_ratio": 1.0,
+    "worst_ratio": 10.936100328456256,
     "sim_rd": 288,
     "static_rd": 288,
     "sim_wr": 137,
     "static_wr": 137,
     "sim_act": 90,
-    "static_act": 89,
+    "static_act": 90,
     "sim_ref": 1,
+    "static_ref": 1,
+    "max_constraint_diff": 18,
+    "est_column": 1284,
+    "est_row": 1369,
+    "est_refresh": 350,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 384,
+    "V_mem_bytes": 98304,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 384,
+    "N_mode": 38,
+    "N_bar": 56,
+    "N_col": 425,
+    "N_act": 90,
+    "rho_row": 0.21176470588235294,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        1282,
+        1282
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        75,
+        57
+      ],
+      "tRC": [
+        14,
+        14
+      ],
+      "tRCD_RD": [
+        298,
+        298
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRFC": [
+        350,
+        350
+      ],
+      "tRP": [
+        465,
+        465
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        93,
+        93
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        1284,
+        1284
+      ],
+      "row": [
+        1387,
+        1369
+      ],
+      "refresh": [
+        350,
+        350
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -811,21 +4547,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 45941,
-    "est_cycles": 46759,
-    "worst_cycles": 393730,
-    "est_ratio": 1.0178001377643555,
-    "worst_ratio": 8.570340218976513,
+    "est_cycles": 45941,
+    "worst_cycles": 532705,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.595415859471931,
     "sim_rd": 4128,
     "static_rd": 4128,
     "sim_wr": 2057,
     "static_wr": 2057,
     "sim_act": 818,
-    "static_act": 820,
+    "static_act": 818,
     "sim_ref": 23,
+    "static_ref": 23,
+    "max_constraint_diff": 18,
+    "est_column": 20442,
+    "est_row": 16079,
+    "est_refresh": 4200,
+    "est_turnaround": 4856,
+    "est_issue": 340,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 6144,
+    "V_mem_bytes": 1572864,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 6144,
+    "N_mode": 38,
+    "N_bar": 776,
+    "N_col": 6185,
+    "N_act": 818,
+    "rho_row": 0.1322554567502021,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        4845,
+        4845
+      ],
+      "order": [
+        61,
+        61
+      ],
+      "tCCD_L": [
+        20440,
+        20440
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        280,
+        279
+      ],
+      "tRAS": [
+        123,
+        105
+      ],
+      "tRC": [
+        126,
+        126
+      ],
+      "tRCD_RD": [
+        3770,
+        3770
+      ],
+      "tRCD_WR": [
+        2619,
+        2619
+      ],
+      "tRFC": [
+        4200,
+        4200
+      ],
+      "tRP": [
+        7013,
+        7013
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        1503,
+        1503
+      ],
+      "tWR": [
+        869,
+        869
+      ]
+    },
+    "by_term": {
+      "column": [
+        20442,
+        20442
+      ],
+      "row": [
+        16097,
+        16079
+      ],
+      "refresh": [
+        4200,
+        4200
+      ],
+      "turnaround": [
+        4856,
+        4856
+      ],
+      "issue": [
+        341,
+        340
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -834,21 +4684,135 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 11806,
-    "est_cycles": 12359,
-    "worst_cycles": 100216,
-    "est_ratio": 1.0468554869894109,
-    "worst_ratio": 8.488565136371337,
+    "est_cycles": 11806,
+    "worst_cycles": 136121,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.52981534812807,
     "sim_rd": 1056,
     "static_rd": 1056,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 236,
-    "static_act": 237,
+    "static_act": 236,
     "sim_ref": 6,
+    "static_ref": 6,
+    "max_constraint_diff": 18,
+    "est_column": 5116,
+    "est_row": 4319,
+    "est_refresh": 1050,
+    "est_turnaround": 1208,
+    "est_issue": 89,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1536,
+    "V_mem_bytes": 393216,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1536,
+    "N_mode": 38,
+    "N_bar": 200,
+    "N_col": 1577,
+    "N_act": 236,
+    "rho_row": 0.14965123652504755,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        12,
+        12
+      ],
+      "tCCD_L": [
+        5114,
+        5114
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        78,
+        77
+      ],
+      "tRAS": [
+        87,
+        69
+      ],
+      "tRC": [
+        42,
+        42
+      ],
+      "tRCD_RD": [
+        998,
+        998
+      ],
+      "tRCD_WR": [
+        699,
+        699
+      ],
+      "tRFC": [
+        1050,
+        1050
+      ],
+      "tRP": [
+        1775,
+        1775
+      ],
+      "tRRD_S": [
+        71,
+        71
+      ],
+      "tRTP": [
+        372,
+        372
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        5116,
+        5116
+      ],
+      "row": [
+        4337,
+        4319
+      ],
+      "refresh": [
+        1050,
+        1050
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        90,
+        89
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "32*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "6*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "32*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -857,10 +4821,10 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 2042,
-    "est_cycles": 2652,
-    "worst_cycles": 18626,
-    "est_ratio": 1.2987267384916747,
-    "worst_ratio": 9.121449559255632,
+    "est_cycles": 2042,
+    "worst_cycles": 25881,
+    "est_ratio": 1.0,
+    "worst_ratio": 12.6743388834476,
     "sim_rd": 160,
     "static_rd": 160,
     "sim_wr": 137,
@@ -868,10 +4832,112 @@
     "sim_act": 73,
     "static_act": 73,
     "sim_ref": 1,
+    "static_ref": 0,
+    "max_constraint_diff": 18,
+    "est_column": 840,
+    "est_row": 856,
+    "est_refresh": 0,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 256,
+    "V_mem_bytes": 65536,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 256,
+    "N_mode": 38,
+    "N_bar": 40,
+    "N_col": 297,
+    "N_act": 73,
+    "rho_row": 0.24579124579124578,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        838,
+        838
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        73,
+        55
+      ],
+      "tRCD_RD": [
+        56,
+        56
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRP": [
+        255,
+        255
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        48,
+        48
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        840,
+        840
+      ],
+      "row": [
+        874,
+        856
+      ],
+      "refresh": [
+        0,
+        0
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -880,10 +4946,10 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 817,
-    "est_cycles": 1236,
-    "worst_cycles": 6440,
-    "est_ratio": 1.5128518971848226,
-    "worst_ratio": 7.88249694002448,
+    "est_cycles": 817,
+    "worst_cycles": 9065,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.095471236230111,
     "sim_rd": 64,
     "static_rd": 64,
     "sim_wr": 41,
@@ -891,10 +4957,112 @@
     "sim_act": 49,
     "static_act": 49,
     "sim_ref": 0,
+    "static_ref": 0,
+    "max_constraint_diff": 18,
+    "est_column": 216,
+    "est_row": 496,
+    "est_refresh": 0,
+    "est_turnaround": 68,
+    "est_issue": 13,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 64,
+    "V_mem_bytes": 16384,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 64,
+    "N_mode": 38,
+    "N_bar": 16,
+    "N_col": 105,
+    "N_act": 49,
+    "rho_row": 0.4666666666666667,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        57,
+        57
+      ],
+      "tCCD_L": [
+        214,
+        214
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        14,
+        13
+      ],
+      "tRAS": [
+        69,
+        51
+      ],
+      "tRCD_RD": [
+        60,
+        60
+      ],
+      "tRCD_WR": [
+        99,
+        99
+      ],
+      "tRP": [
+        87,
+        87
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        12,
+        12
+      ],
+      "tWR": [
+        113,
+        113
+      ]
+    },
+    "by_term": {
+      "column": [
+        216,
+        216
+      ],
+      "row": [
+        514,
+        496
+      ],
+      "refresh": [
+        0,
+        0
+      ],
+      "turnaround": [
+        68,
+        68
+      ],
+      "issue": [
+        14,
+        13
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -903,21 +5071,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 7665,
-    "est_cycles": 9051,
-    "worst_cycles": 67720,
-    "est_ratio": 1.1808286825638423,
-    "worst_ratio": 8.834964122635355,
+    "est_cycles": 7665,
+    "worst_cycles": 91745,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.969341161121983,
     "sim_rd": 544,
     "static_rd": 544,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 171,
-    "static_act": 172,
+    "static_act": 171,
     "sim_ref": 3,
+    "static_ref": 3,
+    "max_constraint_diff": 18,
+    "est_column": 3328,
+    "est_row": 2323,
+    "est_refresh": 700,
+    "est_turnaround": 1208,
+    "est_issue": 82,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1024,
+    "V_mem_bytes": 262144,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1024,
+    "N_mode": 38,
+    "N_bar": 136,
+    "N_col": 1065,
+    "N_act": 171,
+    "rho_row": 0.16056338028169015,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        7,
+        7
+      ],
+      "tCCD_L": [
+        3326,
+        3326
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        76,
+        75
+      ],
+      "tRAS": [
+        81,
+        63
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        88,
+        88
+      ],
+      "tRCD_WR": [
+        692,
+        692
+      ],
+      "tRFC": [
+        700,
+        700
+      ],
+      "tRP": [
+        899,
+        899
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        186,
+        186
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        3328,
+        3328
+      ],
+      "row": [
+        2341,
+        2323
+      ],
+      "refresh": [
+        700,
+        700
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        83,
+        82
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -926,10 +5208,10 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 2042,
-    "est_cycles": 2652,
-    "worst_cycles": 18626,
-    "est_ratio": 1.2987267384916747,
-    "worst_ratio": 9.121449559255632,
+    "est_cycles": 2042,
+    "worst_cycles": 25881,
+    "est_ratio": 1.0,
+    "worst_ratio": 12.6743388834476,
     "sim_rd": 160,
     "static_rd": 160,
     "sim_wr": 137,
@@ -937,10 +5219,112 @@
     "sim_act": 73,
     "static_act": 73,
     "sim_ref": 1,
+    "static_ref": 0,
+    "max_constraint_diff": 18,
+    "est_column": 840,
+    "est_row": 856,
+    "est_refresh": 0,
+    "est_turnaround": 296,
+    "est_issue": 26,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 256,
+    "V_mem_bytes": 65536,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 256,
+    "N_mode": 38,
+    "N_bar": 40,
+    "N_col": 297,
+    "N_act": 73,
+    "rho_row": 0.24579124579124578,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        285,
+        285
+      ],
+      "tCCD_L": [
+        838,
+        838
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        27,
+        26
+      ],
+      "tRAS": [
+        73,
+        55
+      ],
+      "tRCD_RD": [
+        56,
+        56
+      ],
+      "tRCD_WR": [
+        219,
+        219
+      ],
+      "tRP": [
+        255,
+        255
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        48,
+        48
+      ],
+      "tWR": [
+        149,
+        149
+      ]
+    },
+    "by_term": {
+      "column": [
+        840,
+        840
+      ],
+      "row": [
+        874,
+        856
+      ],
+      "refresh": [
+        0,
+        0
+      ],
+      "turnaround": [
+        296,
+        296
+      ],
+      "issue": [
+        27,
+        26
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -949,21 +5333,135 @@
     "B": 1,
     "C": 16,
     "sim_cycles": 29056,
-    "est_cycles": 33891,
-    "worst_cycles": 263396,
-    "est_ratio": 1.166414413095329,
-    "worst_ratio": 9.06511563876652,
+    "est_cycles": 29056,
+    "worst_cycles": 356251,
+    "est_ratio": 1.0,
+    "worst_ratio": 12.260841134361234,
     "sim_rd": 2080,
     "static_rd": 2080,
     "sim_wr": 2057,
     "static_wr": 2057,
     "sim_act": 558,
-    "static_act": 562,
+    "static_act": 558,
     "sim_ref": 14,
+    "static_ref": 14,
+    "max_constraint_diff": 18,
+    "est_column": 13288,
+    "est_row": 8133,
+    "est_refresh": 2450,
+    "est_turnaround": 4856,
+    "est_issue": 305,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 4096,
+    "V_mem_bytes": 1048576,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 4096,
+    "N_mode": 38,
+    "N_bar": 520,
+    "N_col": 4137,
+    "N_act": 558,
+    "rho_row": 0.1348803480783176,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        4845,
+        4845
+      ],
+      "order": [
+        31,
+        31
+      ],
+      "tCCD_L": [
+        13286,
+        13286
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        275,
+        274
+      ],
+      "tRAS": [
+        121,
+        103
+      ],
+      "tRC": [
+        70,
+        70
+      ],
+      "tRCD_RD": [
+        130,
+        130
+      ],
+      "tRCD_WR": [
+        2612,
+        2612
+      ],
+      "tRFC": [
+        2450,
+        2450
+      ],
+      "tRP": [
+        3516,
+        3516
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        759,
+        759
+      ],
+      "tWR": [
+        869,
+        869
+      ]
+    },
+    "by_term": {
+      "column": [
+        13288,
+        13288
+      ],
+      "row": [
+        8151,
+        8133
+      ],
+      "refresh": [
+        2450,
+        2450
+      ],
+      "turnaround": [
+        4856,
+        4856
+      ],
+      "issue": [
+        306,
+        305
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   },
   {
@@ -972,21 +5470,135 @@
     "B": 1,
     "C": 64,
     "sim_cycles": 7665,
-    "est_cycles": 9051,
-    "worst_cycles": 67720,
-    "est_ratio": 1.1808286825638423,
-    "worst_ratio": 8.834964122635355,
+    "est_cycles": 7665,
+    "worst_cycles": 91745,
+    "est_ratio": 1.0,
+    "worst_ratio": 11.969341161121983,
     "sim_rd": 544,
     "static_rd": 544,
     "sim_wr": 521,
     "static_wr": 521,
     "sim_act": 171,
-    "static_act": 172,
+    "static_act": 171,
     "sim_ref": 3,
+    "static_ref": 3,
+    "max_constraint_diff": 18,
+    "est_column": 3328,
+    "est_row": 2323,
+    "est_refresh": 700,
+    "est_turnaround": 1208,
+    "est_issue": 82,
+    "est_drain": 24,
+    "N_host": 3,
+    "V_host_bytes": 96,
+    "N_mem": 1024,
+    "V_mem_bytes": 262144,
+    "internal_bytes_per_command": 256,
+    "bus_bytes_per_command": 32,
+    "C_step": 1024,
+    "N_mode": 38,
+    "N_bar": 136,
+    "N_col": 1065,
+    "N_act": 171,
+    "rho_row": 0.16056338028169015,
+    "by_constraint": {
+      "R2W": [
+        11,
+        11
+      ],
+      "W2R": [
+        1197,
+        1197
+      ],
+      "order": [
+        7,
+        7
+      ],
+      "tCCD_L": [
+        3326,
+        3326
+      ],
+      "tCCD_S": [
+        2,
+        2
+      ],
+      "tCMD": [
+        76,
+        75
+      ],
+      "tRAS": [
+        81,
+        63
+      ],
+      "tRC": [
+        28,
+        28
+      ],
+      "tRCD_RD": [
+        88,
+        88
+      ],
+      "tRCD_WR": [
+        692,
+        692
+      ],
+      "tRFC": [
+        700,
+        700
+      ],
+      "tRP": [
+        899,
+        899
+      ],
+      "tRRD_S": [
+        74,
+        74
+      ],
+      "tRTP": [
+        186,
+        186
+      ],
+      "tWR": [
+        293,
+        293
+      ]
+    },
+    "by_term": {
+      "column": [
+        3328,
+        3328
+      ],
+      "row": [
+        2341,
+        2323
+      ],
+      "refresh": [
+        700,
+        700
+      ],
+      "turnaround": [
+        1208,
+        1208
+      ],
+      "issue": [
+        83,
+        82
+      ],
+      "drain": [
+        5,
+        24
+      ]
+    },
     "symbolic": {
       "rd": "16*floor(B*ceiling(L/16)/(128*C)) + 32",
       "wr": "16*floor(B*ceiling(L/16)/(128*C)) + 9",
-      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8"
+      "bar": "4*floor(B*ceiling(L/16)/(128*C)) + 8",
+      "bank2pu": "16*floor(B*ceiling(L/16)/(128*C))",
+      "pu2bank": "16*floor(B*ceiling(L/16)/(128*C))",
+      "host2pu": "3",
+      "pu2host": "0",
+      "mode_rd": "32",
+      "mode_wr": "6"
     }
   }
 ]

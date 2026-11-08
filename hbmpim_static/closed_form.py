@@ -97,8 +97,10 @@ def critical_path(arch, cmds):
 
 
 def _path(ir, arch, kernel, vals):
-    it = P.concrete_stream(ir, arch, kernel, vals)
-    return critical_path(arch, it.cmds)
+    """`ir` is the vendor frontend IR (a path), or a callable (kernel, vals) ->
+    command stream, e.g. the PIMSA-IR lowering (pim_model/pimsa_ir)."""
+    cmds = ir(kernel, vals) if callable(ir) else P.concrete_stream(ir, arch, kernel, vals).cmds
+    return critical_path(arch, cmds)
 
 
 def _sub(a, b):

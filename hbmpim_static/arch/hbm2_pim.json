@@ -85,6 +85,167 @@
     },
     "execution": "command-triggered: each all-bank column command in PIM mode advances the CRF and drives all PIM blocks of the channel in lockstep"
   },
+  "exec": {
+    "_doc": "How PIMSA-IR runs on this target, read by metric extraction and by the command lowering (pim_model/pimsa_ir). Program statements say what moves where; these entries say which DRAM commands that becomes.",
+    "trigger": {
+      "value": "command",
+      "src": "PIMRank::doPIM: every data-row column command in HAB_PIM mode executes one CRF instruction on all PIM blocks of the channel"
+    },
+    "parallel": {
+      "value": "lockstep",
+      "src": "all-bank mode (ABMR): one column command is broadcast to the PIM blocks of every bank pair; a parallel region over PIM blocks is one command stream"
+    },
+    "memory_operands": {
+      "value": true,
+      "src": "CRF operands EVEN_BANK/ODD_BANK: an instruction reads or writes the bank column addressed by the triggering command"
+    },
+    "transaction_bytes": {
+      "value": 32,
+      "src": "M.bytes_per_column_access: one column command moves one 32 B burst"
+    },
+    "broadcast_address": {
+      "bank_group": 0,
+      "bank_level": "bank",
+      "src": "PIMKernel.cpp computeAddOrMul/computeGemv: all-bank commands address bank group 0, bank = even (0) or odd (1)"
+    },
+    "register_file": {
+      "row": "register_row",
+      "bank_group": 0,
+      "bank": 1,
+      "files": {
+        "0": 8,
+        "1": 24
+      },
+      "src": "PIMRank::writeHab: GRF_A at register-row col 0x8-0xf, GRF_B at 0x18-0x1f; PIMKernel.cpp computeGemv writes GRF_A at (bg 0, bank 1, pim_reg_ra_, 0x8 + gidx)"
+    },
+    "crf": {
+      "row": "register_row",
+      "bank_group": 0,
+      "bank": 1,
+      "col0": 4,
+      "slots_per_burst": 8,
+      "capacity": 32,
+      "src": "PIMKernel.cpp programCrf: up to 4 bursts of 8 instructions, written to (bg 0, bank 1, pim_reg_ra_, 0x4 + i)"
+    },
+    "protocol": {
+      "_doc": "Command templates the target issues around a kernel (launch) and around each execution of a parallel region (PC reset). Each step is a barrier, a list of column commands to a reserved row, or the CRF program. Banks are [bank_group, bank].",
+      "launch_enter": [
+        {
+          "barrier": true
+        },
+        {
+          "cmd": "RD",
+          "row": "park_row",
+          "col": 0,
+          "banks": "all_bank_major",
+          "class": "mode_rd"
+        },
+        {
+          "barrier": true
+        },
+        {
+          "cmd": "WR",
+          "row": "abmr_row",
+          "col": 31,
+          "banks": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "class": "mode_wr"
+        },
+        {
+          "barrier": true
+        },
+        {
+          "crf_program": true,
+          "class": "host2pu"
+        },
+        {
+          "barrier": true
+        }
+      ],
+      "region_enter": [
+        {
+          "cmd": "WR",
+          "row": "register_row",
+          "col": 0,
+          "banks": [
+            [
+              0,
+              0
+            ]
+          ],
+          "class": "host2pu"
+        },
+        {
+          "barrier": true
+        }
+      ],
+      "region_exit": [
+        {
+          "cmd": "WR",
+          "row": "register_row",
+          "col": 0,
+          "banks": [
+            [
+              0,
+              0
+            ]
+          ],
+          "class": "host2pu"
+        },
+        {
+          "barrier": true
+        }
+      ],
+      "launch_exit": [
+        {
+          "cmd": "WR",
+          "row": "sbmr_row",
+          "col": 31,
+          "banks": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ]
+          ],
+          "class": "mode_wr"
+        },
+        {
+          "barrier": true
+        },
+        {
+          "cmd": "RD",
+          "row": "park_row",
+          "col": 0,
+          "banks": "all_bank_major",
+          "class": "mode_rd"
+        },
+        {
+          "barrier": true
+        }
+      ],
+      "src": "PIMKernel.cpp parkIn/parkOut (bank index outer, bank group inner, barrier before and after), changePIMMode (SB->HAB: ABMR to (0,0),(0,1),(2,0),(2,1); HAB->HAB_PIM and back: control word at register-row col 0; HAB->SB: SBMR to (0,0),(0,1)), programCrf; executeEltwise/executeGemv issue parkIn, SB->HAB, programCrf once, HAB->HAB_PIM / HAB_PIM->HAB around each compute phase, then HAB->SB, parkOut"
+    }
+  },
   "timing_cycles": {
     "tCCD_L": {
       "value": 4,

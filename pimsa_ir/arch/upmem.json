@@ -1,0 +1,24 @@
+{
+  "_doc": "PIMSA architecture instance for UPMEM, as far as PIMSA-IR metric extraction and lowering need it. Per-loop-body instruction costs are not listed: they come from the target toolchain (dpu-clang, inst_count_analyzer), looked up by the source anchors of the IR loops.",
+  "name": "UPMEM DPU (uPIMulator)",
+  "M": {
+    "levels": ["dpu", "mram"],
+    "mram_bytes": {"value": 67108864, "src": "UPMEM SDK: 64 MB MRAM per DPU"}
+  },
+  "B": {
+    "wram_bytes": {"value": 65536, "src": "UPMEM SDK: 64 KB WRAM per DPU"}
+  },
+  "P": {
+    "k": "DPU",
+    "W": {"value": 1, "src": "DPU ISA: 32-bit scalar RISC pipeline, no SIMD lanes"},
+    "max_tasklets": {"value": 24, "src": "UPMEM SDK: NR_TASKLETS <= 24"}
+  },
+  "exec": {
+    "_doc": "How PIMSA-IR runs on this target.",
+    "trigger": {"value": "self", "src": "each tasklet fetches and executes its own instruction stream"},
+    "parallel": {"value": "threads", "src": "a parallel region over tasklets: each tasklet runs its own instance (interleaved by the revolver pipeline)"},
+    "memory_operands": {"value": false, "src": "instructions operate on WRAM and registers; MRAM is reached only by DMA (mram_read / mram_write)"},
+    "transaction_bytes": {"value": 8, "src": "MRAM DMA moves 8 B units (mram_read/mram_write sizes are multiples of 8); uPIMulator counts MRAM reads and writes in these units"},
+    "cost": {"value": "toolchain", "src": "per-loop-body machine instruction counts E_b from dpu-clang (pim_model/inst_count_analyzer); trip counts n_b from PIMSA-IR"}
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "one_time_seconds": {
+    "GEMV": 0.551,
+    "ADD": 0.171,
+    "MUL": 0.163,
+    "RELU": 0.121
+  },
+  "sim_seconds": [
+    0.0802,
+    17.0121
+  ],
+  "closed_seconds": [
+    0.000267,
+    0.000659
+  ],
+  "speedup_per_config": {
+    "min": 297.3,
+    "median": 2580.7,
+    "max": 28391.2,
+    "geomean": 2771.1
+  },
+  "sweep_total_seconds": {
+    "simulator": 108.97,
+    "pimsa_including_one_time": 1.03,
+    "speedup": 106.3
+  }
+}

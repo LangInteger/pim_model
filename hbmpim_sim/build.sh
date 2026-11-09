@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Build Samsung PIMSimulator plus the PIMSA sweep driver out of tree.
 # Usage: build.sh [SIM_SRC] [BUILD_DIR]
+#   VANILLA=1 build.sh ... builds the uninstrumented simulator with the timing
+#   driver (PIMSATime.cpp) instead, for wall-clock comparisons.
 # Requires: scons, googletest (brew install scons googletest on macOS).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -10,10 +12,13 @@ OUT="${2:-$HERE/build/pimsim}"
 
 rm -rf "$OUT"; mkdir -p "$(dirname "$OUT")"
 cp -R "$SRC" "$OUT"
-cp "$HERE/PIMSASweep.cpp" "$OUT/src/tests/PIMSASweep.cpp"
-
-# Bookkeeping-only instrumentation (counts + stall attribution); timing untouched.
-python3 "$HERE/instrument.py" "$OUT/src/MemoryController.cpp"
+if [ "${VANILLA:-0}" = 1 ]; then
+  cp "$HERE/PIMSATime.cpp" "$OUT/src/tests/PIMSATime.cpp"
+else
+  cp "$HERE/PIMSASweep.cpp" "$OUT/src/tests/PIMSASweep.cpp"
+  # Bookkeeping-only instrumentation (counts + stall attribution); timing untouched.
+  python3 "$HERE/instrument.py" "$OUT/src/MemoryController.cpp"
+fi
 
 PREFIX="$(brew --prefix 2>/dev/null || echo /usr/local)"
 cd "$OUT"

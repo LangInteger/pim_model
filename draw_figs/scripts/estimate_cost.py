@@ -166,8 +166,10 @@ def compose_cycle_bounds(
     memory_upper: float,
     tasklets: int,
     stall_rate: float,
+    issue_distance: int = REVOLVER_SCHEDULING_CYCLES,
 ) -> dict[str, float | str]:
-    """Propagate instruction and memory intervals into cycle bounds."""
+    """Propagate instruction and memory intervals into cycle bounds.
+    `issue_distance` is the same-tasklet issue distance D of the pipeline."""
     if tasklets <= 0:
         raise ValueError("tasklets must be positive")
     if not 0 <= stall_rate < 1:
@@ -177,9 +179,7 @@ def compose_cycle_bounds(
     if not memory_lower <= memory_upper:
         raise ValueError("memory lower bound exceeds upper bound")
 
-    issue_factor = REVOLVER_SCHEDULING_CYCLES * max(
-        1 / tasklets, 1 / REVOLVER_SCHEDULING_CYCLES
-    )
+    issue_factor = issue_distance * max(1 / tasklets, 1 / issue_distance)
     compute_lower = instruction_lower * issue_factor
     compute_upper = instruction_upper * issue_factor
     compute_conservative_upper = compute_upper / (1 - stall_rate)

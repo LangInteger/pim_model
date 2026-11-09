@@ -1,17 +1,36 @@
 {
-  "_doc": "PIMSA architecture instance for UPMEM, as far as PIMSA-IR metric extraction and lowering need it. Per-loop-body instruction costs are not listed: they come from the target toolchain (dpu-clang, inst_count_analyzer), looked up by the source anchors of the IR loops.",
+  "_doc": "PIMSA architecture instance A = <M, B, P> for UPMEM as simulated by uPIMulator, following the paper's case-study instantiation (Sec. case study, 'Instantiation for UPMEM'). Per-loop-body instruction costs are not listed: they come from the target toolchain (dpu-clang, inst_count_analyzer), looked up by the source anchors of the IR loops. Fields with value null are part of the model but not used by the UPMEM analysis; the 'src' of each says why.",
   "name": "UPMEM DPU (uPIMulator)",
   "M": {
-    "levels": ["dpu", "mram"],
-    "mram_bytes": {"value": 67108864, "src": "UPMEM SDK: 64 MB MRAM per DPU"}
+    "L": {"value": 1, "src": "paper: root = the shared channel/rank; leaves = DPU-local MRAM partitions. The 8-DPU chip layer is not modeled: it adds no separate bandwidth boundary"},
+    "levels": ["rank", "dpu"],
+    "I1_dpus": {"value": 64, "src": "uPIMulator: one channel, one rank, 64 DPUs. A deployment parameter: the DPU sweeps use 1..64 and the analysis is per DPU"},
+    "mram_bytes": {"value": 67108864, "src": "UPMEM SDK: 64 MB MRAM per DPU"},
+    "BW": {
+      "0": {"value": null, "unit": "bytes/cycle", "src": "host-PIM transfer: not in the kernel-only cycle count"},
+      "1": {"value": 2, "unit": "bytes/cycle", "src": "PrIM (Gomez-Luna et al. 2022): MRAM DMA of s bytes costs alpha + beta*s, beta = 0.5 cycles/byte"}
+    },
+    "t_read": {"value": 77, "unit": "cycles", "src": "PrIM: fixed cost alpha of one mram_read"},
+    "t_write": {"value": 61, "unit": "cycles", "src": "PrIM: fixed cost alpha of one mram_write"}
   },
   "B": {
-    "wram_bytes": {"value": 65536, "src": "UPMEM SDK: 64 KB WRAM per DPU"}
+    "j": {"value": 1, "src": "WRAM is attached to each leaf (DPU) node"},
+    "B": {"value": 1, "src": "one buffer per DPU: the whole WRAM, buffer id b = 0"},
+    "BSize": {"value": 65536, "src": "UPMEM SDK: 64 KB WRAM per DPU; a software-managed scratchpad, so no miss cost"}
   },
   "P": {
-    "k": "DPU",
+    "k": {"value": 1, "src": "one DPU per leaf memory node"},
+    "P": {"value": 1, "src": "one DPU per leaf memory node"},
     "W": {"value": 1, "src": "DPU ISA: 32-bit scalar RISC pipeline, no SIMD lanes"},
+    "D": {"value": 11, "src": "14-stage pipeline whose last three stages overlap the next instruction of the same tasklet: same-tasklet issue distance 11 (revolver scheduling)"},
+    "t_op": {"value": 1, "unit": "cycles", "src": "one machine instruction issues per cycle when the pipeline is full"},
+    "ESize": {"value": null, "src": "from the build: the TYPE macro gives E (4 bytes for INT32), see prim/common.py"},
+    "R": {"value": null, "src": "not used: register reads and writes are inside the machine instruction count"},
     "max_tasklets": {"value": 24, "src": "UPMEM SDK: NR_TASKLETS <= 24"}
+  },
+  "cost": {
+    "_doc": "Cost-model parameters of the UPMEM composition (paper: rho_pipe), not hardware properties.",
+    "stall_fraction": {"value": 0.1, "src": "paper: conservative non-memory pipeline stall fraction for the compute upper bound, rho_pipe+ = max(D/T, 1) / (1 - 0.1)"}
   },
   "exec": {
     "_doc": "How PIMSA-IR runs on this target.",

@@ -22,8 +22,8 @@ the innermost enclosing loop. Callee calls are counted the same way. The
 machine-CFG flow problem is then solved by the analyzer's own solver
 (generic_cfg.solve_machine_total), and instruction and memory bounds are
 composed into cycles by the paper's UPMEM cost model
-(draw_figs/scripts/estimate_cost.py, compose_cycle_bounds and its memory model
-with default parameters).
+(draw_figs/scripts/estimate_cost.py, compose_cycle_bounds and its memory model),
+with BW_1, t_read, t_write, D and the stall fraction read from arch/upmem.json.
 
 IR loops are matched to machine loops structurally: the loop trees are walked
 in preorder, IR loops in source order and machine loops by header block
@@ -234,11 +234,24 @@ def phase_bound(kernel, dbg, values) -> dict:
 # ----------------------------------------------------------------------------
 # A whole setting (all DPUs, all executions) and its cycle bounds
 # ----------------------------------------------------------------------------
-def setting_bounds(mod, setting_id, row, code_setting=None, stall_rate=0.10, bandwidth=2.0,
-                   read_latency=77.0, write_latency=61.0) -> dict:
+def cost_parameters(arch=None) -> dict:
+    """The UPMEM cost parameters of the architecture instance: MRAM DMA
+    bandwidth BW_1 and fixed costs t_read / t_write (M), the same-tasklet issue
+    distance D (P) and the compute stall fraction (cost)."""
+    a = arch or ARCH
+    return {"bandwidth": a["M"]["BW"]["1"]["value"], "read_latency": a["M"]["t_read"]["value"],
+            "write_latency": a["M"]["t_write"]["value"], "issue_distance": a["P"]["D"]["value"],
+            "stall_rate": a["cost"]["stall_fraction"]["value"]}
+
+
+def setting_bounds(mod, setting_id, row, code_setting=None, arch=None) -> dict:
     """`mod` is a prim.<bench> module. `code_setting` names the stored analysis
     whose machine code is used (default: the setting itself); it must share the
-    build configuration."""
+    build configuration. Cost parameters come from the architecture instance
+    (default arch/upmem.json)."""
+    arch = arch or ARCH
+    cp = cost_parameters(arch)
+    bandwidth, read_latency, write_latency = cp["bandwidth"], cp["read_latency"], cp["write_latency"]
     code_setting = code_setting or setting_id
     top = load_setting(mod.BENCH, code_setting)
     build = json.loads(row["dpu_build_options_json"])
@@ -267,7 +280,7 @@ def setting_bounds(mod, setting_id, row, code_setting=None, stall_rate=0.10, ban
             if key not in cache:
                 dbg = load_phase(mod.BENCH, code_setting, code[fn])
                 pb = phase_bound(kern, dbg, v)
-                dma = MX.dma_counts(kern, ARCH, v)
+                dma = MX.dma_counts(kern, arch, v)
                 cache[key] = (pb, dma)
             pb, dma = cache[key]
             checks.extend(pb["checks"])
@@ -282,7 +295,8 @@ def setting_bounds(mod, setting_id, row, code_setting=None, stall_rate=0.10, ban
                     + dma["read_calls_upper"] * read_latency + dma["write_calls_upper"] * write_latency)
         ins_lo, ins_hi = max(ins_lo, lo), max(ins_hi, hi)
         mem_lo, mem_hi = max(mem_lo, mlo), max(mem_hi, mhi)
-    comp = EC.compose_cycle_bounds(ins_lo, ins_hi, mem_lo, mem_hi, nt, stall_rate)
+    comp = EC.compose_cycle_bounds(ins_lo, ins_hi, mem_lo, mem_hi, nt, cp["stall_rate"],
+                                  cp["issue_distance"])
     return {"instructions": (ins_lo, ins_hi), "memory_cycles": (mem_lo, mem_hi), "dma_total": dict(tot),
             "cycles": (comp["composed_lower"], comp["composed_upper"]), "compose": comp,
             "checks": checks, "stored_instructions": (top["dynamic_instruction_bound"]["lower"],

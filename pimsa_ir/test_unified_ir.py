@@ -96,31 +96,6 @@ class HBMCycles(unittest.TestCase):
                 self.assertEqual(res["closed_form"]["total"], int(r["closed_cycles"]))
 
 
-class VAMetrics(unittest.TestCase):
-    """PrIM VA on UPMEM: DMA volume and beat counts from PIMSA-IR against the
-    uPIMulator counters (draw_figs/results/va/summary.csv)."""
-
-    def test_dma_matches_upimulator(self):
-        arch = json.loads((HERE / "arch/upmem.json").read_text())
-        rows = _rows(HERE.parent / "draw_figs/results/va/summary.csv")
-        self.assertTrue(rows)
-        for r in rows:
-            inputs = json.loads(r["dpu_execution_inputs_json"])
-            bl = json.loads(r["dpu_build_options_json"])["BL"]
-            tot = {"read_bytes": 0, "write_bytes": 0, "reads": 0, "writes": 0}
-            for d in inputs:
-                v = {K.SIZE: d["params"]["size"], K.NT: int(r["num_tasklets"]), K.BS: 1 << bl}
-                m = MX.dma_counts(K.KERNELS["VA"](), arch, v)
-                m = {key: m[key] for key in tot}
-                for key in tot:
-                    tot[key] += m[key]
-            with self.subTest(experiment=r["experiment"], dpus=r["num_dpus"], tasklets=r["num_tasklets"]):
-                self.assertEqual(tot["read_bytes"], float(r["read_bytes_sum"]))
-                self.assertEqual(tot["write_bytes"], float(r["write_bytes_sum"]))
-                self.assertEqual(tot["reads"], float(r["num_reads_sum"]))
-                self.assertEqual(tot["writes"], float(r["num_writes_sum"]))
-
-
 class PrIMCycles(unittest.TestCase):
     """PrIM benchmarks on UPMEM (prim/*.py): from PIMSA-IR counts and the
     toolchain's stored per-body costs, per setting: MRAM traffic matches

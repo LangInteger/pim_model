@@ -2,8 +2,8 @@
 
 HBM-PIM kernels follow Samsung PIMSimulator's host-side command generators
 (PIMKernel::executeEltwise / computeAddOrMul / computeRelu / executeGemv /
-computeGemv, src/tests/PIMKernel.cpp). The UPMEM kernel follows PrIM VA
-(benchmark/VA/dpu/task.c). The programs are written by hand from that source,
+computeGemv, src/tests/PIMKernel.cpp). The UPMEM programs (PrIM) are in
+prim/. The programs are written by hand from that source,
 statement for statement, and checked mechanically: the HBM-PIM command stream
 lowered from each program must equal, command for command, the stream the
 vendor generator produces (test_unified_ir.py).
@@ -15,10 +15,10 @@ statement (DRAM command encoding, broadcast, mode switching, CRF code), which
 comes from the architecture instance.
 
 Symbols:
-  application  L (elements), M, N (matrix), B (batch), SIZE (bytes per DPU)
-  deployment   C (PUs: HBM-PIM pseudo-channels), NT (UPMEM tasklets)
+  application  L (elements), M, N (matrix), B (batch)
+  deployment   C (PUs: HBM-PIM pseudo-channels)
   architecture P (PIM blocks per PU), NB (banks per block), G (registers per
-               GRF file), W (SIMD lanes), BS (UPMEM block size, bytes)
+               GRF file), W (SIMD lanes)
 """
 from __future__ import annotations
 
@@ -27,9 +27,8 @@ import sympy as sp
 from ir import Array, Assign, Barrier, For, Kernel, ParFor, Ref
 
 L, M, N, B, C = sp.symbols("L M N B C", integer=True, positive=True)
-SIZE, NT = sp.symbols("SIZE NT", integer=True, positive=True)
-P, NB, G, W, BS = sp.symbols("P NB G W BS", integer=True, positive=True)
-i, b, j, bt, i2, c, blk, t, idx = sp.symbols("i b j bt i2 c blk t idx", integer=True, nonnegative=True)
+P, NB, G, W = sp.symbols("P NB G W", integer=True, positive=True)
+i, b, j, bt, i2, c, blk = sp.symbols("i b j bt i2 c blk", integer=True, nonnegative=True)
 
 ROW = 32 * 32  # bytes per DRAM row of one bank (32 bursts of 32 B); used only to place arrays
 PIMK = "Samsung_PIMSimulator/src/tests/PIMKernel.cpp"
@@ -41,7 +40,7 @@ def arch_values(arch: dict) -> dict:
         p = arch["P"]["P_per_channel"]["value"]
         return {P: p, NB: arch["M"]["I2_banks"]["value"] // p, G: arch["P"]["R"]["value"] // 2,
                 W: arch["P"]["W"]["value"]}
-    return {W: arch["P"]["W"]["value"]}  # UPMEM; BS is a build parameter of the program
+    return {W: arch["P"]["W"]["value"]}  # UPMEM (prim/): BS and E come from the build
 
 
 # ----------------------------------------------------------------------------
@@ -115,35 +114,9 @@ def gemv():
                   src=PIMK + ":364", lets={"n_in": n_in, "n_out": n_out})
 
 
-# ----------------------------------------------------------------------------
-# UPMEM PrIM VA (main_kernel1). Per DPU, NT tasklets each stream BS-byte blocks
-# of A and B from MRAM into WRAM, add them element by element, and write the
-# block of B back.
-# ----------------------------------------------------------------------------
-VA_SRC = "PrIM/VA/dpu/task.c"
-
-
-def va():
-    A = Array("A", "M", 4, 0)
-    Bm = Array("Bm", "M", 4, SIZE)
-    cA = Array("cache_A", "B", 4)
-    cB = Array("cache_B", "B", 4)
-    nbytes = sp.Min(BS, SIZE - idx)  # l_size_bytes
-    n = nbytes / 4
-    th = (("tasklet", t),)
-    body = (Assign(Ref(cA, 0, n, th), "copy", (Ref(A, idx / 4, n),)),
-            Assign(Ref(cB, 0, n, th), "copy", (Ref(Bm, idx / 4, n),)),
-            Assign(Ref(cB, 0, n, th), "add", (Ref(cB, 0, n, th), Ref(cA, 0, n, th)), src=VA_SRC + ":19"),
-            Assign(Ref(Bm, idx / 4, n), "copy", (Ref(cB, 0, n, th),)))
-    loop = For(idx, SIZE, body, lo=t * BS, step=BS * NT, src=VA_SRC + ":60")
-    return Kernel("VA", (SIZE,), (NT,), (A, Bm, cA, cB),
-                  (ParFor(t, NT, (Barrier(), loop), src=VA_SRC + ":37"),), src=VA_SRC + ":37")
-
-
 KERNELS = {
     "ADD": lambda: _eltwise("ADD", "add"),
     "MUL": lambda: _eltwise("MUL", "mul"),
     "RELU": relu,
     "GEMV": gemv,
-    "VA": va,
 }

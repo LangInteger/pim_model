@@ -29,11 +29,12 @@ for parallel blk < P:
 
 # UPMEM VA, per DPU
 for parallel t < NT:
-  for idx = t·BS; idx < SIZE; idx += BS·NT:
-    B[cache_A][0:n] ← M[A][idx/4 : +n]
-    B[cache_B][0:n] ← M[B][idx/4 : +n]
+  barrier
+  for idx = t·BS; idx < SIZE; idx += BS·NT:      # n = min(BS, SIZE - idx) / E
+    B[cache_A][0:n] ← M[A][idx/E : +n]
+    B[cache_B][0:n] ← M[B][idx/E : +n]
     B[cache_B][0:n] ← add(B[cache_B][0:n], B[cache_A][0:n])
-    M[B][idx/4 : +n] ← B[cache_B][0:n]
+    M[B][idx/E : +n] ← B[cache_B][0:n]
 ```
 
 What 𝒜 decides (`exec` in the arch JSON):

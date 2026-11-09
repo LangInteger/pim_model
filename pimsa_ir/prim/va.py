@@ -7,15 +7,15 @@ SRC = "PrIM/VA/dpu/task.c"
 
 
 def main_kernel1():
-    A = Array("A", "M", 4, 0)
-    Bm = Array("Bm", "M", 4, SIZE)
-    cA, cB = Array("cache_A", "B", 4), Array("cache_B", "B", 4)
-    n = l_size() / 4
+    A = Array("A", "M", E, 0)
+    Bm = Array("Bm", "M", E, SIZE)
+    cA, cB = Array("cache_A", "B", E), Array("cache_B", "B", E)
+    n = l_size() / E
     th = (("tasklet", t),)
-    body = (Assign(Ref(cA, 0, n, th), "copy", (Ref(A, idx / 4, n),)),
-            Assign(Ref(cB, 0, n, th), "copy", (Ref(Bm, idx / 4, n),)),
+    body = (Assign(Ref(cA, 0, n, th), "copy", (Ref(A, idx / E, n),)),
+            Assign(Ref(cB, 0, n, th), "copy", (Ref(Bm, idx / E, n),)),
             Assign(Ref(cB, 0, n, th), "add", (Ref(cB, 0, n, th), Ref(cA, 0, n, th)), src=SRC + ":19"),
-            Assign(Ref(Bm, idx / 4, n), "copy", (Ref(cB, 0, n, th),)))
+            Assign(Ref(Bm, idx / E, n), "copy", (Ref(cB, 0, n, th),)))
     return Kernel("VA", (SIZE,), (NT,), (A, Bm, cA, cB),
                   (ParFor(t, NT, (Barrier(), blocks_loop(body, SRC + ":60")), src=SRC + ":37"),),
                   src=SRC + ":37")

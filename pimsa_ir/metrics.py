@@ -35,6 +35,31 @@ BOUNDARY = {("M", "R"): "mem2reg", ("R", "M"): "reg2mem", ("M", "B"): "mld", ("B
             ("B", "R"): "bld", ("R", "B"): "bst"}
 
 
+def steady_sum(n, run):
+    """Sum of run(q) over q = 0..n-1 without visiting every iteration.
+
+    A PrIM loop differs from one iteration to the next only at its ends (the
+    first iteration, and the last one with its partial block), as the old
+    pipeline assumed when it charged every block alike. The middle iterations
+    are therefore taken equal to iteration 1, which is checked at three more
+    points; if any of them differs, every iteration is visited."""
+    if n <= 6:
+        out = collections.Counter()
+        for q in range(n):
+            out.update(run(q))
+        return out
+    first, mid, last = run(0), run(1), run(n - 1)
+    if all(run(q) == mid for q in (2, n // 2, n - 2)):
+        out = collections.Counter(first)
+        out.update({k: v * (n - 2) for k, v in mid.items()})
+        out.update(last)
+        return out
+    out = collections.Counter()
+    for q in range(n):
+        out.update(run(q))
+    return out
+
+
 def _stmt(s: Assign, tb, W, env=None):
     """Counts for one execution of s. With env, numbers; else expressions."""
     val = (lambda e: ev(e, env)) if env is not None else sp.sympify
@@ -80,8 +105,8 @@ def extract(kernel: Kernel, arch: dict, values: dict | None = None):
             elif isinstance(s, For):
                 if concrete:
                     lo, st = ev(s.lo, env), ev(s.step, env)
-                    for q in range(ev(s.trips(), env)):
-                        add(out, body_counts(s.body, {**env, s.var: lo + q * st}))
+                    add(out, steady_sum(ev(s.trips(), env),
+                                        lambda q: body_counts(s.body, {**env, s.var: lo + q * st})))
                 else:
                     q = sp.Dummy("q", integer=True, nonnegative=True)
                     inner = body_counts(s.body, env)

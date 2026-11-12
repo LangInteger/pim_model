@@ -1,0 +1,21 @@
+{
+  "settings": 116,
+  "cycles_covered": 102,
+  "cycles_coverage_pct": 87.93103448275862,
+  "instructions_with_measurement": 116,
+  "instructions_covered": 107,
+  "instructions_coverage_pct": 92.24137931034483,
+  "uncovered_benchmarks": [
+    "HST-L",
+    "SCAN-RSS",
+    "SCAN-SSA"
+  ],
+  "midpoint_mape_pct": {
+    "tasklet_sweep": 34.77544118682737,
+    "dpu_sweep": 23.55844003703755
+  },
+  "median_normalized_width": {
+    "tasklet_sweep": 1.1690692361878312,
+    "dpu_sweep": 0.9321886930454392
+  }
+}

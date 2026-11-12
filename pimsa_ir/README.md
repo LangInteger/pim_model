@@ -74,6 +74,28 @@ Where the IR is wider: TRNS's kernel 2 distributes tiles at run time; the IR use
 
 The 14 uncovered settings are all 16-tasklet runs of HST-L, SCAN-SSA and SCAN-RSS, where the measured time includes mutex spinning (HST-L) or serialized handshake chains (SCAN) that the cycle composition (`estimate_cost.compose_cycle_bounds`) does not model. Instruction and traffic counts are exact there; the gap is in the composition, and the paper's intervals miss the same settings.
 
+### Paper results (`run_prim_results.py`, `summarize_prim_results.py`)
+
+`run_prim_results.py` runs the IR analysis on all 116 settings and writes
+`results/prim/<bench>/<bench>_cost_estimates.csv` (the column names of
+`draw_figs`, so its plotting scripts read them with `--results-root`);
+`summarize_prim_results.py` writes
+`results/prim/summary.json`. The UPMEM accuracy numbers of the paper come from
+here: 102/116 cycle intervals and 107/116 instruction intervals cover the
+measurement, and the midpoint MAPE is 34.8 % (tasklet sweep) and 23.6 % (DPU
+sweep). The paper's Figure 3 is drawn from them with
+`draw_figs/scripts/plot_all_benchmark_cycle_midpoint.py --results-root pimsa_ir/results/prim`.
+
+Analysis time does not grow with the input: loop bodies are summed with
+`metrics.steady_sum`, which evaluates the first, second and last iteration and
+charges the middle ones like the second (checked at three more iterations,
+otherwise every iteration is visited). Its results equal full enumeration on
+all 116 settings. SCAN-RSS and SCAN-SSA still grow with the number of DPUs,
+because every DPU has different arguments and is analyzed once.
+
+These scripts record no timing. The paper's analysis-time numbers come from
+`draw_figs` (the toolchain's `analysis_wall_seconds` against uPIMulator).
+
 ### UPMEM per-body costs
 
 `upmem_cost.py` reads, for a setting the toolchain analyzed, its machine blocks (final assembly, instruction counts, edge costs), the per-call bounds of expanded callees and the barrier contribution from `inst_count_analyzer/results/<BENCH>/<setting>/phases/*/debug.json`. It pins each machine loop to the IR trip count (IR loops matched in source order), solves the machine-CFG flow with the analyzer's own `solve_machine_total`, adds callees by their IR call counts, and composes cycles with `estimate_cost.compose_cycle_bounds` and its memory model, fed with the IR's MRAM bytes and DMA calls.

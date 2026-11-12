@@ -134,6 +134,12 @@ def lower(kernel: Kernel, arch: dict, values: dict) -> list:
     bpg = m["I2_banks"]["value"] // nbg
     cols = m["burst_columns_per_row"]["value"]
     tb = ex["transaction_bytes"]["value"]
+    # A command-driven PU takes one W-wide operand per column access (paper,
+    # drive mode), so the column access size is W * ESize, not a free parameter.
+    val = lambda f: f["value"] if isinstance(f, dict) else f
+    w, esize = val(arch["P"]["W"]), val(arch["P"]["ESize"])
+    if tb != w * esize:
+        raise ValueError(f"column access {tb} B != W * ESize = {w} * {esize} B")
     bcast, rf, crf = ex["broadcast_address"], ex["register_file"], ex["crf"]
     env0 = {**values, **arch_values(arch)}
     cmds: list = []

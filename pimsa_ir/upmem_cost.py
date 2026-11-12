@@ -34,7 +34,7 @@ from __future__ import annotations
 import json
 import re
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -90,14 +90,24 @@ def _static(body, env, depth=1, loops=None, bars=None):
 
 def _dynamic(body, env, iters, entries, bar_exec):
     """Execute the control structure: per loop total iterations and per-entry
-    trip counts; per barrier executions (keyed by node identity)."""
+    trip counts; per barrier executions (keyed by node identity). Loop bodies
+    are summed with MX.steady_sum, so the work does not grow with the trip count."""
     for s in body:
         if isinstance(s, For):
             lo, st, n = ev(s.lo, env), ev(s.step, env), ev(s.trips(), env)
             iters[id(s)] += n
             entries[id(s)].add(n)
-            for q in range(n):
-                _dynamic(s.body, {**env, s.var: lo + q * st}, iters, entries, bar_exec)
+
+            def run(q, s=s, lo=lo, st=st):
+                i, e, b = defaultdict(int), defaultdict(set), defaultdict(int)
+                _dynamic(s.body, {**env, s.var: lo + q * st}, i, e, b)
+                for k, v in e.items():  # per-entry trip sets, merged below
+                    entries[k] |= v
+                return Counter({("i", k): v for k, v in i.items()}) + \
+                    Counter({("b", k): v for k, v in b.items()})
+
+            for (kind, k), v in MX.steady_sum(n, run).items():
+                (iters if kind == "i" else bar_exec)[k] += v
         elif isinstance(s, If):
             _dynamic(s.body if ev(s.cond, env) else s.orelse, env, iters, entries, bar_exec)
         elif isinstance(s, Barrier):

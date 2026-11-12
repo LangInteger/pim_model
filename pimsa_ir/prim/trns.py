@@ -42,38 +42,32 @@ and F the number of walks:
 
 Dynamic tile distribution. Which tasklet obtains which tile is decided at
 run time by get_tile (line 133-139). The IR is per tasklet, so the share of
-each tasklet is a data-dependent quantity. Two accountings are provided:
+each tasklet is a data-dependent quantity. main_kernel2 charges it as the
+toolchain does (inst_count_analyzer upmem_icount/source_loop_semantics.py,
+source_loop_total_backedge_bounds, an amortized partition): every tasklet runs
+at most CAP = ceil(tile_max / NT) backedges of the while loop and of the walk
+loop, and at least 0. Per tasklet, the while loop runs W in [0, CAP+1] trips
+and the walk loop B in [0, CAP] backedges (= tile writes) in total. The upper
+ends sum to an upper bound of the DPU work (T*(CAP+1) >= D, T*CAP >= N_nt);
+the lower end is 0 per tasklet, so the MRAM traffic interval is [step 2 only,
+NT times the per-tasklet cap].
 
-  main_kernel2 (used by FUNCTIONS): the toolchain's amortized partition
-    (inst_count_analyzer upmem_icount/source_loop_semantics.py,
-    source_loop_total_backedge_bounds): every tasklet is charged at most
-    CAP = ceil(tile_max / NT) backedges of the while loop and of the walk
-    loop, and at least 0. Per tasklet: while trips W in [0, CAP+1], of which
-    V visit non-fixed tiles and E start walks (E <= V <= W), and B in [0, CAP]
-    walk backedges (= tile writes). The B backedges are carried by the first
-    walk (the per-tasklet split over walks does not change any count). The
-    upper ends are reached together at the 'hi' extreme (W = V = E = CAP+1,
-    B = CAP): walk-loop header 2*CAP+1, copy loop (2*CAP+1)*m, exactly the
-    stored header bounds. This sums to an upper bound of the DPU work
-    (T*(CAP+1) >= D, T*CAP >= N_nt), but the lower end is 0 per tasklet and
-    the sum over tasklets is not tied to D, so the MRAM traffic interval is
-    [step 2 only, NT times the per-tasklet cap].
-
-  main_kernel2_domain: an accounting partition of the exact DPU totals:
-    tasklet t is charged share(X) = floor((X + NT - 1 - t) / NT) of each
-    total X in {D, N_nt, F, N_nt}, so the shares sum to the totals; F is the
-    only unknown (C .. N_nt, C when NT = 1). Its MRAM traffic is the paper's
-    trns_static_memory_bounds; its instruction bound is tighter than the
-    stored one (no tasklet is charged 0 or CAP+1). See domain_report().
-
-Kernel.unknowns needs numeric ranges, but the caps depend on M_, n and NT, so
-the unknowns are fractions u in [0, 1] of their cap (floor(u * cap)).
-Tile identities (tile, next_in_cycle) only appear in MRAM offsets, which no
-count depends on; they are free symbols.
+Every iteration of an IR loop is alike (metrics.times), so the program is
+written in that form:
+  - every while trip visits a tile and starts a walk (at the extremes W and
+    the number of visits and walks coincide: all 0, or all CAP+1);
+  - the walk loop has an average trip count, its total W + B over the W
+    walks (For(average=True)): the split of the backedges over the walks is
+    decided at run time, their total is what the cap bounds. Its total,
+    2*CAP+1 at the upper end, and that of the copy loop, (2*CAP+1)*m, are
+    exactly the stored header bounds;
+  - whether a walk trip writes its tile depends on the done bit read from
+    MRAM (every trip but the walk's last writes), a data-dependent branch:
+    WR in [0, 1] (no trip writes / every trip writes).
+The counts therefore need neither N_nt nor C (no enumeration of the
+permutation). Tile identities (tile, next_in_cycle) only appear in MRAM
+offsets, which no count depends on; they are free symbols.
 """
-import math
-import types
-
 import sympy as sp
 
 from prim.common import NT, Array, Assign, Barrier, For, If, Kernel, ParFor, Ref, build_values, t
@@ -82,10 +76,9 @@ BENCH = "TRNS"
 SRC = "PrIM/TRNS/dpu/task.c"
 
 M_, m, n = sp.symbols("M_ m n", integer=True, positive=True)
-NNT, NC = sp.symbols("N_nt C", integer=True, nonnegative=True)  # non-fixed tiles, non-trivial cycles
 tile, nxt = sp.symbols("tile next_in_cycle", integer=True, nonnegative=True)  # runtime tile ids
 r, i, w, j = sp.symbols("r i w j", integer=True, nonnegative=True)
-uW, uV, uE, uB, uF = sp.symbols("u_W u_V u_E u_B u_F", nonnegative=True)
+W_, B_, WR = sp.symbols("W_walks B_walks WR", integer=True, nonnegative=True)  # while trips, walk backedges, write flag
 
 T_BYTES = 8  # T = int64_t (support/common.h)
 CHUNK = 2048 // T_BYTES  # elements per step-2 transfer (2048 B, the SDK maximum)
@@ -125,116 +118,33 @@ def main_kernel1():
                   (ParFor(t, NT, (Barrier(), tiles), src=SRC + ":46"),), src=SRC + ":46")
 
 
-def _kernel2(W, V, E, B, unknowns, tag):
-    """main_kernel2 with per-tasklet counts: W while trips, V of them visit a
-    non-fixed tile, E of those start a walk, B walk backedges (tile writes)."""
+def main_kernel2():
+    """main_kernel2 per tasklet: W while trips, each visiting a tile and walking
+    its cycle; B walk backedges in total (module doc)."""
     A, done = _arrays()
     data, backup = Array("data", "B", T_BYTES), Array("backup", "B", T_BYTES)
     rdone = Array("read_done", "B", 1)
-    trips = 1 + sp.Piecewise((B, sp.Eq(w, 0)), (0, True))  # the first walk carries the backedges
-    walk = For(j, trips, (
+    walk = For(j, (W_ + B_) / sp.Max(W_, 1), (
         Assign(Ref(backup, 0, m), "copy", (Ref(A, nxt * m, m),), src=SRC + ":170"),       # line 115
         Assign(Ref(rdone, 0, T_BYTES), "copy", (Ref(done, nxt, T_BYTES),), src=SRC + ":192"),  # 117
         Assign(Ref(done, nxt, T_BYTES), "copy", (Ref(rdone, 0, T_BYTES),), src=SRC + ":195"),
-        If(sp.Lt(j, trips - 1),  # !done: all but the walk's last trip
+        If(sp.Eq(WR, 1),  # !done (line 119): decided by the done bit read from MRAM
            (Assign(Ref(A, nxt * m, m), "copy", (Ref(data, 0, m),), src=SRC + ":174"),),  # line 120
            src=SRC + ":119"),
         For(i, m, (Assign(Ref(data, i, 1), "copy", (Ref(backup, i, 1),), src=SRC + ":123"),),
-            src=SRC + ":122")), src=SRC + ":114")
+            src=SRC + ":122")), src=SRC + ":114", average=True)
     visit = (Assign(Ref(data, 0, m), "copy", (Ref(A, tile * m, m),), src=SRC + ":170"),       # line 111
              Assign(Ref(rdone, 0, T_BYTES), "copy", (Ref(done, tile, T_BYTES),), src=SRC + ":181"),  # 113
-             If(sp.Lt(w, E), (walk,), src=SRC + ":114"))  # done == 0 on entry
-    loop = For(w, W, (If(sp.Ge(w, V), (), visit, src=SRC + ":107"),), src=SRC + ":105")
-    return Kernel("TRNS_step3" + tag, (M_, m, n), (NT,), (A, done, data, backup, rdone),
-                  (ParFor(t, NT, (Barrier(), loop), src=SRC + ":77"),), src=SRC + ":77",
-                  unknowns=unknowns)
-
-
-def main_kernel2():
-    """The toolchain's amortized per-tasklet partition (see module doc)."""
+             walk)
+    loop = For(w, W_, visit, src=SRC + ":105")
     cap = sp.ceiling(TILE_MAX / NT)
-    W, V, E = (sp.floor(u * (cap + 1)) for u in (uW, uV, uE))
-    B = sp.floor(uB * cap)
-    return _kernel2(W, V, E, B, {uW: (0, 1), uV: (0, 1), uE: (0, 1), uB: (0, 1)}, "")
-
-
-def _share(X):
-    return sp.floor((X + NT - 1 - t) / NT)
-
-
-def main_kernel2_domain():
-    """Accounting partition of the exact DPU totals; F (walks) is the only unknown."""
-    fmax = sp.Piecewise((NC, sp.Eq(NT, 1)), (NNT, True))
-    F = NC + sp.floor(uF * (fmax - NC))
-    return _kernel2(_share(TILE_MAX), _share(NNT), _share(F), _share(NNT), {uF: (0, 1)}, "_domain")
+    return Kernel("TRNS_step3", (M_, m, n), (NT,), (A, done, data, backup, rdone),
+                  (ParFor(t, NT, (Barrier(), loop), src=SRC + ":77"),), src=SRC + ":77",
+                  unknowns={W_: (0, cap + 1), B_: (0, cap), WR: (0, 1)})
 
 
 FUNCTIONS = {"main_kernel1": main_kernel1, "main_kernel2": main_kernel2}
 
 
-def permutation_stats(M, nn):
-    """(N_nt, C) of p(x) = x*M - tile_max*(x/n) on [0, tile_max) (lines 106, 114)."""
-    tm = M * nn - 1
-    seen = bytearray(tm)
-    nnt = nc = 0
-    for s in range(tm):
-        if seen[s] or s * M - tm * (s // nn) == s:
-            continue
-        x, length = s, 0
-        while not seen[x]:
-            seen[x] = 1
-            x = x * M - tm * (x // nn)
-            length += 1
-        nnt += length
-        nc += 1
-    return nnt, nc
-
-
 def values(params, build, nt):
-    v = {**build_values(build, nt), M_: params["M_"], m: params["m"], n: params["n"]}
-    v[NNT], v[NC] = permutation_stats(params["M_"], params["n"])
-    return v
-
-
-# ----------------------------------------------------------------------------
-# Domain accounting, evaluated through the shared setting_bounds (no shared
-# code changed): FUNCTIONS with main_kernel2 replaced by main_kernel2_domain.
-# ----------------------------------------------------------------------------
-def domain_module():
-    return types.SimpleNamespace(BENCH=BENCH, values=values,
-                                 FUNCTIONS={"main_kernel1": main_kernel1,
-                                            "main_kernel2": main_kernel2_domain})
-
-
-def domain_report():
-    """Run from pimsa_ir: ../.venv/bin/python -c "import prim.trns as T; T.domain_report()"."""
-    import csv
-    import upmem_cost as U
-    from prim_check import FIG
-    est = {(e["experiment"], e["num_dpus"], e["num_tasklets"]): e
-           for e in csv.DictReader(open(FIG / "trns" / "trns_cost_estimates.csv"))}
-    mod = domain_module()
-    for row in csv.DictReader(open(FIG / "trns" / "summary.csv")):
-        sid = U.setting_id(row, BENCH)
-        res = U.setting_bounds(mod, sid, row)
-        d, e = res["dma_total"], est[(row["experiment"], row["num_dpus"], row["num_tasklets"])]
-        nd = int(row["num_dpus"])
-        rb = (d["read_bytes_lower"], d["read_bytes_upper"])
-        wb = (d["write_bytes_lower"], d["write_bytes_upper"])
-        paper_r = (float(e["memory_read_bytes_lower_per_dpu"]) * nd, float(e["memory_read_bytes_upper_per_dpu"]) * nd)
-        paper_w = (float(e["memory_write_bytes_lower_per_dpu"]) * nd, float(e["memory_write_bytes_upper_per_dpu"]) * nd)
-        meas = {k: float(row[k]) for k in ("read_bytes_sum", "write_bytes_sum", "num_reads_sum", "num_writes_sum")}
-        ok = lambda a, x: a[0] <= x <= a[1]
-        rd = (d["reads_lower"], d["reads_upper"])
-        wr = (d["writes_lower"], d["writes_upper"])
-        print(f"{sid:46s} rB {'=paper' if rb == paper_r else rb} wB {'=paper' if wb == paper_w else wb} "
-              f"bytes {'in' if ok(rb, meas['read_bytes_sum']) and ok(wb, meas['write_bytes_sum']) else 'OUT'} "
-              f"units {'in' if ok(rd, meas['num_reads_sum']) and ok(wr, meas['num_writes_sum']) else 'OUT'} "
-              f"(reads-meas {meas['num_reads_sum'] - rd[1]:+.0f}, writes-meas {meas['num_writes_sum'] - wr[1]:+.0f} vs upper) "
-              f"instr [{res['instructions'][0]:.0f}, {res['instructions'][1]:.0f}] "
-              f"stored [{res['stored_instructions'][0]:.0f}, {res['stored_instructions'][1]:.0f}] "
-              f"cycles [{res['cycles'][0]:.0f}, {res['cycles'][1]:.0f}] paper "
-              f"[{float(e['composed_cycles_lower']):.0f}, {float(e['composed_cycles_upper']):.0f}] "
-              f"actual {float(e['actual_cycles']):.0f} "
-              f"{'in' if res['cycles'][0] <= float(e['actual_cycles']) <= res['cycles'][1] else 'OUT'}")
-
+    return {**build_values(build, nt), M_: params["M_"], m: params["m"], n: params["n"]}

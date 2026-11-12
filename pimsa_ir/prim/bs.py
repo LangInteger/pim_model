@@ -24,6 +24,11 @@ step went left (current = start_aux + BLOCK_SIZE / 2). The toolchain's
 stored cap is ceil(log2(blocks)) + 2 backedges (benchmark_settings.py), i.e.
 WMAX + 3 iterations, so the IR bound is tighter.
 
+The boundary reads happen only in the last iteration (k = WMAX - 1, when the
+search does not break). The IR places them after the loop, which gives the
+same counts and makes every iteration of the loop alike, so its counts are
+the body's counts times the trip count.
+
 Data-dependent symbols:
   F     iteration (1-based) at which the found-break fires; F > WMAX means
         the loop ends at the boundary checks. Range [1, FMAX]; the loop runs
@@ -53,17 +58,17 @@ def main_kernel1():
     cA, cAuxA, cAuxB = (Array(nm, "B", EB) for nm in ("cache_A", "cache_aux_A", "cache_aux_B"))
     blk = BS / EB  # elements per BLOCK_SIZE read
     per_t = sp.floor(SLICE / NT)  # queries per tasklet
-    last = sp.Eq(w, WMAX - 1)  # the iteration that reaches the boundary checks
     no_break = F > WMAX
     read = lambda line: Assign(Ref(cA, 0, blk), "copy", (Ref(A, 0, blk),), src=f"{SRC}:{line}")
     while_body = (read(100),
-                  Assign(Ref(sq, 0, 1), "search", (Ref(cA, 0, blk), Ref(sq, 0, 1)), src=SRC + ":103"),
-                  If(sp.And(last, no_break, sp.Eq(LEFT, 1)), (read(130),), src=SRC + ":127"),
-                  If(sp.And(last, no_break), (read(144),), src=SRC + ":141"))
+                  Assign(Ref(sq, 0, 1), "search", (Ref(cA, 0, blk), Ref(sq, 0, 1)), src=SRC + ":103"))
     target_body = (Assign(Ref(sq, 0, 1), "copy", (Ref(Q, t * per_t + q, 1),), src=SRC + ":80"),
                    Assign(Ref(cAuxA, 0, blk), "copy", (Ref(A, 0, blk),), src=SRC + ":93"),
                    Assign(Ref(cAuxB, 0, blk), "copy", (Ref(A, N_IN - BS, blk),), src=SRC + ":94"),
-                   For(w, sp.Min(F, WMAX), while_body, src=SRC + ":97"))
+                   For(w, sp.Min(F, WMAX), while_body, src=SRC + ":97"),
+                   # the boundary reads of the last iteration, placed after the loop
+                   If(sp.And(no_break, sp.Eq(LEFT, 1)), (read(130),), src=SRC + ":127"),
+                   If(no_break, (read(144),), src=SRC + ":141"))
     return Kernel("BS", (N_IN, SLICE), (NT,), (A, Q, sq, cA, cAuxA, cAuxB),
                   (ParFor(t, NT, (Barrier(), For(q, per_t, target_body, src=SRC + ":76")),
                           src=SRC + ":48"),),

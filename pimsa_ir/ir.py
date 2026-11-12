@@ -87,8 +87,16 @@ class For:
     # noinline callee ("callee:read_tile_step2") or was replaced by a library
     # call ("libcall:memset"); its cost is the callee's per-call cost
     lowered: str = ""
+    # hi is the average number of iterations per entry (total / entries), which
+    # need not be an integer: for a loop whose total over the program is known
+    # but whose split over its entries is decided at run time (paper Sec. 3.2).
+    # lo = 0 and step = 1; the body must not depend on var.
+    average: bool = False
 
     def trips(self):
+        if self.average:
+            assert self.lo == 0 and self.step == 1, "an average loop counts from 0 by 1"
+            return sp.Max(0, sp.sympify(self.hi))
         return sp.Max(0, sp.ceiling((sp.sympify(self.hi) - self.lo) / self.step))
 
 

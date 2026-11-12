@@ -11,8 +11,8 @@
     "SCAN-SSA"
   ],
   "midpoint_mape_pct": {
-    "tasklet_sweep": 34.77544118682737,
-    "dpu_sweep": 23.55844003703755
+    "tasklet_sweep": 34.82669171883214,
+    "dpu_sweep": 23.72783592467065
   },
   "median_normalized_width": {
     "tasklet_sweep": 1.1690692361878312,

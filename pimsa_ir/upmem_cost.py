@@ -43,7 +43,7 @@ sys.path[:0] = [str(HERE), str(ROOT / "inst_count_analyzer"), str(ROOT / "draw_f
 
 import estimate_cost as EC  # noqa: E402
 from ir import Barrier, For, If, ParFor  # noqa: E402
-from lower_cmd import ev  # noqa: E402
+from lower_cmd import ev, ev_count  # noqa: E402
 from upmem_icount.generic_cfg import Bound, LoopInfo, MachineBlock, solve_machine_total  # noqa: E402
 
 import metrics as MX  # noqa: E402
@@ -91,10 +91,11 @@ def _static(body, env, depth=1, loops=None, bars=None):
 def _dynamic(body, env, iters, entries, bar_exec):
     """Execute the control structure: per loop total iterations and per-entry
     trip counts; per barrier executions (keyed by node identity). Loop bodies
-    are summed with MX.steady_sum, so the work does not grow with the trip count."""
+    are counted with MX.times (first iteration times the trip count), so the
+    work does not grow with the trip count."""
     for s in body:
         if isinstance(s, For):
-            lo, st, n = ev(s.lo, env), ev(s.step, env), ev(s.trips(), env)
+            lo, st, n = ev(s.lo, env), ev(s.step, env), ev_count(s.trips(), env)
             iters[id(s)] += n
             entries[id(s)].add(n)
 
@@ -106,7 +107,7 @@ def _dynamic(body, env, iters, entries, bar_exec):
                 return Counter({("i", k): v for k, v in i.items()}) + \
                     Counter({("b", k): v for k, v in b.items()})
 
-            for (kind, k), v in MX.steady_sum(n, run).items():
+            for (kind, k), v in MX.times(n, run).items():
                 (iters if kind == "i" else bar_exec)[k] += v
         elif isinstance(s, If):
             _dynamic(s.body if ev(s.cond, env) else s.orelse, env, iters, entries, bar_exec)
@@ -125,7 +126,10 @@ def ir_counts(kernel, values, tid):
         res.append((iters, entries, bars))
     (i0, e0, b0), (i1, e1, b1) = res
     loops = {k: (i0[k], i1[k]) for k in set(i0) | set(i1)}
-    per_entry = {k: (next(iter(e0[k])) if len(e0[k]) == 1 and e0[k] == e1[k] else None)
+    # a per-entry trip count is passed on only when it is one integer (an average
+    # trip count is not the count of any entry)
+    per_entry = {k: (next(iter(e0[k])) if len(e0[k]) == 1 and e0[k] == e1[k]
+                     and next(iter(e0[k])) == int(next(iter(e0[k]))) else None)
                  for k in set(e0) | set(e1)}
     bar = {k: (b0[k], b1[k]) for k in set(b0) | set(b1)}
     return loops, per_entry, bar

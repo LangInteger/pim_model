@@ -69,7 +69,7 @@
     "BSize_bytes": 1024
   },
   "P": {
-    "k": "bank pair (PIM block)",
+    "k": "pseudo-channel (level 1): P PIM blocks per pseudo-channel, each serving one bank pair, which the program addresses as banks below it",
     "P_per_channel": {
       "value": 8,
       "src": "ini NUM_PIM_BLOCKS"

@@ -12,9 +12,11 @@ unique(): output[0] is always written and pos grows by at most one for each
 of the other REGS-1 elements, so 1 <= l_count <= REGS (the paper's adapter
 uses the same 1..REGS). It is taken equal for all blocks; DMA bytes grow
 monotonically with every block's count, so the uniform extremes bound the
-total. Kernel.unknowns needs numeric ranges, but REGS = BS/8 depends on the
-build; the symbol therefore ranges over 1..256 (REGS <= 256 because a single
-mram_read moves at most 2048 B) and the written count is Min(uni, REGS).
+total. The symbol ranges over 1..256 (REGS <= 256 because a single mram_read
+moves at most 2048 B) and the written count is Min(uni, REGS). This form dates
+from when Kernel.unknowns took numeric ranges only; ranges may now depend on
+the build (metrics.extremes, e.g. SEL's (1, BS/E)), and (1, REGS) directly
+would give the same counts.
 The write offset (message_partial_count + x - y) depends on the data beyond
 l_count (duplicates across block boundaries); it does not affect the counts
 and is written with the uniform count, uni times the earlier blocks."""

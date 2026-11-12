@@ -82,15 +82,18 @@ The 14 uncovered settings are all 16-tasklet runs of HST-L, SCAN-SSA and SCAN-RS
 `results/prim/wall_time_comparison.csv`; `summarize_prim_results.py` writes
 `results/prim/summary.json`. The UPMEM accuracy numbers of the paper come from
 here: 102/116 cycle intervals and 107/116 instruction intervals cover the
-measurement, and the midpoint MAPE is 34.8 % (tasklet sweep) and 23.6 % (DPU
+measurement, and the midpoint MAPE is 34.8 % (tasklet sweep) and 23.7 % (DPU
 sweep). The paper's Figure 3 is drawn from them with
 `draw_figs/scripts/plot_all_benchmark_cycle_midpoint.py --results-root pimsa_ir/results/prim`.
 
-Analysis time does not grow with the input: loop bodies are summed with
-`metrics.steady_sum`, which evaluates the first, second and last iteration and
-charges the middle ones like the second (checked at three more iterations,
-otherwise every iteration is visited). Its results equal full enumeration on
-all 116 settings. SCAN-RSS and SCAN-SSA still grow with the number of DPUs,
+Analysis time does not grow with the input: a loop counts as its first
+iteration times its trip count (`metrics.times`). Every iteration of a loop is
+alike: a difference between iterations is written as a data-dependent value
+(`any`) or as an average trip count (`For(average=True)`, TRNS), not as a branch
+on the loop variable. `check_uniform_loops.py` checks this on all 116 settings
+(every iteration of loops up to 1000 trips, three more of longer ones), and
+`check_prim_loops.py` checks that every IR loop count equals the toolchain's
+bound for its machine loop or lies within it (BS, MLP). SCAN-RSS and SCAN-SSA still grow with the number of DPUs,
 because every DPU has different arguments and is analyzed once.
 
 Timing: `run_prim_results.py` charges each setting its toolchain run
@@ -120,7 +123,7 @@ PIMSA_HBM_IR=../hbmpim_static/build/ir.json ../.venv/bin/python -m unittest -v t
 
 - The programs are written by hand from the vendor source. The stream comparison checks them mechanically, but the frontend does not yet lift `PIMKernel.cpp` (or PrIM C) to PIMSA-IR automatically.
 - PIMSA-IR has no lock or handshake construct, so contention (HST-L) and handshake serialization (SCAN) are not bounded.
-- Per-tasklet shares of a run-time-distributed domain (TRNS) cannot be constrained to sum to the domain; `prim/trns.py` has a prototype (`main_kernel2_domain`) that makes the traffic exact but no longer reproduces the stored instruction bound.
+- Per-tasklet shares of a run-time-distributed domain (TRNS) cannot be constrained to sum to the domain; `prim/trns.py` charges every tasklet the toolchain's amortized cap, so the traffic interval reaches down to step 2 only.
 - 8 B unit counts ignore DMA splits at 1 KiB wordline boundaries; this only shows for TRNS's unaligned 8 B accesses (the IR has no MRAM heap base address).
 - A new build configuration (BL, TYPE or tasklet count not analyzed before) needs one toolchain run, which needs the UPMEM SDK.
 - Callee costs are the toolchain's per-call bounds for the analyzed call arguments (full BS blocks in every PrIM setting); a callee whose cost depends on a runtime argument would need its bound as a function of that argument.

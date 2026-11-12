@@ -16,8 +16,9 @@ How a parallel region multiplies these comes from the architecture too:
   exec.parallel = "threads": every iteration runs its own instance, so
       everything is summed over the region variable.
 
-Both a symbolic pass (counts as formulas, trip counts as sympy sums) and a
-concrete pass (one instance, loops iterated) are provided.
+A loop contributes its body's counts at its first iteration times its trip
+count: every iteration of a loop is alike (see times()). Both a symbolic pass
+(counts as formulas) and a concrete pass (one instance) are provided.
 """
 from __future__ import annotations
 
@@ -28,36 +29,22 @@ import sympy as sp
 
 from ir import Assign, Barrier, For, If, Kernel, ParFor, Ref
 from kernels import arch_values
-from lower_cmd import crf_length, _first_region, ev
+from lower_cmd import crf_length, _first_region, ev, ev_count
 
 BOUNDARY = {("M", "R"): "mem2reg", ("R", "M"): "reg2mem", ("M", "B"): "mld", ("B", "M"): "mst",
             ("H", "R"): "host2reg", ("R", "H"): "reg2host", ("H", "M"): "hld", ("M", "H"): "hst",
             ("B", "R"): "bld", ("R", "B"): "bst"}
 
 
-def steady_sum(n, run):
-    """Sum of run(q) over q = 0..n-1 without visiting every iteration.
-
-    A PrIM loop differs from one iteration to the next only at its ends (the
-    first iteration, and the last one with its partial block), as the old
-    pipeline assumed when it charged every block alike. The middle iterations
-    are therefore taken equal to iteration 1, which is checked at three more
-    points; if any of them differs, every iteration is visited."""
-    if n <= 6:
-        out = collections.Counter()
-        for q in range(n):
-            out.update(run(q))
-        return out
-    first, mid, last = run(0), run(1), run(n - 1)
-    if all(run(q) == mid for q in (2, n // 2, n - 2)):
-        out = collections.Counter(first)
-        out.update({k: v * (n - 2) for k, v in mid.items()})
-        out.update(last)
-        return out
-    out = collections.Counter()
-    for q in range(n):
-        out.update(run(q))
-    return out
+def times(n, run):
+    """Counts of n iterations of a loop: the counts of its first iteration,
+    run(0), times n. Every iteration of a loop is alike (paper Sec. 4.1): a
+    difference between iterations is written in the program as a
+    data-dependent value (any) or as an average trip count, not as a branch on
+    the loop variable; check_uniform_loops.py checks this for the PrIM programs."""
+    if n <= 0:
+        return collections.Counter()
+    return collections.Counter({k: v * n for k, v in run(0).items()})
 
 
 def _stmt(s: Assign, tb, W, env=None):
@@ -105,15 +92,13 @@ def extract(kernel: Kernel, arch: dict, values: dict | None = None):
             elif isinstance(s, For):
                 if concrete:
                     lo, st = ev(s.lo, env), ev(s.step, env)
-                    add(out, steady_sum(ev(s.trips(), env),
-                                        lambda q: body_counts(s.body, {**env, s.var: lo + q * st})))
-                else:
-                    q = sp.Dummy("q", integer=True, nonnegative=True)
+                    add(out, times(ev_count(s.trips(), env),
+                                   lambda q: body_counts(s.body, {**env, s.var: lo + q * st})))
+                else:  # the body at the first iteration, times the trip count
                     inner = body_counts(s.body, env)
                     n = s.trips().subs(av)
                     for k, v in inner.items():
-                        v = sp.sympify(v).subs(s.var, s.lo + q * s.step).subs(av)
-                        out[k] += sp.summation(v, (q, 0, n - 1)) if q in v.free_symbols else v * n
+                        out[k] += sp.sympify(v).subs(s.var, s.lo).subs(av) * n
             elif isinstance(s, If):
                 if concrete:
                     add(out, body_counts(s.body if ev(s.cond, env) else s.orelse, env))

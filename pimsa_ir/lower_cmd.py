@@ -42,6 +42,21 @@ _FUNCS = {"floor": math.floor, "ceiling": math.ceil, "Min": min, "Max": max}
 _CACHE: dict = {}
 
 
+def ev_count(expr, env):
+    """Evaluate a trip count: an int, or an exact Fraction for an average count."""
+    try:
+        return ev(expr, env)
+    except ValueError as e:
+        if "is not an integer" not in str(e):
+            raise
+    from fractions import Fraction
+    e = sp.sympify(expr)
+    v = sp.nsimplify(e.subs({s: env[s] for s in e.free_symbols}))
+    if not v.is_Rational:
+        raise ValueError(f"{expr} = {v} is not rational")
+    return Fraction(int(v.p), int(v.q))
+
+
 def ev(expr, env) -> int:
     """Evaluate an integer index expression at a concrete environment."""
     if isinstance(expr, int):

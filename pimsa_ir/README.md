@@ -78,8 +78,8 @@ The 14 uncovered settings are all 16-tasklet runs of HST-L, SCAN-SSA and SCAN-RS
 
 `run_prim_results.py` runs the IR analysis on all 116 settings and writes
 `results/prim/<bench>/<bench>_cost_estimates.csv` (the column names of
-`draw_figs`, so its plotting scripts read them with `--results-root`);
-`summarize_prim_results.py` writes
+`draw_figs`, so its plotting scripts read them with `--results-root`) and
+`results/prim/wall_time_comparison.csv`; `summarize_prim_results.py` writes
 `results/prim/summary.json`. The UPMEM accuracy numbers of the paper come from
 here: 102/116 cycle intervals and 107/116 instruction intervals cover the
 measurement, and the midpoint MAPE is 34.8 % (tasklet sweep) and 23.6 % (DPU
@@ -93,8 +93,17 @@ otherwise every iteration is visited). Its results equal full enumeration on
 all 116 settings. SCAN-RSS and SCAN-SSA still grow with the number of DPUs,
 because every DPU has different arguments and is analyzed once.
 
-These scripts record no timing. The paper's analysis-time numbers come from
-`draw_figs` (the toolchain's `analysis_wall_seconds` against uPIMulator).
+Timing: `run_prim_results.py` charges each setting its toolchain run
+(`analysis_wall_seconds` from `inst_count_analyzer`) plus the IR analysis
+(median of `--repeat` runs), and writes `results/prim/wall_time_comparison.csv`;
+`summarize_prim_results.py` then adds the speedups to `summary.json`. Run both
+on the machine that timed the toolchain and uPIMulator, after
+`draw_figs/scripts/summarize_upimulator_wall_time.py`, so that all three
+timings come from one machine; this regenerates every file in `results/prim`.
+
+The checked-in `results/prim` holds accuracy results only: it was generated
+without timing, and the paper's analysis-time numbers still come from
+`draw_figs` (the toolchain alone against uPIMulator).
 
 ### UPMEM per-body costs
 

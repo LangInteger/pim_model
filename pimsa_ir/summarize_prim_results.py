@@ -1,7 +1,8 @@
 """Summary numbers of the UPMEM evaluation from results/prim (run_prim_results.py).
 
-Prints coverage, midpoint accuracy per sweep, and interval widths, and
-writes them to results/prim/summary.json. No timing.
+Prints coverage, midpoint accuracy per sweep, interval widths, and, when
+results/prim/wall_time_comparison.csv exists, analysis-time speedups, and writes
+them to results/prim/summary.json.
 
 Usage: ../.venv/bin/python summarize_prim_results.py
 """
@@ -9,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import statistics
 from pathlib import Path
 
@@ -19,6 +21,32 @@ OUT = HERE / "results/prim"
 def rows(path):
     with open(path) as f:
         return list(csv.DictReader(f))
+
+
+def gmean(xs):
+    return math.exp(sum(math.log(x) for x in xs) / len(xs))
+
+
+def timing():
+    path = OUT / "wall_time_comparison.csv"
+    if not path.exists():
+        return {}
+    cmp = rows(path)
+    sp = [float(r["upimulator_over_pimsa"]) for r in cmp]
+    return {
+        "timed_settings": len(cmp), "faster_settings": sum(x > 1 for x in sp),
+        "slower": [(r["benchmark"], r["experiment"], r["num_dpus"], r["num_tasklets"]) for r in cmp
+                   if float(r["upimulator_over_pimsa"]) < 1],
+        "speedup_gmean": gmean(sp), "speedup_median": statistics.median(sp),
+        "speedup_min": min(sp), "speedup_max": max(sp),
+        "speedup_gmean_by_sweep": {s: gmean([float(r["upimulator_over_pimsa"]) for r in cmp
+                                             if r["experiment"] == s])
+                                   for s in ("tasklet_sweep", "dpu_sweep")},
+        "total_pimsa_seconds": sum(float(r["pimsa_wall_seconds"]) for r in cmp),
+        "total_ir_seconds": sum(float(r["ir_analysis_seconds"]) for r in cmp),
+        "total_toolchain_seconds": sum(float(r["toolchain_seconds"]) for r in cmp),
+        "total_upimulator_seconds": sum(float(r["upimulator_wall_seconds"]) for r in cmp),
+    }
 
 
 def main():
@@ -42,6 +70,7 @@ def main():
         "instructions_with_measurement": len(ins), "instructions_covered": ins_cov,
         "instructions_coverage_pct": 100 * ins_cov / len(ins), "uncovered_benchmarks": uncovered,
         "midpoint_mape_pct": mape, "median_normalized_width": width,
+        **timing(),
     }
     (OUT / "summary.json").write_text(json.dumps(out, indent=2) + "\n")
     print(json.dumps(out, indent=2))

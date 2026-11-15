@@ -11,6 +11,7 @@ Static analysis runs on a single IR, the paper's programming model (Sec. 3.2). T
 | `metrics.py` | metric extraction, shared by both targets: bytes, transfers and transactions per boundary, primitive operations |
 | `lower_cmd.py` | lowering to DRAM column commands for command-triggered, lockstep targets (HBM-PIM) |
 | `analyze.py` | HBM-PIM analysis on PIMSA-IR alone: metrics, constraint-evaluation cycles, closed form |
+| `hbm_bandwidth_model.py` | HBM-PIM under the bandwidth-based cost model (bytes / bandwidth, from the IR metrics) vs the DRAM-timing-based closed form and PIMSimulator; writes `results/hbm/bandwidth_vs_dram_timing.csv` |
 | `upmem_cost.py` | UPMEM instruction and cycle bounds: IR trip counts and MRAM traffic, with per-body costs from the toolchain's stored machine code |
 | `arch/upmem.json` | UPMEM instance; the HBM-PIM instance is `../hbmpim_static/arch/hbm2_pim.json` (`exec` section) |
 

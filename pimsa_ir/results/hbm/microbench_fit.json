@@ -1,0 +1,33 @@
+{
+  "n_transfers": 256,
+  "k_range": [
+    1,
+    32
+  ],
+  "fit": {
+    "MEM_RD": {
+      "alpha_cycles": 34.698,
+      "beta_cycles_per_byte": 0.016356,
+      "bandwidth_bytes_per_cycle": 61.138,
+      "max_rel_residual": 0.2371
+    },
+    "MEM_WR": {
+      "alpha_cycles": 50.353,
+      "beta_cycles_per_byte": 0.017081,
+      "bandwidth_bytes_per_cycle": 58.545,
+      "max_rel_residual": 0.0095
+    },
+    "BUS_RD": {
+      "alpha_cycles": 34.637,
+      "beta_cycles_per_byte": 0.130942,
+      "bandwidth_bytes_per_cycle": 7.637,
+      "max_rel_residual": 0.2375
+    },
+    "BUS_WR": {
+      "alpha_cycles": 50.321,
+      "beta_cycles_per_byte": 0.136648,
+      "bandwidth_bytes_per_cycle": 7.318,
+      "max_rel_residual": 0.012
+    }
+  }
+}

@@ -16,6 +16,7 @@ if [ "${VANILLA:-0}" = 1 ]; then
   cp "$HERE/PIMSATime.cpp" "$OUT/src/tests/PIMSATime.cpp"
 else
   cp "$HERE/PIMSASweep.cpp" "$OUT/src/tests/PIMSASweep.cpp"
+  cp "$HERE/PIMSAMicro.cpp" "$OUT/src/tests/PIMSAMicro.cpp"   # bandwidth microbenchmark
   # Bookkeeping-only instrumentation (counts + stall attribution); timing untouched.
   python3 "$HERE/instrument.py" "$OUT/src/MemoryController.cpp"
 fi

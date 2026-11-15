@@ -250,10 +250,10 @@ def phase_bound(kernel, dbg, values) -> dict:
 # ----------------------------------------------------------------------------
 def cost_parameters(arch=None) -> dict:
     """The UPMEM cost parameters of the architecture instance: MRAM DMA
-    bandwidth BW_1 and fixed costs t_read / t_write (M), the same-tasklet issue
+    bandwidth BW_2 (edge from a bank to its WRAM) and fixed costs t_read / t_write (M), the same-tasklet issue
     distance D (P) and the compute stall fraction (cost)."""
     a = arch or ARCH
-    return {"bandwidth": a["M"]["BW"]["1"]["value"], "read_latency": a["M"]["t_read"]["value"],
+    return {"bandwidth": a["M"]["BW"]["2"]["value"], "read_latency": a["M"]["t_read"]["value"],
             "write_latency": a["M"]["t_write"]["value"], "issue_distance": a["P"]["D"]["value"],
             "stall_rate": a["cost"]["stall_fraction"]["value"]}
 

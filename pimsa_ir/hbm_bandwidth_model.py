@@ -52,6 +52,7 @@ sys.path[:0] = [str(HERE), str(HERE.parent / "hbmpim_static")]
 import sympy as sp  # noqa: E402
 
 import analyze as AN  # noqa: E402
+import archinfo as A  # noqa: E402
 import kernels as K  # noqa: E402
 import metrics as MX  # noqa: E402
 
@@ -63,7 +64,7 @@ MICRO_FIT = HERE / "results/hbm/microbench_fit.json"
 def bandwidths(arch):
     """(BW_mem, BW_host) in bytes per cycle, from the architecture instance."""
     col = arch["M"]["bytes_per_column_access"]["value"]
-    p = arch["P"]["P_per_channel"]["value"]
+    p = A.pus_per_region(arch)
     t = arch["timing_cycles"]
     return p * col / t["tCCD_L"]["value"], col / t["tCCD_S"]["value"]
 
@@ -72,7 +73,7 @@ def estimate(kname, arch, values, n_act):
     """Bandwidth-based cycles and the volumes it uses, at one configuration."""
     m = {k: int(sp.sympify(v).subs(values)) for k, v in MX.hbm_counts(K.KERNELS[kname](), arch).items()}
     col = arch["M"]["bytes_per_column_access"]["value"]
-    p = arch["P"]["P_per_channel"]["value"]
+    p = A.pus_per_region(arch)
     v_mem = p * col * (m["bank2pu"] + m["pu2bank"])
     v_host = col * (m["host2pu"] + m["pu2host"])
     bw_mem, bw_host = bandwidths(arch)

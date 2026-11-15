@@ -1,26 +1,27 @@
 {
-  "_doc": "PIMSA architecture instance A = <M, B, P> for UPMEM as simulated by uPIMulator, following the paper's case-study instantiation (Sec. case study, 'Instantiation for UPMEM'). Per-loop-body instruction costs are not listed: they come from the target toolchain (dpu-clang, inst_count_analyzer), looked up by the source anchors of the IR loops. Fields with value null are part of the model but not used by the UPMEM analysis; the 'src' of each says why.",
+  "_doc": "PIMSA architecture instance A = <M, B, P, C> for UPMEM as simulated by uPIMulator, following the paper (Sec. 3.1, Table 2), with the timing parameters of the bandwidth-based cost model. Per-loop-body instruction costs are not listed: they come from the target toolchain (dpu-clang, inst_count_analyzer), looked up by the source anchors of the IR loops. Fields with value null are part of the model but not used by the UPMEM analysis; the 'src' of each says why.",
   "name": "UPMEM DPU (uPIMulator)",
   "M": {
-    "L": {"value": 1, "src": "paper: root = the shared channel/rank; leaves = DPU-local MRAM partitions. The 8-DPU chip layer is not modeled: it adds no separate bandwidth boundary"},
-    "levels": ["rank", "dpu"],
-    "I1_dpus": {"value": 64, "src": "uPIMulator: one channel, one rank, 64 DPUs. A deployment parameter: the DPU sweeps use 1..64 and the analysis is per DPU"},
+    "L": {"value": 2, "src": "paper: root = the shared channel/rank; level 1 = the MRAM banks; level 2 = one WRAM node below each bank. The 8-DPU chip layer is not modeled: it adds no separate bandwidth boundary"},
+    "L_D": {"value": 1, "src": "the MRAM banks are level 1"},
+    "levels": ["rank", "bank", "wram"],
+    "I": {"value": [1, 64, 1], "src": "uPIMulator: one channel, one rank, 64 DPUs (a deployment parameter: the DPU sweeps use 1..64 and the analysis is per DPU); one WRAM per bank"},
     "mram_bytes": {"value": 67108864, "src": "UPMEM SDK: 64 MB MRAM per DPU"},
     "BW": {
       "0": {"value": null, "unit": "bytes/cycle", "src": "host-PIM transfer: not in the kernel-only cycle count"},
-      "1": {"value": 2, "unit": "bytes/cycle", "src": "PrIM (Gomez-Luna et al. 2022): MRAM DMA of s bytes costs alpha + beta*s, beta = 0.5 cycles/byte"}
+      "2": {"value": 2, "unit": "bytes/cycle", "src": "edge from a bank to its WRAM node (the DMA). PrIM (Gomez-Luna et al. 2022): MRAM DMA of s bytes costs alpha + beta*s, beta = 0.5 cycles/byte"}
     },
     "t_read": {"value": 77, "unit": "cycles", "src": "PrIM: fixed cost alpha of one mram_read"},
     "t_write": {"value": 61, "unit": "cycles", "src": "PrIM: fixed cost alpha of one mram_write"}
   },
   "B": {
-    "j": {"value": 1, "src": "WRAM is attached to each leaf (DPU) node"},
+    "j": {"value": 2, "src": "WRAM is the node below each bank"},
     "B": {"value": 1, "src": "one buffer per DPU: the whole WRAM, buffer id b = 0"},
     "BSize": {"value": 65536, "src": "UPMEM SDK: 64 KB WRAM per DPU; a software-managed scratchpad, so no miss cost"}
   },
   "P": {
-    "k": {"value": 1, "src": "one DPU per leaf memory node"},
-    "P": {"value": 1, "src": "one DPU per leaf memory node"},
+    "k": {"value": 2, "src": "the DPU is attached to the WRAM node of its bank"},
+    "P": {"value": 1, "src": "one DPU per WRAM node"},
     "W": {"value": 1, "src": "DPU ISA: 32-bit scalar RISC pipeline, no SIMD lanes"},
     "D": {"value": 11, "src": "14-stage pipeline whose last three stages overlap the next instruction of the same tasklet: same-tasklet issue distance 11 (revolver scheduling)"},
     "t_op": {"value": 1, "unit": "cycles", "src": "one machine instruction issues per cycle when the pipeline is full"},
@@ -28,14 +29,18 @@
     "R": {"value": null, "src": "not used: register reads and writes are inside the machine instruction count"},
     "max_tasklets": {"value": 24, "src": "UPMEM SDK: NR_TASKLETS <= 24"}
   },
+  "C": {
+    "_doc": "PU control region: the subtree of one bank, with its one DPU (P_C = 1).",
+    "k_C": {"value": 1, "src": "each bank is reached only through its DPU's DMA engine"},
+    "issuer": {"value": "PU", "src": "the DPU issues its own MRAM accesses (DMA); each tasklet fetches and executes its own instruction stream"},
+    "coord": {"value": "indep", "src": "a parallel region over tasklets: each tasklet runs its own instance (interleaved by the revolver pipeline)"}
+  },
   "cost": {
     "_doc": "Cost-model parameters of the UPMEM composition (paper: rho_pipe), not hardware properties.",
     "stall_fraction": {"value": 0.1, "src": "paper: conservative non-memory pipeline stall fraction for the compute upper bound, rho_pipe+ = max(D/T, 1) / (1 - 0.1)"}
   },
   "exec": {
     "_doc": "How PIMSA-IR runs on this target.",
-    "trigger": {"value": "self", "src": "each tasklet fetches and executes its own instruction stream"},
-    "parallel": {"value": "threads", "src": "a parallel region over tasklets: each tasklet runs its own instance (interleaved by the revolver pipeline)"},
     "memory_operands": {"value": false, "src": "instructions operate on WRAM and registers; MRAM is reached only by DMA (mram_read / mram_write)"},
     "transaction_bytes": {"value": 8, "src": "MRAM DMA moves 8 B units (mram_read/mram_write sizes are multiples of 8); uPIMulator counts MRAM reads and writes in these units"},
     "cost": {"value": "toolchain", "src": "per-loop-body machine instruction counts E_b from dpu-clang (pim_model/inst_count_analyzer); trip counts n_b from PIMSA-IR"}

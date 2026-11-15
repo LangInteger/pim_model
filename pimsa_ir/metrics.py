@@ -10,10 +10,10 @@ on UPMEM). Computation is counted in target primitives: a slice operation of
 n elements is ceil(n / W) primitive operations, W from the architecture.
 
 How a parallel region multiplies these comes from the architecture too:
-  exec.parallel = "lockstep": one command stream serves all P blocks, so
+  C.coord = "lockstep": one command stream serves all P_C blocks, so
       transfers and beats are counted once per region execution while bytes
       and primitive operations are multiplied by the region's extent;
-  exec.parallel = "threads": every iteration runs its own instance, so
+  C.coord = "indep": every iteration runs its own instance, so
       everything is summed over the region variable.
 
 A loop contributes its body's counts at its first iteration times its trip
@@ -27,6 +27,7 @@ import math
 
 import sympy as sp
 
+import archinfo as A
 from ir import Assign, Barrier, For, If, Kernel, ParFor, Ref
 from kernels import arch_values
 from lower_cmd import crf_length, _first_region, ev, ev_count
@@ -96,7 +97,7 @@ def extract(kernel: Kernel, arch: dict, values: dict | None = None):
     ex = arch["exec"]
     tb = ex["transaction_bytes"]["value"]
     W = arch["P"]["W"]["value"]
-    lockstep = ex["parallel"]["value"] == "lockstep"
+    lockstep = A.coord(arch) == "lockstep"
     concrete = values is not None
     av = arch_values(arch)
     env0 = {**av, **(values or {})}
@@ -157,7 +158,7 @@ def protocol_counts(arch: dict, kernel: Kernel, regions):
     """Commands and barriers of the architecture's launch protocol, by the
     boundary class each template declares."""
     ex, m = arch["exec"], arch["M"]
-    nbanks = m["I2_banks"]["value"]
+    nbanks = A.banks_per_region(arch)
     out = collections.Counter()
     reg = _first_region(kernel.body, arch_values(arch))
     crf_bursts = math.ceil(crf_length(*reg) / ex["crf"]["slots_per_burst"]) if reg else 0

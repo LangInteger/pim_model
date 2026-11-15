@@ -1,19 +1,22 @@
 {
-  "_doc": "PIMSA architecture instance A = <M, B, P> for Samsung HBM-PIM as modeled by PIMSimulator. Every value cites its source in papers/pim/artifacts/Samsung_PIMSimulator.",
+  "_doc": "PIMSA architecture instance A = <M, B, P, C> for Samsung HBM-PIM as modeled by PIMSimulator, following the paper (Sec. 3.1, Table 2), with the timing parameters of the cost models. Every value cites its source in papers/pim/artifacts/Samsung_PIMSimulator.",
   "name": "HBM2-PIM (PIMSimulator, pseudo-channel mode)",
   "M": {
-    "L": 2,
-    "levels": [
-      "pseudo-channel",
-      "bank"
-    ],
-    "I1_channels": {
-      "value": 64,
-      "src": "system_hbm_64ch.ini NUM_CHANS"
+    "L": 4,
+    "L_D": {
+      "value": 3,
+      "src": "paper: the banks are level 3; the row buffer of each bank is the node below it (level 4)"
     },
-    "I2_banks": {
-      "value": 16,
-      "src": "ini/HBM2_samsung_2M_16B_x64.ini NUM_BANKS"
+    "levels": [
+      "device",
+      "pseudo-channel",
+      "bank pair",
+      "bank",
+      "row buffer"
+    ],
+    "I": {
+      "value": [1, 64, 8, 2, 1],
+      "src": "|I_l| per level: 64 pseudo-channels (system_hbm_64ch.ini NUM_CHANS); 8 bank pairs x 2 banks = 16 banks per pseudo-channel (ini/HBM2_samsung_2M_16B_x64.ini NUM_BANKS, one PIM block per bank pair, ini NUM_PIM_BLOCKS = 8); one row buffer per bank"
     },
     "bank_groups": {
       "value": 4,
@@ -63,16 +66,19 @@
     }
   },
   "B": {
-    "_doc": "No software-managed SRAM. The open DRAM row buffer is the modeled buffer: j = L (bank), B = 1, BSize = one row.",
-    "j": 2,
+    "_doc": "No software-managed SRAM. The open DRAM row buffer is the modeled buffer, one node below each bank: j = L = 4, B = 1, BSize = one row.",
+    "j": 4,
     "B": 1,
     "BSize_bytes": 1024
   },
   "P": {
-    "k": "pseudo-channel (level 1): P PIM blocks per pseudo-channel, each serving one bank pair, which the program addresses as banks below it",
-    "P_per_channel": {
-      "value": 8,
-      "src": "ini NUM_PIM_BLOCKS"
+    "k": {
+      "value": 2,
+      "src": "one PIM block per bank pair (ini NUM_PIM_BLOCKS = 8 per pseudo-channel of 16 banks)"
+    },
+    "P": {
+      "value": 1,
+      "src": "one PIM block per bank-pair node"
     },
     "W": {
       "value": 16,
@@ -81,20 +87,26 @@
     "ESize": 2,
     "R": {
       "value": 16,
-      "src": "PIMKernel.h num_grfA_ = num_grfB_ = 8"
+      "src": "PIMKernel.h num_grfA_ = num_grfB_ = 8: two register files of 8 entries, each paired with one bank of the pair"
+    }
+  },
+  "C": {
+    "_doc": "PU control region: the subtree of one pseudo-channel, with the P_C = P * |I_2| = 8 PIM blocks of its bank pairs.",
+    "k_C": {
+      "value": 1,
+      "src": "each pseudo-channel has its own memory controller and command bus (system_hbm_64ch.ini), which issue every access to its banks"
     },
-    "execution": "command-triggered: each all-bank column command in PIM mode advances the CRF and drives all PIM blocks of the channel in lockstep"
+    "issuer": {
+      "value": "controller",
+      "src": "PIMRank::doPIM: every data-row column command in HAB_PIM mode executes one CRF instruction on all PIM blocks of the channel; the PIM blocks issue no access of their own"
+    },
+    "coord": {
+      "value": "lockstep",
+      "src": "all-bank mode (ABMR): one column command is broadcast to the PIM blocks of every bank pair; a parallel region over PIM blocks is one command stream"
+    }
   },
   "exec": {
     "_doc": "How PIMSA-IR runs on this target, read by metric extraction and by the command lowering (pim_model/pimsa_ir). Program statements say what moves where; these entries say which DRAM commands that becomes.",
-    "trigger": {
-      "value": "command",
-      "src": "PIMRank::doPIM: every data-row column command in HAB_PIM mode executes one CRF instruction on all PIM blocks of the channel"
-    },
-    "parallel": {
-      "value": "lockstep",
-      "src": "all-bank mode (ABMR): one column command is broadcast to the PIM blocks of every bank pair; a parallel region over PIM blocks is one command stream"
-    },
     "memory_operands": {
       "value": true,
       "src": "CRF operands EVEN_BANK/ODD_BANK: an instruction reads or writes the bank column addressed by the triggering command"

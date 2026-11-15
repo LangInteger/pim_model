@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import sympy as sp
 
+import archinfo as A
 from ir import Array, Assign, Barrier, For, Kernel, ParFor, Ref
 
 L, M, N, B, C = sp.symbols("L M N B C", integer=True, positive=True)
@@ -36,9 +37,8 @@ PIMK = "Samsung_PIMSimulator/src/tests/PIMKernel.cpp"
 
 def arch_values(arch: dict) -> dict:
     """Architecture symbols that programs use, from the architecture instance."""
-    if "P" in arch and "P_per_channel" in arch["P"]:  # HBM-PIM
-        p = arch["P"]["P_per_channel"]["value"]
-        return {P: p, NB: arch["M"]["I2_banks"]["value"] // p, G: arch["P"]["R"]["value"] // 2,
+    if A.issuer(arch) == "controller":  # HBM-PIM: R = 2 register files of G entries
+        return {P: A.pus_per_region(arch), NB: A.banks_per_pu(arch), G: arch["P"]["R"]["value"] // 2,
                 W: arch["P"]["W"]["value"]}
     return {W: arch["P"]["W"]["value"]}  # UPMEM (prim/): BS and E come from the build
 

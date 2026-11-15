@@ -207,7 +207,7 @@ class Interp:
         # concrete-pass state: per-PU address stream split into barrier groups
         self.groups = [[]]
         self.cmds = []  # channel-0 column-command stream, in program order
-        self.banks_per_bg = (arch["M"]["I2_banks"]["value"] // arch["M"]["bank_groups"]["value"])
+        self.banks_per_bg = banks_per_region(arch) // arch["M"]["bank_groups"]["value"]
         self.counts = {k: 0 for k in Metrics.KEYS}
         self.counts.update(w2r=0, r2w=0, data_outside_all_bank=0)
         self.last_dir = None
@@ -609,11 +609,29 @@ def timing(arch):
     return {k: v["value"] for k, v in arch["timing_cycles"].items()}
 
 
+def _nodes_below(arch, top, level):
+    """Number of level-`level` nodes in the subtree of one level-`top` node."""
+    n = 1
+    for s in arch["M"]["I"]["value"][top + 1:level + 1]:
+        n *= s
+    return n
+
+
+def banks_per_region(arch):
+    """Banks (level L_D) in one PU control region (level k_C): 16 per pseudo-channel."""
+    return _nodes_below(arch, arch["C"]["k_C"]["value"], arch["M"]["L_D"]["value"])
+
+
+def pus_per_region(arch):
+    """P_C = P * prod_{l=k_C+1}^{k} |I_l|: 8 PIM blocks per pseudo-channel."""
+    return arch["P"]["P"]["value"] * _nodes_below(arch, arch["C"]["k_C"]["value"], arch["P"]["k"]["value"])
+
+
 def estimate(arch, cmds):
     m = arch["M"]
     cycles, breakdown, counts = ctl.schedule(
-        cmds, timing(arch), m["ranks_per_channel"]["value"], m["I2_banks"]["value"],
-        m["I2_banks"]["value"] // m["bank_groups"]["value"], m["command_queue_depth"]["value"])
+        cmds, timing(arch), m["ranks_per_channel"]["value"], banks_per_region(arch),
+        banks_per_region(arch) // m["bank_groups"]["value"], m["command_queue_depth"]["value"])
     return {"total": cycles, "by_constraint": breakdown, "commands": counts}
 
 
@@ -665,7 +683,7 @@ def metric_vector(arch, m: dict, act: int) -> dict:
     command (command-triggered execution), so compute adds no separate term.
     """
     col = arch["M"]["bytes_per_column_access"]["value"]
-    p = arch["P"]["P_per_channel"]["value"]
+    p = pus_per_region(arch)
     n_mem = m["bank2pu"] + m["pu2bank"]
     n_host = m["host2pu"] + m["pu2host"]
     n_col = m["rd"] + m["wr"]

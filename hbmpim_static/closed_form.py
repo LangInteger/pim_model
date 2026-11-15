@@ -64,8 +64,8 @@ def nominal(t: dict) -> dict:
 
 def _sched_args(arch):
     m = arch["M"]
-    return (m["ranks_per_channel"]["value"], m["I2_banks"]["value"],
-            m["I2_banks"]["value"] // m["bank_groups"]["value"], m["command_queue_depth"]["value"])
+    return (m["ranks_per_channel"]["value"], P.banks_per_region(arch),
+            P.banks_per_region(arch) // m["bank_groups"]["value"], m["command_queue_depth"]["value"])
 
 
 def critical_path(arch, cmds):

@@ -1,7 +1,7 @@
 """Lowering of PIMSA-IR to a DRAM column-command stream, for targets whose
-architecture instance says computation is command-triggered (exec.trigger =
-"command") and parallel regions run in lockstep (exec.parallel = "lockstep"),
-i.e. HBM-PIM.
+architecture instance says the memory controller is the access issuer of a
+PU control region (C.issuer = "controller") and parallel regions run in
+lockstep (C.coord = "lockstep"), i.e. HBM-PIM.
 
 Everything target-specific is read from the architecture instance:
   - a statement with a memory operand becomes one column command per
@@ -32,6 +32,7 @@ from pathlib import Path
 
 import sympy as sp
 
+import archinfo as A
 from ir import Assign, Barrier, For, If, Kernel, ParFor, Ref
 from kernels import arch_values
 
@@ -142,11 +143,11 @@ def _first_region(body, env):
 
 def lower(kernel: Kernel, arch: dict, values: dict) -> list:
     ex, m = arch["exec"], arch["M"]
-    if ex["trigger"]["value"] != "command" or ex["parallel"]["value"] != "lockstep":
-        raise ValueError("lower_cmd handles command-triggered, lockstep targets only")
+    if A.issuer(arch) != "controller" or A.coord(arch) != "lockstep":
+        raise ValueError("lower_cmd handles regions whose access issuer is the controller, in lockstep")
     rows = {k: v["value"] for k, v in m["pim_rows"].items() if isinstance(v, dict) and "value" in v}
     nbg = m["bank_groups"]["value"]
-    bpg = m["I2_banks"]["value"] // nbg
+    bpg = A.banks_per_region(arch) // nbg
     cols = m["burst_columns_per_row"]["value"]
     tb = ex["transaction_bytes"]["value"]
     # A command-driven PU takes one W-wide operand per column access (paper,
@@ -228,7 +229,7 @@ def lower(kernel: Kernel, arch: dict, values: dict) -> list:
             elif isinstance(s, If):
                 run(s.body if ev(s.cond, env) else s.orelse, env, in_region)
             elif isinstance(s, ParFor):
-                if ev(s.extent, env) != arch["P"]["P_per_channel"]["value"]:
+                if ev(s.extent, env) != A.pus_per_region(arch):
                     raise ValueError("lockstep region must span the PU's PIM blocks")
                 protocol("region_enter")
                 run(s.body, env, True)  # one stream for all blocks: s.var stays unbound

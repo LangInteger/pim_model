@@ -38,14 +38,15 @@ for parallel t < NT:
     M[B][idx/E : +n] ← B[cache_B][0:n]
 ```
 
-What 𝒜 decides (`exec` in the arch JSON):
+What 𝒜 decides (`C` and `exec` in the arch JSON):
 
 | | UPMEM | HBM-PIM |
 | --- | --- | --- |
 | W | 1 | 16 × fp16 |
 | memory operands in computation | no (DMA into WRAM first) | yes (RD feeds the PIM unit) |
-| `for parallel` | threads (tasklets) | lockstep (PIM blocks, one broadcast command stream) |
-| trigger | self (instruction fetch) | command (each column command advances the CRF) |
+| PU control region (`C.k_C`) | one bank with its DPU | one pseudo-channel with its 8 PIM blocks |
+| access issuer (`C.issuer`) | PU (the DPU's DMA) | controller (each column command advances the CRF) |
+| `for parallel` (`C.coord`) | indep (tasklets) | lockstep (PIM blocks, one broadcast command stream) |
 | transaction | 8 B DMA unit | 32 B column command |
 | launch | — | park, mode switches, CRF program (`exec.protocol`) |
 | per-loop-body cost | toolchain: dpu-clang instruction counts E_b, looked up by the loops' `src` anchors | controller rules: critical cycle of one period |

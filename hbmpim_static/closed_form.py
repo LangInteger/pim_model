@@ -160,14 +160,34 @@ def formula(ir, arch, kernel, numeric=True):
     d = derive(ir, arch, kernel)
     nom = nominal(P.timing(arch))
     e = lambda c: _expr(c, numeric, nom)
+    n = trip_counts(ir, kernel)
+    if kernel == "GEMV":
+        R = n["outer"]
+        return (d["const"] + e(d["first"]) + (R - 1) * e(d["outer"])
+                + R * (n["odd_tiles"] * e(d["odd_tile"])
+                       + (n["even_tiles"] - 1) * e(d["even_tile"])))
+    return d["const"] + e(d["first"]) + (n["tiles"] - 1) * e(d["tile"])
+
+
+def trip_counts(ir, kernel):
+    """The loop counts the closed form multiplies its periods by. With the
+    PIMSA-IR as stream source they are the trip counts of the program's loops
+    (pimsa_ir metrics.loop_trips); for the vendor frontend IR they are restated
+    from PIMKernel.cpp."""
+    if hasattr(ir, "trips"):
+        t = ir.trips(kernel)
+        if kernel == "GEMV":  # loops j, bt, i2 (even tiles), c, i2 (odd tiles), c
+            (j, nj), (bt, nb), (i0, n0), _, (i1, n1), _ = t
+            assert (j, bt, i0, i1) == ("j", "bt", "i2", "i2"), t
+            return {"outer": nj * nb, "even_tiles": n0, "odd_tiles": n1}
+        (i, ni), _ = t  # loops i (tiles), b (banks of the pair)
+        assert i == "i", t
+        return {"tiles": ni}
     if kernel == "GEMV":
         n_in = sp.ceiling(P.N / 128)
-        R = P.BT * sp.ceiling(P.M / (64 * P.C))
-        return (d["const"] + e(d["first"]) + (R - 1) * e(d["outer"])
-                + R * (sp.floor(n_in / 2) * e(d["odd_tile"])
-                       + (sp.ceiling(n_in / 2) - 1) * e(d["even_tile"])))
-    n_t = sp.floor(P.BT * sp.ceiling(P.L / 16) / (128 * P.C))
-    return d["const"] + e(d["first"]) + (n_t - 1) * e(d["tile"])
+        return {"outer": P.BT * sp.ceiling(P.M / (64 * P.C)),
+                "even_tiles": sp.ceiling(n_in / 2), "odd_tiles": sp.floor(n_in / 2)}
+    return {"tiles": sp.floor(P.BT * sp.ceiling(P.L / 16) / (128 * P.C))}
 
 
 def refreshes(arch, T0, tail):

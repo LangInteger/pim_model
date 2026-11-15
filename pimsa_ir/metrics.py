@@ -47,6 +47,29 @@ def times(n, run):
     return collections.Counter({k: v * n for k, v in run(0).items()})
 
 
+def loop_trips(kernel: Kernel, arch: dict) -> list:
+    """Trip counts of the kernel's sequential loops, in program order, as
+    (loop variable name, symbolic trip count) with the architecture values
+    substituted. The closed-form cost of a command-driven target is a formula
+    in these counts (hbmpim_static/closed_form.py)."""
+    av = arch_values(arch)
+    out = []
+
+    def walk(body):
+        for s in body:
+            if isinstance(s, For):
+                out.append((str(s.var), sp.sympify(s.trips()).subs(av)))
+                walk(s.body)
+            elif isinstance(s, ParFor):
+                walk(s.body)
+            elif isinstance(s, If):
+                walk(s.body)
+                walk(s.orelse)
+
+    walk(kernel.body)
+    return out
+
+
 def _stmt(s: Assign, tb, W, env=None):
     """Counts for one execution of s. With env, numbers; else expressions."""
     val = (lambda e: ev(e, env)) if env is not None else sp.sympify

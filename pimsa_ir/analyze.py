@@ -40,6 +40,13 @@ class Stream:
     def __call__(self, kernel, vals):
         return LC.lower(K.KERNELS[kernel](), self.arch, {_TO_K[k]: int(v) for k, v in vals.items()})
 
+    def trips(self, kernel):
+        """Loop trip counts of the PIMSA-IR program (metrics.loop_trips), in
+        program order, in the hbmpim_static symbols."""
+        to_p = {v: k for k, v in _TO_K.items()}
+        return [(v, sp.sympify(n).subs(to_p, simultaneous=True))
+                for v, n in MX.loop_trips(K.KERNELS[kernel](), self.arch)]
+
     def __str__(self):
         return "pimsa-ir"
 

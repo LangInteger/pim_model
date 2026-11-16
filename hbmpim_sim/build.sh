@@ -27,6 +27,6 @@ cd "$OUT"
 sed -i.bak \
   -e "s|LIBPATH=\['.'\]|LIBPATH=['.','$PREFIX/lib']|" \
   -e "s|CPPPATH=\[base_path\[\"lib\"\], base_path\[\"source\"\], base_path\[\"tools\"\]\]|CPPPATH=[base_path['lib'], base_path['source'], base_path['tools'], '$PREFIX/include']|" \
-  -e "s|-std=c++14|-std=c++17|g" Sconstruct
+  -e "s|-std=c++14|-std=c++17 -include cstdint -include iterator|g" Sconstruct
 scons -j8 NO_LIBRARY=1 >/dev/null
 echo "built $OUT/sim"

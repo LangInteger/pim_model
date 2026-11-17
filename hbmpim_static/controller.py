@@ -9,7 +9,8 @@ data. Its only inputs are the command stream, the architecture's timing
 parameters, and the controller's issue rules. Every delay is either a timing
 parameter of the device ini or a derived delay of Configuration.h, and every
 rule below cites the PIMSimulator source line that enforces it (paths
-relative to papers/pim/artifacts/Samsung_PIMSimulator/src).
+relative to the src/ directory of Samsung PIMSimulator,
+https://github.com/SAITPublic/PIMSimulator).
 
 Constraint table (who waits on whom, and for how long):
 

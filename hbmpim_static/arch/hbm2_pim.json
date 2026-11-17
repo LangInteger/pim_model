@@ -1,5 +1,5 @@
 {
-  "_doc": "PIMSA architecture instance A = <M, B, P, C> for Samsung HBM-PIM as modeled by PIMSimulator, following the paper (Sec. 3.1, Table 2), with the timing parameters of the cost models. Every value cites its source in papers/pim/artifacts/Samsung_PIMSimulator.",
+  "_doc": "PIMSA architecture instance A = <M, B, P, C> for Samsung HBM-PIM as modeled by PIMSimulator, following the paper (Sec. 3.1, Table 2), with the timing parameters of the cost models. Every value cites its source in Samsung PIMSimulator (https://github.com/SAITPublic/PIMSimulator).",
   "name": "HBM2-PIM (PIMSimulator, pseudo-channel mode)",
   "M": {
     "L": 4,

@@ -1,12 +1,7 @@
-# PIMSA static analysis for HBM-PIM (plan A)
+# PIMSA static analysis for HBM-PIM
 
-Overview, with a worked GEMV example: dissertation repo,
-`manuscripts/pimsa/case_studies/hbmpim/OVERVIEW_2026-11-06.md` (Chinese:
-`OVERVIEW_2026-11-06.zh.md`).
-
-Applies the PIMSA method (manuscripts/pimsa: architecture model, metric
-extraction, cost model, automatic factor estimation) to Samsung HBM-PIM, with
-the same structure as the UPMEM case study:
+Applies the PIMSA method (architecture model, metric extraction, cost model)
+to Samsung HBM-PIM, with the same structure as the UPMEM case study:
 
 | UPMEM case study | HBM-PIM case study |
 | --- | --- |
@@ -31,8 +26,7 @@ the same structure as the UPMEM case study:
    stagger, all-bank-mode ACT restriction). Every delay is an ini timing
    parameter or a Configuration.h derived delay; every rule cites the source
    line enforcing it. Output: total cycles plus cycles per constraint. No data,
-   PIM instruction semantics or simulator involved. Derivation:
-   `manuscripts/pimsa/case_studies/hbmpim/COST_DERIVATION_FROM_CONTROLLER_2026-11-05.md`.
+   PIM instruction semantics or simulator involved.
 
 Per-channel closed forms (n_in = ⌈N/128⌉, n_out = ⌈M/(64C)⌉,
 n_t = ⌊B⌈L/16⌉/(128C)⌋), checked on a grid by `test_pimsa_hbm.py`:
@@ -112,8 +106,8 @@ PIMSA_HBM_IR=build/ir.json ../.venv/bin/python -m unittest -v test_pimsa_hbm
 ../.venv/bin/python sweep.py --ir build/ir.json --sim ../hbmpim_sim/build/pimsim/sim
 ```
 
-The Samsung simulator source is read from
-`papers/pim/artifacts/Samsung_PIMSimulator` and is not copied into this
+The Samsung simulator source is read from `$PIMSIM_SRC`, a checkout of
+https://github.com/SAITPublic/PIMSimulator, and is not copied into this
 repository; the generated IR (`build/`) is likewise not committed.
 `hbmpim_sim/build.sh` adds counting-only instrumentation (per-channel DRAM
 command counters) and does not change timing: vendor PIMBench cycles are

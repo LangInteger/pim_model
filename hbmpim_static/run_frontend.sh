@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # Lower Samsung PIMSimulator's PIMKernel entry points to PIMSA-IR.
-# Usage: run_frontend.sh OUT.json [ANALYZER_BIN] [SIM_SRC]
+# Usage: run_frontend.sh OUT.json [ANALYZER_BIN] [SIM_SRC]   (SIM_SRC defaults to $PIMSIM_SRC)
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../.." && pwd)"
 OUT="${1:?output IR path}"
 BIN="${2:-$HERE/../static_analyzer/build/pim-analyzer}"
-SIM="${3:-$ROOT/papers/pim/artifacts/Samsung_PIMSimulator}"
+SIM="${3:-${PIMSIM_SRC:?set PIMSIM_SRC to a checkout of https://github.com/SAITPublic/PIMSimulator}}"
 CLANG="$(brew --prefix llvm 2>/dev/null || echo /usr)/bin/clang"
 
 FLAGS=(-std=c++17 -w -include iterator

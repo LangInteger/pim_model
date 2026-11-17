@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 # Build Samsung PIMSimulator plus the PIMSA sweep driver out of tree.
-# Usage: build.sh [SIM_SRC] [BUILD_DIR]
+# Usage: build.sh [SIM_SRC] [BUILD_DIR]   (SIM_SRC defaults to $PIMSIM_SRC)
 #   VANILLA=1 build.sh ... builds the uninstrumented simulator with the timing
 #   driver (PIMSATime.cpp) instead, for wall-clock comparisons.
 # Requires: scons, googletest (brew install scons googletest on macOS).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../.." && pwd)"
-SRC="${1:-$ROOT/papers/pim/artifacts/Samsung_PIMSimulator}"
+SRC="${1:-${PIMSIM_SRC:?set PIMSIM_SRC to a checkout of https://github.com/SAITPublic/PIMSimulator}}"
 OUT="${2:-$HERE/build/pimsim}"
 
 rm -rf "$OUT"; mkdir -p "$(dirname "$OUT")"

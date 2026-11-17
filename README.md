@@ -1,7 +1,6 @@
 # PIM Model
 
-Implementation of the PIMSA static analysis (paper: `manuscripts/pimsa` in the
-dissertation repository), with its two case studies:
+Implementation of the PIMSA static analysis, with its two case studies:
 - UPMEM, validated against uPIMulator;
 - Samsung HBM-PIM, validated against PIMSimulator.
 
@@ -25,6 +24,5 @@ pim_model/
 ```
 
 See `hbmpim_static/README.md` for how to run the HBM-PIM analysis. The
-Samsung PIMSimulator source is not part of this repository (license): it is
-read from `papers/pim/artifacts/Samsung_PIMSimulator` in the dissertation
-repository, and build outputs (`*/build/`, `.venv/`) are not committed.
+Samsung PIMSimulator source is not part of this repository (license). Clone
+it from https://github.com/SAITPublic/PIMSimulator and set `PIMSIM_SRC` to the checkout. Build outputs (`*/build/`, `.venv/`) are not committed.

@@ -23,8 +23,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 # x-axis groups: (label, kernel, batch or None, shape or None); GEMV shape is
 # "sq" (M == N) or "rect" (M != N)
-GROUPS = (("GEMV-B1 sq.", "GEMV", 1, "sq"), ("GEMV-B1 rect.", "GEMV", 1, "rect"),
-          ("GEMV-B4 sq.", "GEMV", 4, "sq"), ("GEMV-B4 rect.", "GEMV", 4, "rect"),
+GROUPS = (("GEMV\nB1 sq.", "GEMV", 1, "sq"), ("GEMV\nB1 rect.", "GEMV", 1, "rect"),
+          ("GEMV\nB4 sq.", "GEMV", 4, "sq"), ("GEMV\nB4 rect.", "GEMV", 4, "rect"),
           ("ADD", "ADD", None, None), ("MUL", "MUL", None, None), ("RELU", "RELU", None, None))
 
 
@@ -79,14 +79,17 @@ def draw(axis, rows, column, title, legend, zoom):
         axis.set_yticks((0.5, 0.71, 1.0, 1.41, 2.0), ("1/2", "", "1", "", "2"))
     axis.set_xlim(-0.55, len(GROUPS) - 0.45)
     axis.set_xticks(range(len(GROUPS)), [g[0] for g in GROUPS])
-    axis.tick_params(axis="x", rotation=48, length=0, pad=1.5)
+    axis.tick_params(axis="x", length=0, pad=2.0)
     axis.tick_params(axis="y", length=2.2, width=0.6, pad=1.8)
     axis.grid(axis="y", which="major", color="#D1D5DB", linewidth=0.45)
-    axis.set_title(title, loc="left", pad=17 if legend else 4, fontweight="bold")
+    axis.set_title(title, loc="left", pad=2.5, fontweight="bold")
     if legend:
-        axis.legend(title="Pseudo-channels", loc="lower right", bbox_to_anchor=(1.0, 1.005),
-                    ncol=len(CHANNELS), frameon=False, borderaxespad=0, handletextpad=0.25,
-                    columnspacing=0.75, markerscale=0.92)
+        from matplotlib.lines import Line2D
+        handles, labels = axis.get_legend_handles_labels()
+        head = Line2D([], [], linestyle="none", marker="none")
+        axis.legend([head] + handles, ["Pseudo-channels:"] + labels, loc="upper right",
+                    ncol=len(CHANNELS) + 1, frameon=False, borderaxespad=0.3,
+                    handletextpad=0.25, handlelength=0.8, columnspacing=0.75, markerscale=0.92)
     for spine in axis.spines.values():
         spine.set_color("#4B5563")
         spine.set_linewidth(0.6)
@@ -107,12 +110,13 @@ def main() -> int:
                          "axes.labelsize": 7.2, "xtick.labelsize": 5.9, "ytick.labelsize": 6.2,
                          "legend.fontsize": 6.0, "legend.title_fontsize": 6.0,
                          "pdf.fonttype": 42, "ps.fonttype": 42})
-    figure, axes = plt.subplots(2, 1, figsize=(3.35, 3.45), sharex=True)
-    figure.subplots_adjust(left=0.155, right=0.985, bottom=0.13, top=0.88, hspace=0.42)
+    figure, axes = plt.subplots(2, 1, figsize=(3.35, 2.45), sharex=True)
+    figure.subplots_adjust(left=0.155, right=0.985, bottom=0.13, top=0.94, hspace=0.30)
     for i, (axis, (column, title, zoom)) in enumerate(zip(axes, PANELS)):
-        draw(axis, rows, column, title, legend=(i == 0), zoom=zoom)
+        # the legend sits in the empty upper part of panel (b)
+        draw(axis, rows, column, title, legend=(i == 1), zoom=zoom)
     axes[0].tick_params(axis="x", bottom=False, labelbottom=False)
-    figure.text(0.018, 0.49, "Estimated cycles / PIMSimulator", rotation=90,
+    figure.text(0.018, 0.53, "Estimated cycles / PIMSimulator", rotation=90,
                 ha="center", va="center", fontsize=7.0)
     a.output.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(a.output, bbox_inches="tight", facecolor="white")
